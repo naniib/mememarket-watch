@@ -1,0 +1,62 @@
+import React, { useState, useEffect } from 'react';
+import { Image, Smile } from 'lucide-react';
+
+interface CreatePostProps {
+    postContent: string;
+    onContentChange: (newContent: string) => void;
+    onPostSubmit: () => void;
+}
+
+const CreatePost = ({ postContent, onContentChange, onPostSubmit }: CreatePostProps) => {
+    const [user, setUser] = useState<{ username: string, avatarUrl?: string } | null>(null);
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
+
+    const userInitial = user ? user.username.charAt(0).toUpperCase() : 'A';
+
+    return (
+        <div className="p-4 border-b border-gray-800">
+            <div className="flex space-x-4">
+                 {user && user.avatarUrl ? (
+                    <img src={user.avatarUrl} alt={user.username} className="w-12 h-12 rounded-full" />
+                ) : (
+                    <div className="w-12 h-12 bg-blue-500 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-white text-xl">
+                        {userInitial}
+                    </div>
+                )}
+                <div className="flex-1">
+                    <label htmlFor="post-input" className="sr-only">¿Qué estás pensando?</label>
+                    <textarea
+                        id="post-input"
+                        placeholder="¿Qué estás pensando?"
+                        className="w-full bg-transparent text-xl placeholder-gray-500 focus:outline-none resize-none"
+                        rows={2}
+                        aria-label="Create a new post"
+                        value={postContent}
+                        onChange={(e) => onContentChange(e.target.value)}
+                    />
+                    <div className="flex items-center justify-between mt-4">
+                        <div className="flex space-x-4 text-cyan-400">
+                            <button onClick={() => alert('Funcionalidad de añadir foto no implementada')} className="hover:bg-cyan-400/10 p-2 rounded-full"><Image size={20} /></button>
+                            <button onClick={() => alert('Funcionalidad de añadir emoji no implementada')} className="hover:bg-cyan-400/10 p-2 rounded-full"><Smile size={20} /></button>
+                        </div>
+                        <button 
+                            onClick={onPostSubmit}
+                            className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-full text-sm transition-colors disabled:opacity-50"
+                            disabled={!postContent.trim()}
+                        >
+                            Post
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default CreatePost;
