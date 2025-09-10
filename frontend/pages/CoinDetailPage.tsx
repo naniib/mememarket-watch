@@ -242,3 +242,5 @@ function DataBox({ title, value, color }: DataBoxProps) {
 }
 
 export default CoinDetailPage;
+
+hola mimai 
