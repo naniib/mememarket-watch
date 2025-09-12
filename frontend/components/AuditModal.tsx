@@ -1,65 +1,71 @@
-
 import React from 'react';
-import { Shield, X } from 'lucide-react';
+import { Shield, X, CheckCircle, AlertTriangle, XCircle } from 'lucide-react';
 
 interface AuditModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-const auditChecks = [
-    { label: 'Verified Contract', value: 'Yes' },
-    { label: 'Honeypot', value: 'No' },
-    { label: 'Buy Tax', value: '???' },
-    { label: 'Sell Tax', value: '???' },
-    { label: 'Proxy Contract', value: '-' },
-    { label: 'Mintable', value: 'No' },
-    { label: 'Tax Modifiable', value: 'No' },
-    { label: 'Can Pause Trading', value: '-' },
-    { label: 'Freezable', value: '-' },
-    { label: 'Scam Risk', value: '???' },
-    { label: 'Can Renounce Ownership', value: '-' },
-    { label: 'Can Modify Balance', value: '-' },
-    { label: 'Hidden Owner', value: '-' },
-    { label: 'Self-Destructible', value: '-' },
-    { label: 'External Call Risk', value: '-' },
-    { label: 'Trading Cooldown', value: '-' },
-    { label: 'Max Sell Ratio', value: '-' },
-    { label: 'Whitelist', value: '-' },
-    { label: 'Anti-Whale', value: '-' },
-    { label: 'Anti-Whale Modifiable', value: '-' },
-    { label: 'Trading Cooldown Change', value: '-' },
-    { label: 'Personal Tax Modifiable', value: '-' },
-    { label: 'Real or Fake Token', value: '-' },
-    { label: 'Airdrop Scam', value: '-' },
-    { label: 'Famous Token', value: '-' },
-    { label: 'Owner Address', value: 'Token...Q5DA' },
-    { label: 'Owner Balance', value: '-' },
-    { label: 'Owner Percentage', value: '-' },
-    { label: 'Creator Address', value: 'WLHv2...JVVh' },
-    { label: 'Creator Balance', value: '-' },
-    { label: 'Creator Percentage', value: '-' },
-    { label: 'Pair Holders', value: '-' },
-    { label: 'Other Risks', value: 'No' },
-    { label: 'Note', value: '-' },
-];
-
-const getValueClass = (value: string) => {
-    switch (value.toLowerCase()) {
-        case 'yes':
-        case 'no':
-            return 'text-green-400';
-        case '???':
-            return 'text-yellow-400';
-        case '-':
-            return 'text-gray-500';
-        default:
-            return 'text-white font-mono';
+const auditData = {
+    risk: 'Medium', // Could be 'Low', 'Medium', 'High'
+    summary: 'Several points require attention. The contract is not mintable, but the taxes are unknown and ownership has not been renounced.',
+    checks: {
+        'Contract Analysis': [
+            { label: 'Verified Contract', value: 'Yes', status: 'pass' },
+            { label: 'Proxy Contract', value: 'No', status: 'pass' },
+            { label: 'Mintable', value: 'No', status: 'pass' },
+            { label: 'Can Renounce Ownership', value: 'Yes', status: 'warn' },
+            { label: 'Hidden Owner', value: 'No', status: 'pass' },
+            { label: 'Self-Destructible', value: 'No', status: 'pass' },
+            { label: 'External Call Risk', value: 'Low', status: 'pass' },
+            { label: 'Can Modify Balance', value: 'No', status: 'pass' },
+        ],
+        'Transaction Analysis': [
+            { label: 'Honeypot', value: 'No', status: 'pass' },
+            { label: 'Buy Tax', value: '???', status: 'warn' },
+            { label: 'Sell Tax', value: '???', status: 'warn' },
+            { label: 'Tax Modifiable', value: 'No', status: 'pass' },
+            { label: 'Can Pause Trading', value: 'No', status: 'pass' },
+            { label: 'Freezable', value: 'No', status: 'pass' },
+            { label: 'Trading Cooldown', value: 'No', status: 'pass' },
+            { label: 'Max Sell Ratio', value: 'None', status: 'pass' },
+            { label: 'Whitelist', value: 'No', status: 'pass' },
+            { label: 'Anti-Whale', value: 'No', status: 'pass' },
+        ],
+        'Ownership & Holders': [
+            { label: 'Owner Address', value: 'Token...Q5DA', status: 'info' },
+            { label: 'Owner Balance', value: '0.5 ETH', status: 'info' },
+            { label: 'Owner Percentage', value: '1.2%', status: 'info' },
+            { label: 'Creator Address', value: 'WLHv2...JVVh', status: 'info' },
+            { label: 'Creator Balance', value: '0.0 ETH', status: 'info' },
+            { label: 'Creator Percentage', value: '0.0%', status: 'info' },
+        ]
     }
 };
 
+const getStatusStyles = (status: string) => {
+    switch (status) {
+        case 'pass': return { Icon: CheckCircle, color: 'text-green-400' };
+        case 'warn': return { Icon: AlertTriangle, color: 'text-yellow-400' };
+        case 'fail': return { Icon: XCircle, color: 'text-red-400' };
+        default: return { Icon: () => null, color: 'text-white font-mono' };
+    }
+};
+
+const getRiskBannerStyle = (risk: string) => {
+    switch (risk.toLowerCase()) {
+        case 'low': return 'bg-green-900/80 text-green-300 border-green-500/50';
+        case 'medium': return 'bg-yellow-900/80 text-yellow-300 border-yellow-500/50';
+        case 'high': return 'bg-red-900/80 text-red-300 border-red-500/50';
+        default: return 'bg-gray-800 text-gray-300 border-gray-600';
+    }
+}
+
 const AuditModal = ({ isOpen, onClose }: AuditModalProps) => {
     if (!isOpen) return null;
+
+    const { risk, summary, checks } = auditData;
+    const riskBannerStyle = getRiskBannerStyle(risk);
 
     return (
         <div 
@@ -70,7 +76,7 @@ const AuditModal = ({ isOpen, onClose }: AuditModalProps) => {
             aria-labelledby="audit-modal-title"
         >
             <div 
-                className="relative w-full max-w-2xl bg-[#161B22] border border-[#30363D] rounded-xl shadow-lg shadow-cyan-500/10"
+                className="relative w-full max-w-3xl bg-[#0d1117] border border-[#30363D] rounded-2xl shadow-lg shadow-cyan-500/10"
                 onClick={e => e.stopPropagation()}
             >
                 <header className="p-6 flex justify-between items-center border-b border-gray-700/30">
@@ -83,20 +89,40 @@ const AuditModal = ({ isOpen, onClose }: AuditModalProps) => {
                     </button>
                 </header>
                 
-                <div className="p-6 max-h-[60vh] overflow-y-auto custom-scrollbar">
-                    <ul className="space-y-3">
-                        {auditChecks.map((check, index) => (
-                            <li key={index} className="flex items-center justify-between text-sm py-1 border-b border-gray-800/50">
-                                <span className="text-gray-400">{check.label}</span>
-                                <span className={`font-bold ${getValueClass(check.value)}`}>
-                                    {check.value}
-                                </span>
-                            </li>
+                <div className="p-6 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                    {/* Risk Summary Section */}
+                    <div className={`p-4 rounded-lg border text-center mb-6 ${riskBannerStyle}`}>
+                        <p className="font-bold text-lg">RISK ASSESSMENT: {risk.toUpperCase()}</p>
+                        <p className="text-sm mt-1">{summary}</p>
+                    </div>
+
+                    {/* Detailed Checks */}
+                    <div className="space-y-6">
+                        {Object.entries(checks).map(([category, items]) => (
+                            <div key={category}>
+                                <h3 className="text-lg font-semibold text-cyan-400 border-b border-cyan-400/20 pb-2 mb-4">{category}</h3>
+                                <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
+                                    {items.map((check, index) => {
+                                        const { Icon, color } = getStatusStyles(check.status);
+                                        return (
+                                            <li key={index} className="flex items-center justify-between text-sm py-1">
+                                                <span className="text-gray-400">{check.label}</span>
+                                                <div className="flex items-center space-x-2">
+                                                    <span className={`font-bold ${color}`}>
+                                                        {check.value}
+                                                    </span>
+                                                    <Icon className={`w-4 h-4 ${color}`} />
+                                                </div>
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 </div>
 
-                <footer className="p-6 border-t border-gray-700/30">
+                <footer className="p-4 border-t border-gray-700/30 bg-[#161B22]/50 rounded-b-2xl">
                      <p className="text-xs text-gray-500 text-center">
                          Disclaimer: This is an automated audit and is for informational purposes only. It is not financial advice. Always conduct your own research.
                      </p>

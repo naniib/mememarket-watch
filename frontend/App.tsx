@@ -105,16 +105,18 @@ const App = () => {
 
     if (Layout) {
         return (
+// FIX: Property 'children' is missing in type '{ showTrendingSidebar: boolean; }' but required in type 'MainLayoutProps'.
+// The children prop is passed implicitly by JSX. Making it optional in the component's props interface will fix this kind of TS error.
             <Layout {...layoutProps}>
                 <Component />
             </Layout>
         );
     }
 
-    const mainClass = showHeaderFooter ? 'flex-grow py-8' : 'flex-grow';
+    const mainClass = 'flex-grow overflow-y-auto';
 
     return (
-        <div className="flex flex-col min-h-screen bg-[#0D1117]">
+        <div className="min-h-screen flex flex-col bg-[#0D1117] text-gray-300">
             {showHeaderFooter && <Header />}
             <main className={mainClass}>
                 <Component />

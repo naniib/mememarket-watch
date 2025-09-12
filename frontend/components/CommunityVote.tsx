@@ -19,13 +19,13 @@ const CommunityVote = ({ bullishVotes, bearishVotes, userVote, onVote, isAuthent
             <p className="text-xs text-gray-400 mb-4 text-center">{totalVotes} total votes</p>
             
             <div className="flex space-x-4 my-4">
-                <div className="flex-1 p-4 rounded-lg bg-green-500/10 border border-green-500/30 text-center">
+                <div className={`flex-1 p-4 rounded-lg bg-green-500/10 border border-green-500/30 text-center transition-all ${userVote === 'bullish' ? 'ring-2 ring-green-400' : ''}`}>
                     <TrendingUp className="w-8 h-8 mx-auto text-green-400 mb-2" />
                     <p className="text-lg font-bold text-green-400">BULLISH</p>
                     <p className="text-sm text-white">{bullishVotes} votes</p>
                     <p className="text-xs text-gray-400">{bullishPercentage.toFixed(2)}%</p>
                 </div>
-                <div className="flex-1 p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-center">
+                <div className={`flex-1 p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-center transition-all ${userVote === 'bearish' ? 'ring-2 ring-red-400' : ''}`}>
                     <TrendingDown className="w-8 h-8 mx-auto text-red-400 mb-2" />
                     <p className="text-lg font-bold text-red-400">BEARISH</p>
                     <p className="text-sm text-white">{bearishVotes} votes</p>

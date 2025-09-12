@@ -90,7 +90,7 @@ const LiveChat = ({ coinId, coinName, isAuthenticated }: LiveChatProps) => {
   }, []);
 
   return (
-    <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-lg h-[600px] flex flex-col">
+    <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-lg h-full flex flex-col">
       <div className="flex items-center space-x-2 p-4 border-b border-gray-700/30">
         <MessageCircle className="w-5 h-5 text-cyan-400" />
         <h3 className="font-bold text-white">Live Chat - {coinName}</h3>

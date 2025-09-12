@@ -122,8 +122,8 @@ const TransactionList = ({ coinSymbol }: TransactionListProps) => {
     };
 
     return (
-        <div className="bg-[#161B22]/80 backdrop-blur-sm border border-gray-700/50 rounded-lg">
-            <div className="flex items-center justify-between p-3 border-b border-gray-700/50">
+        <div className="bg-[#161B22]/80 backdrop-blur-sm border border-gray-700/50 rounded-lg h-full flex flex-col">
+            <div className="flex items-center justify-between p-3 border-b border-gray-700/50 flex-shrink-0">
                 <div className="flex items-center space-x-2">
                     <button className="p-1.5 bg-gray-700/50 rounded hover:bg-gray-600"><Pause size={14} /></button>
                     <button className="p-1.5 bg-gray-700/50 rounded hover:bg-gray-600"><Calendar size={14} /></button>
@@ -135,8 +135,8 @@ const TransactionList = ({ coinSymbol }: TransactionListProps) => {
                 </div>
             </div>
 
-            <div className="text-xs font-mono text-gray-400">
-                <div className="grid grid-cols-12 gap-x-2 px-3 py-2 border-b border-gray-700/50 sticky top-0 bg-[#161B22]/90 backdrop-blur-sm z-10">
+            <div className="text-xs font-mono text-gray-400 flex-grow flex flex-col min-h-0">
+                <div className="grid grid-cols-12 gap-x-2 px-3 py-2 border-b border-gray-700/50 sticky top-0 bg-[#161B22]/90 backdrop-blur-sm z-10 flex-shrink-0">
                     <div className="col-span-2 flex items-center">Fecha <SortIcon /></div>
                     <div className="col-span-1">Tipo</div>
                     <div className="col-span-1 flex items-center">Precio <SortIcon /></div>
@@ -148,7 +148,7 @@ const TransactionList = ({ coinSymbol }: TransactionListProps) => {
                     <div className="col-span-1">Otros</div>
                 </div>
 
-                <div className="h-[400px] overflow-y-auto custom-scrollbar">
+                <div className="flex-grow overflow-y-auto custom-scrollbar">
                     {mockAdvancedTransactions.map((tx, i) => (
                         <div key={i} className="grid grid-cols-12 gap-x-2 items-center px-3 py-2.5 border-b border-gray-800 transition-colors duration-200 hover:bg-gray-800/50">
                             <div className="col-span-2">{tx.date}</div>
