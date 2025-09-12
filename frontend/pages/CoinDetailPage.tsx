@@ -1,5 +1,7 @@
+
+
 import React, { useState, useEffect, useMemo } from 'react';
-import { Star, Share2, Copy, Globe, Send, Search, ChevronsLeft, ChevronsRight, Users, ExternalLink, Trophy } from 'lucide-react';
+import { Star, Share2, Copy, Globe, Send, Search, ChevronsLeft, ChevronsRight, Users, ExternalLink, Trophy, Package, Zap, PieChart, ArrowRightLeft, Box, Coins, Percent, Clock, DollarSign, Droplets, RefreshCw, BarChart, TrendingUp, TrendingDown } from 'lucide-react';
 import { allCoins, Coin } from '../data';
 import TradingViewChart from '../tradingview/TradingViewChart';
 import LiveChat from '../components/LiveChat';
@@ -22,16 +24,16 @@ const InfoIcon = ({ info }: { info: string }) => (
     </span>
 );
 
-const formatK = (num?: number) => {
-    if (num === undefined || num === null) return 'N/A';
-    if (num >= 1000000) {
-        return (num / 1000000).toFixed(1) + 'M';
+const formatValue = (value?: string | number) => {
+    if (value === undefined || value === null) return 'N/A';
+    if (typeof value === 'number') {
+        if (value >= 1000000) return (value / 1000000).toFixed(1) + 'M';
+        if (value >= 1000) return (value / 1000).toFixed(1) + 'K';
+        return value.toLocaleString();
     }
-    if (num >= 1000) {
-        return (num / 1000).toFixed(1) + 'K';
-    }
-    return num.toLocaleString();
+    return value;
 };
+
 
 export interface StatCardProps { 
     title: string;
@@ -44,18 +46,25 @@ export interface StatCardProps {
         text: string;
         color: 'green' | 'red';
     };
+    icon: React.ElementType;
 }
 
 // Exportamos StatCard también
-export const StatCard = ({ title, value, children, onClick, info, highlightColor, statusTag }: StatCardProps) => {
-    const baseClasses = `bg-[#161B22] rounded-xl p-3 flex flex-col justify-between transition-all duration-200 h-full`;
+export const StatCard = ({ title, value, children, onClick, info, highlightColor, statusTag, icon: Icon }: StatCardProps) => {
+    const topBorderColors: Record<string, string> = {
+        cyan: 'bg-cyan-400',
+        amber: 'bg-amber-400',
+        default: 'bg-gray-700'
+    };
+
+    const baseClasses = `bg-[#1c2128] rounded-xl flex flex-col justify-between transition-all duration-300 h-full text-left shadow-lg overflow-hidden relative`;
     
-    let variantClasses = `border border-[#30363D] ${onClick ? 'cursor-pointer hover:border-cyan-400/50 hover:bg-[#1D2127]' : ''}`;
+    let variantClasses = `border border-transparent ${onClick ? 'cursor-pointer hover:border-cyan-400/50 hover:bg-[#222831]' : ''}`;
 
     if (highlightColor) {
         const colorStyles = {
-            cyan: `border-cyan-400 shadow-lg shadow-cyan-500/30 cursor-pointer hover:bg-cyan-900/40 hover:shadow-cyan-500/50 animate-pulse-border`,
-            amber: `border-amber-400 shadow-lg shadow-amber-500/30 cursor-pointer hover:bg-amber-900/40 hover:shadow-amber-500/50 animate-pulse-border`
+            cyan: `border-cyan-400/60 shadow-cyan-500/10 cursor-pointer hover:bg-cyan-900/20 hover:shadow-cyan-500/20`,
+            amber: `border-amber-400/60 shadow-amber-500/10 cursor-pointer hover:bg-amber-900/20 hover:shadow-amber-500/20`
         };
         variantClasses = colorStyles[highlightColor];
     }
@@ -64,42 +73,61 @@ export const StatCard = ({ title, value, children, onClick, info, highlightColor
     
     const content = (
         <>
-            <div className="flex items-center text-sm text-gray-400 truncate">
-                <span className="truncate">{title}</span>
-                {statusTag && (
-                    <span className={`ml-2 text-xs font-bold px-2 py-0.5 rounded-full ${
-                        statusTag.color === 'green'
-                            ? 'bg-green-500/20 text-green-300'
-                            : 'bg-red-500/20 text-red-300'
-                    }`}>
-                        {statusTag.text}
-                    </span>
-                )}
-                {info && <InfoIcon info={info} />}
+            <div className={`absolute top-0 left-0 h-1 w-full ${topBorderColors[highlightColor || 'default']}`}></div>
+            <div className="p-4">
+                <div className="flex items-center text-sm text-gray-400 truncate mb-2">
+                    {Icon && <Icon className="w-4 h-4 mr-2 flex-shrink-0" />}
+                    <span className="truncate font-semibold">{title}</span>
+                    {statusTag && (
+                        <span className={`ml-2 text-xs font-bold px-2 py-0.5 rounded-full ${
+                            statusTag.color === 'green'
+                                ? 'bg-green-500/20 text-green-300'
+                                : 'bg-red-500/20 text-red-300'
+                        }`}>
+                            {statusTag.text}
+                        </span>
+                    )}
+                    {info && <InfoIcon info={info} />}
+                </div>
+                {value !== undefined && value !== null && <div className="text-3xl font-bold text-white mt-1 leading-tight truncate font-mono">{formatValue(value)}</div>}
+                {children && <div className="mt-2 text-lg">{children}</div>}
             </div>
-            {value !== undefined && value !== null && <div className="text-2xl font-bold text-white mt-1 leading-tight truncate">{typeof value === 'number' ? formatK(value) : value}</div>}
-            {children && <div className="mt-1">{children}</div>}
         </>
     );
 
-    if (onClick) {
-        return <button type="button" onClick={onClick} className={cardClasses + " w-full"}>{content}</button>;
-    }
-    
-    return <div className={cardClasses}>{content}</div>;
+    const commonProps = {
+        className: cardClasses,
+        ...(onClick && { onClick }),
+    };
+
+    return React.createElement(onClick ? 'button' : 'div', commonProps, content);
 };
 
 
 const CoinDetailPage = () => {
     const [coin, setCoin] = useState<Coin | null>(null);
-    const [isChatVisible, setIsChatVisible] = useState(true);
-    const [isSentimentVisible, setIsSentimentVisible] = useState(true);
+    const [isChatVisible, setIsChatVisible] = useState(() => {
+        const saved = localStorage.getItem('isChatVisible');
+        return saved !== null ? JSON.parse(saved) : true;
+    });
+    const [isSentimentVisible, setIsSentimentVisible] = useState(() => {
+        const saved = localStorage.getItem('isSentimentVisible');
+        return saved !== null ? JSON.parse(saved) : true;
+    });
     const [isTopHoldersModalOpen, setTopHoldersModalOpen] = useState(false);
     const [isAuditModalOpen, setAuditModalOpen] = useState(false);
     const [isSecurityWarningOpen, setSecurityWarningOpen] = useState(false);
     const [userVote, setUserVote] = useState<'bullish' | 'bearish' | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isStatsModalOpen, setIsStatsModalOpen] = useState(false); 
+
+    useEffect(() => {
+        localStorage.setItem('isChatVisible', JSON.stringify(isChatVisible));
+    }, [isChatVisible]);
+
+    useEffect(() => {
+        localStorage.setItem('isSentimentVisible', JSON.stringify(isSentimentVisible));
+    }, [isSentimentVisible]);
 
     useEffect(() => {
         const handleHashChange = () => {
@@ -125,91 +153,74 @@ const CoinDetailPage = () => {
         setUserVote(prev => (prev === vote ? null : vote));
     };
 
-    const gridStyle = useMemo(() => {
-        const hasRightColumn = isChatVisible || isSentimentVisible;
-        // Si no hay columna derecha visible, el segundo track es 0 y el primero ocupa todo (1fr).
-        // El gap se elimina en ese caso.
-        const gridTemplateColumns = hasRightColumn ? '1fr 400px' : '1fr 0px';
-        const gridTemplateRows = 'auto minmax(0, 1fr)'; 
-        
-        let gridTemplateAreas;
-        if (isChatVisible && isSentimentVisible) {
-            gridTemplateAreas = `"chart chat" "trades sentiment"`;
-        } else if (isChatVisible && !isSentimentVisible) {
-            // Si solo el chat está visible, el sentimiento se colapsa.
-            gridTemplateAreas = `"chart chat" "trades trades"`; 
-        } else if (!isChatVisible && isSentimentVisible) {
-            // Si solo el sentimiento está visible, el chat se colapsa.
-            gridTemplateAreas = `"chart chart" "trades sentiment"`; 
-        } else { // Ambos ocultos (chat y sentimiento)
-            gridTemplateAreas = `"chart chart" "trades trades"`; // Ambos ocupan todo el ancho
-        }
-
-        return {
-            display: 'grid',
-            gridTemplateColumns,
-            gridTemplateRows,
-            gridTemplateAreas,
-            // CORRECCIÓN CLAVE: El gap debe ser 0 si la columna derecha está colapsada.
-            gap: hasRightColumn ? '1rem' : '0', 
-            transition: 'all 0.3s ease-in-out',
-        };
-    }, [isChatVisible, isSentimentVisible]);
-
-
-    const allStats = useMemo(() => {
+    const allStats = useMemo((): StatCardProps[] => {
         if (!coin) return [];
-
+    
+        const change24h = coin.change24h ?? 0;
         let multiplierTitle: string;
-        if ((coin.change24h ?? 0) > 1) { 
+        let statusTag: StatCardProps['statusTag'];
+        let perfIcon: React.ElementType;
+    
+        if (change24h > 1) {
             multiplierTitle = 'Upside (ATH)';
-        } else if ((coin.change24h ?? 0) < -1) {
+            statusTag = { text: 'Pumping', color: 'green' };
+            perfIcon = TrendingUp;
+        } else if (change24h < -1) {
             multiplierTitle = 'Downside (ATH)';
+            statusTag = { text: 'Dumping', color: 'red' };
+            perfIcon = TrendingDown;
         } else {
             multiplierTitle = 'Performance (ATH)';
+            statusTag = { text: 'Stable', color: 'green' }; // Or another color
+            perfIcon = TrendingUp;
         }
-
+    
         return [
-            // --- Stats Básicas (8) ---
-            { 
-                title: "Top 10 Holders", 
-                children: (
-                    <div className="flex items-center space-x-2 text-cyan-400 font-bold">
-                        <Trophy size={20} className="text-yellow-400" />
-                        <span>Ver Lista</span>
-                    </div>
-                ),
-                onClick: () => setTopHoldersModalOpen(true),
-                highlightColor: 'cyan' as 'cyan'
-            },
-            { title: "Market Cap", value: `$${formatK(coin.marketCap)}` },
-            { title: "Liquidez", value: `$${formatK(coin.liquidity)}` },
-            { title: "Holders", value: formatK(coin.holders) },
-            { 
-                title: multiplierTitle, 
-                value: "x125 🔥", 
-                highlightColor: 'amber' as 'amber',
-                statusTag: (coin.change24h ?? 0) > 0 
-                    ? { text: 'Pumping', color: 'green' as 'green' } 
-                    : { text: 'Dumping', color: 'red' as 'red' }
-            },
-            { title: "Circ. Supply", value: formatK(coin.circulatingSupply) },
-            { title: "Total Mktcap", value: `$${formatK(coin.totalMarketCap)}` },
-            { title: "Volumen en 24h", value: `$${formatK(coin.volume24h)}` },
-            // --- Stats Avanzadas (las 6 restantes) ---
-            { title: "Total Supply", value: formatK(coin.totalSupply) },
-            { title: "Volatilidad", value: `${(coin.volatility ?? 0).toFixed(4)}`, info: "Medida de la fluctuación del precio." },
-            { title: "% Circ. Supply", value: `${(coin.circSupplyPercentage ?? 0).toFixed(2)}%` },
-            { title: "Total TXs", value: formatK(coin.totalTx) },
-            { title: "SOL en Pool", value: `${(coin.pooledSol ?? 0).toFixed(2)} SOL` },
-            { title: "Memecoin en Pool", value: formatK(coin.pooledMemecoin) },
-            { title: "% Memecoin en Pool", value: `${(coin.pooledMemecoinPercentage ?? 0).toFixed(2)}%` },
-            { title: "Pool Creado", value: coin.poolCreated || 'N/A' },
+            { title: "Top 10 Holders", children: <div className="flex items-center space-x-2 text-cyan-400 font-bold"><Trophy size={20} className="text-yellow-400" /><span>Ver Lista</span></div>, onClick: () => setTopHoldersModalOpen(true), highlightColor: 'cyan', icon: Trophy },
+            { title: "Market Cap", value: `$${coin.marketCap}`, icon: DollarSign },
+            { title: "Liquidez", value: `$${coin.liquidity}`, icon: Droplets },
+            { title: "Holders", value: coin.holders, icon: Users },
+            { title: multiplierTitle, value: "x125 🔥", highlightColor: 'amber', statusTag, icon: perfIcon },
+            { title: "Circ. Supply", value: coin.circulatingSupply, icon: RefreshCw },
+            { title: "Total Mktcap", value: `$${coin.totalMarketCap}`, icon: Globe },
+            { title: "Volumen en 24h", value: `$${coin.volume24h}`, icon: BarChart },
+            { title: "Total Supply", value: coin.totalSupply, icon: Package },
+            { title: "Volatilidad (24h)", value: `${(coin.volatility * 100).toFixed(2)}%`, icon: Zap },
+            { title: "% Circ. Supply", value: `${coin.circSupplyPercentage}%`, icon: PieChart },
+            { title: "Total TXs", value: coin.totalTx, icon: ArrowRightLeft },
+            { title: "SOL en Pool", value: `${coin.pooledSol.toFixed(2)} SOL`, icon: Box },
+            { title: "Memecoin en Pool", value: coin.pooledMemecoin, icon: Coins },
+            { title: "% Memecoin en Pool", value: `${coin.pooledMemecoinPercentage}%`, icon: Percent },
+            { title: "Pool Creado", value: coin.poolCreated, icon: Clock },
         ];
     }, [coin]);
 
     const basicStats = useMemo(() => allStats.slice(0, 8), [allStats]);
     const advancedStats = useMemo(() => allStats.slice(8), [allStats]); 
+
+    const gridStyle = useMemo(() => {
+        const isAnySidebarVisible = isChatVisible || isSentimentVisible;
+        
+        let areas;
+        if (isChatVisible && isSentimentVisible) {
+            areas = `"chart chat" "trades sentiment"`;
+        } else if (isChatVisible && !isSentimentVisible) {
+            areas = `"chart chat" "trades trades"`;
+        } else if (!isChatVisible && isSentimentVisible) {
+            areas = `"chart chart" "trades sentiment"`;
+        } else { // both hidden
+            areas = `"chart chart" "trades trades"`;
+        }
+
+        return {
+            display: 'grid',
+            gridTemplateColumns: isAnySidebarVisible ? '1fr 400px' : '1fr 0px',
+            gridTemplateRows: 'auto minmax(0, 1fr)',
+            gridTemplateAreas: areas,
+            gap: isAnySidebarVisible ? '1rem' : '0',
+        };
+    }, [isChatVisible, isSentimentVisible]);
+
 
     if (!coin) {
         return <div className="text-center p-10 text-gray-400">Loading coin data or coin not found...</div>;
@@ -273,63 +284,47 @@ const CoinDetailPage = () => {
                 </div>
             </div>
             
-            <main style={gridStyle}>
-                <div style={{ gridArea: 'chart' }} className="min-h-[450px] relative">
+            <main style={gridStyle as React.CSSProperties} className="transition-all duration-300">
+                <div style={{ gridArea: 'chart' }} className="relative min-h-[450px]">
                     <TradingViewChart />
-                    <button 
-                        onClick={() => setIsChatVisible(!isChatVisible)} 
-                        className="absolute top-1/2 -translate-y-1/2 -right-3 z-20 p-1 bg-[#161B22] border border-[#30363D] rounded-full text-gray-400 hover:bg-cyan-500/20 hover:text-white" 
+                    <button
+                        onClick={() => setIsChatVisible(!isChatVisible)}
+                        className="absolute top-1/2 -right-3 transform -translate-y-1/2 z-10 p-2 bg-[#161B22] border border-[#30363D] rounded-full text-gray-400 hover:bg-cyan-500/20 hover:text-white"
                         aria-label={isChatVisible ? "Ocultar chat" : "Mostrar chat"}
                     >
                         {isChatVisible ? <ChevronsRight size={16} /> : <ChevronsLeft size={16} />}
                     </button>
                 </div>
-
-                {/* Columna del chat - Si no está visible, grid-template-columns lo colapsará */}
-                <div 
-                    style={{ gridArea: 'chat', overflow: 'hidden' }} 
-                    className={`flex flex-col min-h-0 bg-[#161B22] border border-[#30363D] rounded-xl ${!isChatVisible ? 'hidden' : ''}`}
-                    // Agregué 'hidden' para asegurar que no ocupe espacio si isChatVisible es false
-                >
-                    {isChatVisible && (
-                        <LiveChat coinId={coin.id} coinName={coin.name} isAuthenticated={isAuthenticated} />
-                    )}
+                
+                <div style={{ gridArea: 'chat' }} className={`flex flex-col min-h-0 transition-all duration-300 ${!isChatVisible ? 'hidden' : ''}`}>
+                    <LiveChat coinId={coin.id} coinName={coin.name} isAuthenticated={isAuthenticated} />
                 </div>
-
-                <div style={{ gridArea: 'trades' }} className="flex flex-col min-h-[500px] relative">
+                
+                <div style={{ gridArea: 'trades' }} className="relative min-h-[500px]">
                     <TransactionList coinSymbol={coin.symbol} />
-                    <button 
-                        onClick={() => setIsSentimentVisible(!isSentimentVisible)} 
-                        className="absolute top-1/2 -translate-y-1/2 -right-3 z-20 p-1 bg-[#161B22] border border-[#30363D] rounded-full text-gray-400 hover:bg-cyan-500/20 hover:text-white" 
-                        aria-label={isSentimentVisible ? "Ocultar widgets de sentimiento" : "Mostrar widgets de sentimiento"}
+                    <button
+                        onClick={() => setIsSentimentVisible(!isSentimentVisible)}
+                        className="absolute top-1/2 -right-3 transform -translate-y-1/2 z-10 p-2 bg-[#161B22] border border-[#30363D] rounded-full text-gray-400 hover:bg-cyan-500/20 hover:text-white"
+                        aria-label={isSentimentVisible ? "Ocultar widgets" : "Mostrar widgets"}
                     >
                         {isSentimentVisible ? <ChevronsRight size={16} /> : <ChevronsLeft size={16} />}
                     </button>
                 </div>
-                
-                {/* Columna de sentimientos - Si no está visible, grid-template-columns lo colapsará */}
-                <div 
-                    style={{ gridArea: 'sentiment', overflow: 'hidden' }} 
-                    className={`flex flex-col space-y-4 min-h-0 ${!isSentimentVisible ? 'hidden' : ''}`}
-                    // Agregué 'hidden' para asegurar que no ocupe espacio si isSentimentVisible es false
-                >
-                    {isSentimentVisible && (
-                        <>
-                            <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-4">
-                                <h3 className="text-lg font-bold text-cyan-400 mb-2 text-center">Fear & Greed Index</h3>
-                                <FearGreedMeter value={coin.fearGreedIndex || 0} size={180} />
-                            </div>
-                            <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-4">
-                                <CommunityVote
-                                    bullishVotes={coin.bullishVotes || 0}
-                                    bearishVotes={coin.bearishVotes || 0} 
-                                    userVote={userVote}
-                                    onVote={handleVote}
-                                    isAuthenticated={isAuthenticated}
-                                />
-                            </div>
-                        </>
-                    )}
+
+                <div style={{ gridArea: 'sentiment' }} className={`space-y-4 min-h-0 transition-all duration-300 ${!isSentimentVisible ? 'hidden' : ''}`}>
+                    <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-4">
+                        <h3 className="text-lg font-bold text-cyan-400 mb-2 text-center">Fear & Greed Index</h3>
+                        <FearGreedMeter value={coin.fearGreedIndex || 0} size={180} />
+                    </div>
+                    <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-4">
+                        <CommunityVote
+                            bullishVotes={coin.bullishVotes || 0}
+                            bearishVotes={coin.bearishVotes || 0} 
+                            userVote={userVote}
+                            onVote={handleVote}
+                            isAuthenticated={isAuthenticated}
+                        />
+                    </div>
                 </div>
             </main>
         </div>
