@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
 
-const MemeBattlesPage = () => {
+interface User {
+    id: number;
+    username: string;
+}
+
+interface MemeBattlesPageProps {
+    user: User | null;
+    onOpenJoinCommunityModal: () => void;
+}
+
+const MemeBattlesPage = ({ user, onOpenJoinCommunityModal }: MemeBattlesPageProps) => {
     const [activeArena, setActiveArena] = useState('Batallas Relámpago');
     const [activeTimeframe, setActiveTimeframe] = useState('1 Minuto');
     const [betAmount, setBetAmount] = useState('');
@@ -10,6 +20,11 @@ const MemeBattlesPage = () => {
     const timeframes = ["1 Minuto", "5 Minutos", "15 Minutos"];
 
     const handleConfirmVote = () => {
+        if (!user) {
+            onOpenJoinCommunityModal();
+            return;
+        }
+
         if (!betAmount.trim() || !selectedChoice) {
             alert('Por favor, selecciona PUMP o DUMP e introduce una cantidad de puntos.');
             return;

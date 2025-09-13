@@ -1,5 +1,4 @@
 
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { Star, Share2, Copy, Globe, Send, Search, ChevronsLeft, ChevronsRight, Users, ExternalLink, Trophy, Package, Zap, PieChart, ArrowRightLeft, Box, Coins, Percent, Clock, DollarSign, Droplets, RefreshCw, BarChart, TrendingUp, TrendingDown } from 'lucide-react';
 import { allCoins, Coin } from '../data';
@@ -106,28 +105,14 @@ export const StatCard = ({ title, value, children, onClick, info, highlightColor
 
 const CoinDetailPage = () => {
     const [coin, setCoin] = useState<Coin | null>(null);
-    const [isChatVisible, setIsChatVisible] = useState(() => {
-        const saved = localStorage.getItem('isChatVisible');
-        return saved !== null ? JSON.parse(saved) : true;
-    });
-    const [isSentimentVisible, setIsSentimentVisible] = useState(() => {
-        const saved = localStorage.getItem('isSentimentVisible');
-        return saved !== null ? JSON.parse(saved) : true;
-    });
+    const [isChatVisible, setIsChatVisible] = useState(true);
+    const [isSentimentVisible, setIsSentimentVisible] = useState(true);
     const [isTopHoldersModalOpen, setTopHoldersModalOpen] = useState(false);
     const [isAuditModalOpen, setAuditModalOpen] = useState(false);
     const [isSecurityWarningOpen, setSecurityWarningOpen] = useState(false);
     const [userVote, setUserVote] = useState<'bullish' | 'bearish' | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isStatsModalOpen, setIsStatsModalOpen] = useState(false); 
-
-    useEffect(() => {
-        localStorage.setItem('isChatVisible', JSON.stringify(isChatVisible));
-    }, [isChatVisible]);
-
-    useEffect(() => {
-        localStorage.setItem('isSentimentVisible', JSON.stringify(isSentimentVisible));
-    }, [isSentimentVisible]);
 
     useEffect(() => {
         const handleHashChange = () => {
@@ -147,6 +132,33 @@ const CoinDetailPage = () => {
             window.removeEventListener('hashchange', handleHashChange);
         };
     }, []);
+
+    // Cargar el estado desde localStorage cuando cambia la moneda
+    useEffect(() => {
+        if (coin?.id) {
+            // Cargar estado de chat
+            const savedChatState = localStorage.getItem(`isChatVisible_${coin.id}`);
+            setIsChatVisible(savedChatState !== null ? JSON.parse(savedChatState) : true);
+
+            // Cargar estado de sentimiento
+            const savedSentimentState = localStorage.getItem(`isSentimentVisible_${coin.id}`);
+            setIsSentimentVisible(savedSentimentState !== null ? JSON.parse(savedSentimentState) : true);
+        }
+    }, [coin?.id]);
+
+    // Guardar el estado del chat en localStorage para la moneda específica
+    useEffect(() => {
+        if (coin?.id) {
+            localStorage.setItem(`isChatVisible_${coin.id}`, JSON.stringify(isChatVisible));
+        }
+    }, [isChatVisible, coin?.id]);
+
+    // Guardar el estado de sentimiento en localStorage para la moneda específica
+    useEffect(() => {
+        if (coin?.id) {
+            localStorage.setItem(`isSentimentVisible_${coin.id}`, JSON.stringify(isSentimentVisible));
+        }
+    }, [isSentimentVisible, coin?.id]);
 
     const handleVote = (vote: 'bullish' | 'bearish') => {
         if (!isAuthenticated) return;

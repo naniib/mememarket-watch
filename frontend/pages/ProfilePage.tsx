@@ -11,6 +11,12 @@ interface ProfileUser {
     username: string;
     email: string;
     fidelity_points: number;
+    bio?: string;
+    joinedDate?: string;
+    followersCount?: number;
+    followingCount?: number;
+    avatarUrl?: string;
+    bannerUrl?: string;
 }
 
 interface PostUser {
@@ -19,7 +25,7 @@ interface PostUser {
     email: string;
 }
 
-interface Post {
+export interface Post {
     id: number;
     content: string;
     createdAt: string;
@@ -37,6 +43,7 @@ const ProfilePage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [loggedInUser, setLoggedInUser] = useState<{ id: number } | null>(null);
+    const [activeTab, setActiveTab] = useState('Posts'); // State for active tab
 
     const getUserIdFromHash = () => {
         const path = window.location.hash.substring(1); // Remove '#'
@@ -50,16 +57,11 @@ const ProfilePage = () => {
     
     const userId = getUserIdFromHash();
 
-    const fetchProfileData = async () => {
-        if (!userId) {
-            setError('User ID not found in URL.');
-            setLoading(false);
-            return;
-        }
+    const fetchProfileData = async (id: string) => {
         setLoading(true);
         setError(null);
         try {
-            const data = await getUserPosts(userId);
+            const data = await getUserPosts(id);
             if (data.success) {
                 setUser(data.user);
                 setPosts(data.posts);
@@ -74,12 +76,29 @@ const ProfilePage = () => {
     };
 
     useEffect(() => {
+        // Auth Guard: Redirect if not logged in
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.hash = '#/home';
+            return;
+        }
+
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             setLoggedInUser(JSON.parse(storedUser));
         }
-        fetchProfileData();
+
+        if (userId) {
+            fetchProfileData(userId);
+        } else {
+            setError('User ID not found in URL.');
+            setLoading(false);
+        }
     }, [userId]);
+
+    const handlePostCreated = (newPost: Post) => {
+        setPosts(prevPosts => [newPost, ...prevPosts]);
+    };
 
     const isOwnProfile = loggedInUser && user && loggedInUser.id === user.id;
     
@@ -90,37 +109,69 @@ const ProfilePage = () => {
 
         return (
              <>
-                <ProfileHeader />
-                <ProfileNavTabs />
+                <ProfileHeader user={user} isOwnProfile={isOwnProfile} />
+                <ProfileNavTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
                 <main className="px-4">
-                    {isOwnProfile && (
+                    {isOwnProfile && activeTab === 'Posts' && (
                         <div className="my-6">
-                            <CreatePostForm onPostCreated={fetchProfileData} />
+                            <CreatePostForm onPostCreated={handlePostCreated} />
                         </div>
                     )}
                     
-                    {/* The list of posts now appears below the tabs */}
-                    <div className="mt-6">
-                        {posts.length > 0 ? (
-                            <div className="space-y-4">
-                                {posts.map(post => (
-                                    <PostCard key={post.id} post={post} />
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="text-center py-10 bg-[#161B22] border border-[#30363D] rounded-lg">
-                                <p className="text-gray-400">This user hasn't posted anything yet.</p>
-                            </div>
-                        )}
-                    </div>
+                    {activeTab === 'Posts' && (
+                        <div className="mt-6">
+                            {posts.length > 0 ? (
+                                <div className="space-y-4">
+                                    {posts.map(post => (
+                                        <PostCard key={post.id} post={post} />
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="text-center py-10 bg-[#161B22] border border-[#30363D] rounded-lg">
+                                    <p className="text-gray-400">This user hasn't posted anything yet.</p>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                    
+                    {activeTab === 'Replies' && (
+                        <div className="text-center py-10 bg-[#161B22] border border-[#30363D] rounded-lg mt-6">
+                            <p className="text-gray-400">Aquí se mostrarán las respuestas de este usuario.</p>
+                        </div>
+                    )}
+                    {activeTab === 'Media' && (
+                        <div className="text-center py-10 bg-[#161B22] border border-[#30363D] rounded-lg mt-6">
+                            <p className="text-gray-400">Aquí se mostrará el contenido multimedia de este usuario.</p>
+                        </div>
+                    )}
+                    {activeTab === 'Likes' && ( 
+                        <div className="text-center py-10 bg-[#161B22] border border-[#30363D] rounded-lg mt-6">
+                            <p className="text-gray-400">Aquí se mostrarán los posts que este usuario ha marcado como 'Me gusta'.</p>
+                        </div>
+                    )}
+                    {activeTab === 'Notifications' && ( 
+                        <div className="text-center py-10 bg-[#161B22] border border-[#30363D] rounded-lg mt-6">
+                            <p className="text-gray-400">Aquí se mostrarán las notificaciones de este usuario.</p>
+                        </div>
+                    )}
+                    {activeTab === 'Settings' && ( 
+                        <div className="text-center py-10 bg-[#161B22] border border-[#30363D] rounded-lg mt-6">
+                            <p className="text-gray-400">Aquí se mostrarán las configuraciones del perfil.</p>
+                        </div>
+                    )}
+                    {activeTab === 'Followers' && ( 
+                        <div className="text-center py-10 bg-[#161B22] border border-[#30363D] rounded-lg mt-6">
+                            <p className="text-gray-400">Aquí se mostrarán los seguidores de este usuario.</p>
+                        </div>
+                    )}
                 </main>
             </>
         )
     }
 
     return (
-        <div className="max-w-4xl mx-auto">
+        <div>
             {renderContent()}
         </div>
     );

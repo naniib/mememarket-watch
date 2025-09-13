@@ -9,11 +9,20 @@ import ProfilePage from './pages/ProfilePage';
 import EditProfilePage from './pages/EditProfilePage';
 import SocialHomePage from './pages/SocialHomePage';
 import MainLayout from './layouts/MainLayout';
-import ExplorePage from './pages/ExplorePage'; // <-- AÑADIDO
+import ExplorePage from './pages/ExplorePage'; 
 import MemeBattlesPage from './pages/MemeBattlesPage';
-import MemePressPage from './pages/MemePressPage'; // <-- AÑADIDO
-import ArticleDetailPage from './pages/ArticleDetailPage'; // <-- AÑADIDO
+import MemePressPage from './pages/MemePressPage'; 
+import ArticleDetailPage from './pages/ArticleDetailPage'; 
 import FidelityPage from './pages/FidelityPage';
+import AuthModal from './components/AuthModal'; 
+import JoinCommunityModal from './components/JoinCommunityModal';
+
+interface User {
+    id: number;
+    username: string;
+    email: string;
+    avatarUrl?: string;
+}
 
 // A router component to determine which page and layout to render
 const renderPage = (path: string) => {
@@ -65,64 +74,84 @@ const renderPage = (path: string) => {
 
 
 const App = () => {
-    // Helper to get a clean path from the URL hash, defaulting to '/'
     const getPathFromHash = () => {
         let path = window.location.hash.substring(1);
-        
-        if (!path) {
-            return '/'; // Default to root if hash is empty or just '#'
-        }
-
-        // Ensure path starts with a '/' for consistency
-        if (!path.startsWith('/')) {
-            path = '/' + path;
-        }
-        
-        // Ignore query parameters for routing
+        if (!path) return '/';
+        if (!path.startsWith('/')) path = '/' + path;
         return path.split('?')[0];
     };
     
     const [path, setPath] = useState(getPathFromHash());
+    const [user, setUser] = useState<User | null>(null);
+    const [showJoinModal, setShowJoinModal] = useState(false);
+    const [showAuthModal, setShowAuthModal] = useState(false);
 
     useEffect(() => {
-        const onLocationChange = () => {
-            setPath(getPathFromHash());
-        };
+        // Centralized user state initialization
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            try {
+                setUser(JSON.parse(storedUser));
+            } catch (e) {
+                console.error("Failed to parse user from localStorage", e);
+                localStorage.clear(); // Clear corrupted data
+            }
+        }
 
-        // Listen for hash changes to handle navigation
+        const onLocationChange = () => setPath(getPathFromHash());
         window.addEventListener('hashchange', onLocationChange);
-        
-        // Set initial path on component mount
         onLocationChange();
-
-        // Clean up the event listener on component unmount
-        return () => {
-            window.removeEventListener('hashchange', onLocationChange);
-        };
+        return () => window.removeEventListener('hashchange', onLocationChange);
     }, []);
+
+    const handleLoginSuccess = (loggedInUser: User, token: string) => {
+        localStorage.setItem('user', JSON.stringify(loggedInUser));
+        localStorage.setItem('token', token);
+        setUser(loggedInUser);
+        setShowAuthModal(false);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        setUser(null);
+        window.location.hash = '#/home';
+    };
 
     const { Component, Layout, showHeaderFooter, layoutProps } = renderPage(path);
 
     if (Layout) {
         return (
-// FIX: Property 'children' is missing in type '{ showTrendingSidebar: boolean; }' but required in type 'MainLayoutProps'.
-// The children prop is passed implicitly by JSX. Making it optional in the component's props interface will fix this kind of TS error.
-            <Layout {...layoutProps}>
-                <Component />
-            </Layout>
+            <>
+                <Layout 
+                    {...layoutProps}
+                    user={user}
+                    onLogout={handleLogout}
+                    onConnectClick={() => setShowAuthModal(true)}
+                    onCreatePostClick={() => setShowJoinModal(true)}
+                >
+                    <Component user={user} onOpenJoinCommunityModal={() => setShowJoinModal(true)} />
+                </Layout>
+                {showJoinModal && <JoinCommunityModal onClose={() => setShowJoinModal(false)} onConnect={() => { setShowJoinModal(false); setShowAuthModal(true); }} />}
+                {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLoginSuccess={handleLoginSuccess} />}
+            </>
         );
     }
 
     const mainClass = 'flex-grow overflow-y-auto';
 
     return (
-        <div className="min-h-screen flex flex-col bg-[#0D1117] text-gray-300">
-            {showHeaderFooter && <Header />}
-            <main className={mainClass}>
-                <Component />
-            </main>
-            {showHeaderFooter && <Footer />}
-        </div>
+        <>
+            <div className="min-h-screen flex flex-col bg-[#0D1117] text-gray-300">
+                {showHeaderFooter && <Header user={user} onLogout={handleLogout} onLoginClick={() => setShowAuthModal(true)} />}
+                <main className={mainClass}>
+                    <Component user={user} onOpenJoinCommunityModal={() => setShowJoinModal(true)} />
+                </main>
+                {showHeaderFooter && <Footer />}
+            </div>
+            {showJoinModal && <JoinCommunityModal onClose={() => setShowJoinModal(false)} onConnect={() => { setShowJoinModal(false); setShowAuthModal(true); }} />}
+            {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLoginSuccess={handleLoginSuccess} />}
+        </>
     );
 };
 

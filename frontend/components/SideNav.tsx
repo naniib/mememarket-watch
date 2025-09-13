@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Home, User, Search, Trophy, LogOut, Swords, Newspaper, LineChart, PenSquare, LogIn } from 'lucide-react';
+import { Home, User, Search, Trophy, LogOut, Swords, Newspaper, LineChart, PenSquare, LogIn, Zap } from 'lucide-react';
 
-// Interfaz para las propiedades de cada enlace
+interface User {
+    id: number;
+    username: string;
+    avatarUrl?: string;
+}
+
 interface NavLinkProps {
     href: string;
     icon: React.ElementType;
@@ -9,7 +14,6 @@ interface NavLinkProps {
     isActive: boolean;
 }
 
-// Componente para cada enlace del menú
 const NavLink = ({ href, icon: Icon, text, isActive }: NavLinkProps) => {
     const activeClass = isActive ? 'font-bold bg-[#1D2127]' : 'text-gray-400';
     return (
@@ -20,18 +24,17 @@ const NavLink = ({ href, icon: Icon, text, isActive }: NavLinkProps) => {
     );
 };
 
-// Componente principal de la barra lateral
-const SideNav = () => {
-    const [user, setUser] = useState<{ id: number, username: string } | null>(null);
+interface SideNavProps {
+    user: User | null;
+    onLogout: () => void;
+    onConnectClick: () => void;
+    onCreatePostClick: () => void;
+}
+
+const SideNav = ({ user, onLogout, onConnectClick, onCreatePostClick }: SideNavProps) => {
     const [activePath, setActivePath] = useState('');
 
     useEffect(() => {
-        // Cargar usuario desde localStorage
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
-        // Lógica para marcar el enlace activo
         const getPathFromHash = () => window.location.hash.split('?')[0] || '#/home';
         setActivePath(getPathFromHash());
         const onHashChange = () => setActivePath(getPathFromHash());
@@ -39,38 +42,36 @@ const SideNav = () => {
         return () => window.removeEventListener('hashchange', onHashChange);
     }, []);
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        setUser(null);
-    };
-
-    // La lista correcta de enlaces
-    const navLinks = [
-        { text: 'Inicio', href: '#/home', icon: Home },
-        { text: 'Perfil', href: user ? `#/profile/${user.id}` : '#/profile', icon: User },
-        { text: 'Radar', href: '#/explore', icon: Search },
-        { text: 'Meme Battles', href: '#/battles', icon: Swords },
-        { text: 'MemePress & Humor', href: '#/memepress', icon: Newspaper },
-        { text: 'Fidelity', href: '#/fidelity', icon: Trophy },
+    const allNavLinks = [
+        { text: 'Inicio', href: '#/home', icon: Home, requiresAuth: false },
+        { text: 'Perfil', href: user ? `#/profile/${user.id}` : '#/profile', icon: User, requiresAuth: true },
+        { text: 'Radar', href: '#/explore', icon: Search, requiresAuth: false },
+        { text: 'Meme Battles', href: '#/battles', icon: Swords, requiresAuth: false },
+        { text: 'MemePress & Humor', href: '#/memepress', icon: Newspaper, requiresAuth: false },
+        { text: 'Fidelity', href: '#/fidelity', icon: Trophy, requiresAuth: true },
     ];
+
+    const navLinks = allNavLinks.filter(link => !link.requiresAuth || !!user);
 
     return (
         <div className="flex flex-col justify-between h-full py-4">
-            
-            {/* Parte Superior: Perfil y Navegación */}
             <div>
-                {user && (
+                {user ? (
                     <div className="mb-4 px-2">
                          <a href={`#/profile/${user.id}`} className="flex items-center space-x-3 p-2 rounded-full hover:bg-[#1D2127]">
-                            <div className="w-10 h-10 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
-                                <span className="text-lg font-bold">{user.username.charAt(0).toUpperCase()}</span>
-                            </div>
+                            <img src={user.avatarUrl || `https://i.pravatar.cc/150?u=${user.id}`} alt="avatar" className="w-10 h-10 rounded-full" />
                             <div className="text-left flex-grow truncate">
                                 <p className="font-bold truncate">{user.username}</p>
                                 <p className="text-sm text-gray-400 truncate">@{user.username.toLowerCase()}</p>
                             </div>
                         </a>
+                    </div>
+                ) : (
+                     <div className="mb-4 px-2">
+                        <button onClick={onCreatePostClick} className="w-full flex items-center justify-center space-x-2 text-lg font-bold py-3 px-4 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 transition-opacity text-white">
+                           <Zap className="w-6 h-6" />
+                           <span>Connect</span>
+                        </button>
                     </div>
                 )}
 
@@ -81,18 +82,17 @@ const SideNav = () => {
                 </nav>
             </div>
 
-            {/* Parte Inferior: Botones de Acción */}
             <div className="flex flex-col space-y-4">
                 {user ? (
-                     <button onClick={handleLogout} className="flex items-center space-x-4 px-4 py-3 rounded-full hover:bg-[#1D2127] transition-colors duration-200 text-gray-400 text-xl w-full">
+                     <button onClick={onLogout} className="flex items-center space-x-4 px-4 py-3 rounded-full hover:bg-[#1D2127] transition-colors duration-200 text-gray-400 text-xl w-full">
                         <LogOut className="w-7 h-7" />
                         <span>Cerrar sesión</span>
                     </button>
                 ) : (
-                    <a href="#/login" className="flex items-center space-x-4 px-4 py-3 rounded-full hover:bg-[#1D2127] transition-colors duration-200 text-gray-400 text-xl w-full">
+                    <button onClick={onConnectClick} className="flex items-center space-x-4 px-4 py-3 rounded-full hover:bg-[#1D2127] transition-colors duration-200 text-gray-400 text-xl w-full">
                         <LogIn className="w-7 h-7" />
                         <span>Iniciar Sesión</span>
-                    </a>
+                    </button>
                 )}
                 <div className="space-y-4">
                     <a
@@ -102,15 +102,15 @@ const SideNav = () => {
                         <LineChart className="w-6 h-6" />
                         <span>MemeMarket</span>
                     </a>
-                    {user && (
-                        <button className="w-full text-lg text-white font-bold py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 transition-opacity flex items-center justify-center space-x-2">
-                            <PenSquare className="w-6 h-6" />
-                            <span>Crear publicación</span>
-                        </button>
-                    )}
+                    <button 
+                        onClick={user ? () => { /* Logic for logged in user */ alert('Open create post modal/page'); } : onCreatePostClick}
+                        className="w-full text-lg text-white font-bold py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 transition-opacity flex items-center justify-center space-x-2"
+                    >
+                        <PenSquare className="w-6 h-6" />
+                        <span>Crear publicación</span>
+                    </button>
                 </div>
             </div>
-
         </div>
     );
 };

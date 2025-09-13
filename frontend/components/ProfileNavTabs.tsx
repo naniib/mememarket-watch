@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const ProfileNavTabs = () => {
-  const [activeTab, setActiveTab] = useState('Posts');
+interface ProfileNavTabsProps {
+  activeTab: string;
+  onTabChange: (tab: string) => void;
+}
+
+const ProfileNavTabs = ({ activeTab, onTabChange }: ProfileNavTabsProps) => {
   const tabs = ['Posts', 'Replies', 'Media', 'Likes', 'Notifications', 'Settings', 'Followers'];
 
   return (
@@ -10,10 +14,7 @@ const ProfileNavTabs = () => {
         {tabs.map((tab) => (
           <button
             key={tab}
-            onClick={() => {
-                setActiveTab(tab);
-                console.log(`Pestaña ${tab} seleccionada`);
-            }}
+            onClick={() => onTabChange(tab)}
             className={`relative px-3 py-4 text-sm font-medium transition-colors duration-200
               ${
                 activeTab === tab

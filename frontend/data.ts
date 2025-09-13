@@ -370,6 +370,39 @@ const rawMockCoins = [
       { address: "0xL0RD...MEME", percentage: "14.0" }
     ]
   },
+  {
+    id: "safe-ape",
+    name: "SafeApe",
+    symbol: "SAFEAPE",
+    emoji: "🛡️",
+    price: "0.000912",
+    change24h: 9.8,
+    volume24h: "750K",
+    marketCap: "15.5M",
+    totalMarketCap: "18.0M",
+    circSupplyPercentage: 86,
+    holders: 4200,
+    totalTx: ">45k",
+    pooledSol: 250,
+    pooledMemecoin: "25M",
+    pooledMemecoinPercentage: 6,
+    poolCreated: "6/12/2025 16:00",
+    category: "warm" as "warm",
+    boosted: false,
+    upvotes: 411,
+    downvotes: 72,
+    riskLevel: "LOW" as "LOW",
+    liquidity: "400K",
+    volatility: 0.410,
+    fearGreedIndex: 53,
+    bullishVotes: 411,
+    bearishVotes: 72,
+    totalSupply: "200,000,000",
+    circulatingSupply: "172,000,000",
+    topHolders: [
+      { address: "0xSAFE...AAPE", percentage: "8.1" }
+    ]
+  },
   
   // COLD COINS
   {
@@ -502,6 +535,39 @@ const rawMockCoins = [
     circulatingSupply: "512,000,000",
     topHolders: [
       { address: "0xW0LF...WNTR", percentage: "13.2" }
+    ]
+  },
+  {
+    id: "rug-survivor",
+    name: "RugSurvivor",
+    symbol: "SURVIVE",
+    emoji: "⛑️",
+    price: "0.000011",
+    change24h: -2.1,
+    volume24h: "55K",
+    marketCap: "1.1M",
+    totalMarketCap: "1.1M",
+    circSupplyPercentage: 100,
+    holders: 750,
+    totalTx: ">5k",
+    pooledSol: 25,
+    pooledMemecoin: "2M",
+    pooledMemecoinPercentage: 1.5,
+    poolCreated: "11/30/2024 13:00",
+    category: "cold" as "cold",
+    boosted: false,
+    upvotes: 150,
+    downvotes: 140,
+    riskLevel: "HIGH" as "HIGH",
+    liquidity: "80K",
+    volatility: 0.98,
+    fearGreedIndex: 22,
+    bullishVotes: 150,
+    bearishVotes: 140,
+    totalSupply: "100,000,000",
+    circulatingSupply: "100,000,000",
+    topHolders: [
+      { address: "0x5URV...1V0R", percentage: "21.3" }
     ]
   },
 ];

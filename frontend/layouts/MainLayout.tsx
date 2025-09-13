@@ -2,28 +2,43 @@ import React from 'react';
 import SideNav from '../components/SideNav';
 import TrendingPosts from '../components/TrendingPosts';
 
+interface User {
+    id: number;
+    username: string;
+    avatarUrl?: string;
+}
+
 interface MainLayoutProps {
     children: React.ReactNode;
     showTrendingSidebar?: boolean;
+    user: User | null;
+    onLogout: () => void;
+    onConnectClick: () => void;
+    onCreatePostClick: () => void;
 }
 
-const MainLayout = ({ children, showTrendingSidebar = true }: MainLayoutProps) => {
+const MainLayout = ({ children, showTrendingSidebar = true, user, onLogout, onConnectClick, onCreatePostClick }: MainLayoutProps) => {
     return (
         <div className="flex w-full justify-center bg-[#0D1117] text-white">
             <div className="flex w-full max-w-9xl">
-                {/* 1. Sidebar Izquierda (Tus dimensiones respetadas) */}
+                {/* 1. Sidebar Izquierda */}
                 <header className="w-[275px] flex-shrink-0">
                     <div className="fixed top-1 h-full w-[275px] border-r border-gray-800 p-4">
-                        <SideNav />
+                        <SideNav 
+                            user={user} 
+                            onLogout={onLogout}
+                            onConnectClick={onConnectClick}
+                            onCreatePostClick={onCreatePostClick}
+                        />
                     </div>
                 </header>
 
-                {/* 2. Contenido Central (La página actual que se renderiza aquí) */}
+                {/* 2. Contenido Central */}
                 <main className="w-full px-6">
                     {children}
                 </main>
                 
-                {/* 3. Columna Derecha: Trending (AHORA CONDICIONAL) */}
+                {/* 3. Columna Derecha: Trending */}
                 {showTrendingSidebar && (
                     <aside className="hidden lg:block p-8">
                         <div className="sticky top-4 w-[400px]">

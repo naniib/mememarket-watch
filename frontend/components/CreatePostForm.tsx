@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { createPost } from '../api';
+import type { Post } from '../pages/ProfilePage'; // Import Post type
 
 interface CreatePostFormProps {
-    onPostCreated: () => void;
+    onPostCreated: (newPost: Post) => void;
 }
 
 const CreatePostForm = ({ onPostCreated }: CreatePostFormProps) => {
@@ -27,10 +28,12 @@ const CreatePostForm = ({ onPostCreated }: CreatePostFormProps) => {
                 throw new Error('You must be logged in to post.');
             }
 
-            await createPost({ content }, token);
+            const response = await createPost({ content }, token);
             
             setContent('');
-            onPostCreated(); // Callback to refresh the posts list
+            if (response.success && response.post) {
+                onPostCreated(response.post); // Callback with the new post
+            }
 
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An unknown error occurred.');
@@ -54,7 +57,6 @@ const CreatePostForm = ({ onPostCreated }: CreatePostFormProps) => {
                 <div className="flex justify-end mt-4">
                     <button
                         type="submit"
-                        onClick={() => alert('Publicando post desde el perfil...')}
                         className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={loading || !content.trim()}
                     >

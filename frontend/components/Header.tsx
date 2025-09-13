@@ -23,7 +23,6 @@ const ArbitrumIcon = () => <svg role="img" className="w-5 h-5 mr-3" viewBox="0 0
 const BaseIcon = () => <svg role="img" className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="#0052FF" xmlns="http://www.w3.org/2000/svg"><path d="M12,24A12,12,0,1,1,24,12,12,12,0,0,1,12,24ZM8,9.45v5.1H16V9.45Z"/></svg>;
 const AvalancheIcon = () => <svg role="img" className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="#E84142" xmlns="http://www.w3.org/2000/svg"><path d="M2.54 19.64h6.58l3.15-5.32L9.42 8.8h5.16L21.46 19.64h-5.46l-1.39-2.3H9.37l-1.4 2.3zM12 2.36L.3 21.64h23.4L12 2.36z"/></svg>;
 
-
 const networks = [
     { name: 'Solana', logo: <SolanaIcon /> },
     { name: 'BNB Chain', logo: <BnbChainIcon /> },
@@ -34,18 +33,21 @@ const networks = [
     { name: 'Avalanche', logo: <AvalancheIcon /> },
 ];
 
-const Header = () => {
+interface User {
+    id: number;
+    username: string;
+    email: string;
+}
+
+interface HeaderProps {
+    user: User | null;
+    onLogout: () => void;
+    onLoginClick: () => void;
+}
+
+const Header = ({ user, onLogout, onLoginClick }: HeaderProps) => {
     const [isNetworkDropdownOpen, setIsNetworkDropdownOpen] = useState(false);
-    const [user, setUser] = useState<{ id: number; username: string; email: string } | null>(null);
-
     const networkDropdownRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
-    }, []);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -58,13 +60,6 @@ const Header = () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        setUser(null);
-    };
-
 
     return (
         <header className="bg-[#161B22]/80 backdrop-blur-md border-b border-[#30363D] sticky top-0 z-50">
@@ -98,18 +93,15 @@ const Header = () => {
                         </div>
                         
                         {user ? (
-                            <button 
-                                onClick={handleLogout} 
-                                className="flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors"
-                            >
+                            <button onClick={onLogout} className="flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors">
                                 <LogoutIcon />
                                 Logout
                             </button>
                         ) : (
-                            <a href="#/login" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors">
+                            <button onClick={onLoginClick} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline-block mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h5a3 3 0 013 3v1" /></svg>
                                 Login
-                            </a>
+                            </button>
                         )}
                     </div>
                 </div>
