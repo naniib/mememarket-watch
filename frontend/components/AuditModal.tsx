@@ -76,12 +76,12 @@ const AuditModal = ({ isOpen, onClose }: AuditModalProps) => {
             aria-labelledby="audit-modal-title"
         >
             <div 
-                className="relative w-full max-w-3xl bg-[#0d1117] border border-[#30363D] rounded-2xl shadow-lg shadow-cyan-500/10"
+                className="relative w-full max-w-3xl bg-black border border-gray-800 rounded-2xl shadow-lg shadow-[#00f5b3]/10"
                 onClick={e => e.stopPropagation()}
             >
-                <header className="p-6 flex justify-between items-center border-b border-gray-700/30">
+                <header className="p-6 flex justify-between items-center border-b border-gray-800">
                     <h2 id="audit-modal-title" className="text-xl font-bold text-white flex items-center">
-                        <Shield className="w-6 h-6 mr-3 text-cyan-400" />
+                        <Shield className="w-6 h-6 mr-3 text-[#00f5b3]" />
                         Security Audit
                     </h2>
                     <button onClick={onClose} className="text-gray-400 hover:text-white" aria-label="Close modal">
@@ -100,7 +100,7 @@ const AuditModal = ({ isOpen, onClose }: AuditModalProps) => {
                     <div className="space-y-6">
                         {Object.entries(checks).map(([category, items]) => (
                             <div key={category}>
-                                <h3 className="text-lg font-semibold text-cyan-400 border-b border-cyan-400/20 pb-2 mb-4">{category}</h3>
+                                <h3 className="text-lg font-semibold text-[#00f5b3] border-b border-[#00f5b3]/20 pb-2 mb-4">{category}</h3>
                                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
                                     {items.map((check, index) => {
                                         const { Icon, color } = getStatusStyles(check.status);
@@ -122,7 +122,7 @@ const AuditModal = ({ isOpen, onClose }: AuditModalProps) => {
                     </div>
                 </div>
 
-                <footer className="p-4 border-t border-gray-700/30 bg-[#161B22]/50 rounded-b-2xl">
+                <footer className="p-4 border-t border-gray-800 bg-black/50 rounded-b-2xl">
                      <p className="text-xs text-gray-500 text-center">
                          Disclaimer: This is an automated audit and is for informational purposes only. It is not financial advice. Always conduct your own research.
                      </p>

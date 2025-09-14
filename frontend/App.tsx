@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -16,6 +18,7 @@ import ArticleDetailPage from './pages/ArticleDetailPage';
 import FidelityPage from './pages/FidelityPage';
 import AuthModal from './components/AuthModal'; 
 import JoinCommunityModal from './components/JoinCommunityModal';
+import AccountRequiredModal from './components/AccountRequiredModal';
 
 interface User {
     id: number;
@@ -85,6 +88,7 @@ const App = () => {
     const [user, setUser] = useState<User | null>(null);
     const [showJoinModal, setShowJoinModal] = useState(false);
     const [showAuthModal, setShowAuthModal] = useState(false);
+    const [showAccountRequiredModal, setShowAccountRequiredModal] = useState(false);
 
     useEffect(() => {
         // Centralized user state initialization
@@ -118,7 +122,24 @@ const App = () => {
         window.location.hash = '#/home';
     };
 
-    const { Component, Layout, showHeaderFooter, layoutProps } = renderPage(path);
+    const handleOpenAuthModal = () => {
+        setShowJoinModal(false);
+        setShowAccountRequiredModal(false);
+        setShowAuthModal(true);
+    };
+
+    const handleOpenAccountRequiredModal = () => {
+        setShowAccountRequiredModal(true);
+    };
+
+    const { Component, Layout, showHeaderFooter, layoutProps } = renderPage(path);
+    
+    const componentProps = {
+        user: user,
+        onOpenJoinCommunityModal: () => setShowJoinModal(true),
+        onOpenAccountRequiredModal: handleOpenAccountRequiredModal,
+        onOpenAuthModal: handleOpenAuthModal,
+    };
 
     if (Layout) {
         return (
@@ -130,10 +151,11 @@ const App = () => {
                     onConnectClick={() => setShowAuthModal(true)}
                     onCreatePostClick={() => setShowJoinModal(true)}
                 >
-                    <Component user={user} onOpenJoinCommunityModal={() => setShowJoinModal(true)} />
+                    <Component {...componentProps} />
                 </Layout>
-                {showJoinModal && <JoinCommunityModal onClose={() => setShowJoinModal(false)} onConnect={() => { setShowJoinModal(false); setShowAuthModal(true); }} />}
+                {showJoinModal && <JoinCommunityModal onClose={() => setShowJoinModal(false)} onConnect={handleOpenAuthModal} />}
                 {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLoginSuccess={handleLoginSuccess} />}
+                {showAccountRequiredModal && <AccountRequiredModal onClose={() => setShowAccountRequiredModal(false)} onOpenAuthModal={handleOpenAuthModal} />}
             </>
         );
     }
@@ -142,15 +164,16 @@ const App = () => {
 
     return (
         <>
-            <div className="min-h-screen flex flex-col bg-[#0D1117] text-gray-300">
+            <div className="min-h-screen flex flex-col bg-black text-gray-300">
                 {showHeaderFooter && <Header user={user} onLogout={handleLogout} onLoginClick={() => setShowAuthModal(true)} />}
                 <main className={mainClass}>
-                    <Component user={user} onOpenJoinCommunityModal={() => setShowJoinModal(true)} />
+                    <Component {...componentProps} />
                 </main>
                 {showHeaderFooter && <Footer />}
             </div>
-            {showJoinModal && <JoinCommunityModal onClose={() => setShowJoinModal(false)} onConnect={() => { setShowJoinModal(false); setShowAuthModal(true); }} />}
+            {showJoinModal && <JoinCommunityModal onClose={() => setShowJoinModal(false)} onConnect={handleOpenAuthModal} />}
             {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLoginSuccess={handleLoginSuccess} />}
+            {showAccountRequiredModal && <AccountRequiredModal onClose={() => setShowAccountRequiredModal(false)} onOpenAuthModal={handleOpenAuthModal} />}
         </>
     );
 };

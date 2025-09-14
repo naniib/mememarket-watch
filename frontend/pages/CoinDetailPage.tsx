@@ -1,4 +1,6 @@
 
+
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { Star, Share2, Copy, Globe, Send, Search, ChevronsLeft, ChevronsRight, Users, ExternalLink, Trophy, Package, Zap, PieChart, ArrowRightLeft, Box, Coins, Percent, Clock, DollarSign, Droplets, RefreshCw, BarChart, TrendingUp, TrendingDown } from 'lucide-react';
 import { allCoins, Coin } from '../data';
@@ -40,7 +42,7 @@ export interface StatCardProps {
     children?: React.ReactNode;
     onClick?: () => void;
     info?: string;
-    highlightColor?: 'cyan' | 'amber';
+    highlightColor?: 'green' | 'amber';
     statusTag?: {
         text: string;
         color: 'green' | 'red';
@@ -51,18 +53,18 @@ export interface StatCardProps {
 // Exportamos StatCard también
 export const StatCard = ({ title, value, children, onClick, info, highlightColor, statusTag, icon: Icon }: StatCardProps) => {
     const topBorderColors: Record<string, string> = {
-        cyan: 'bg-cyan-400',
+        green: 'bg-green-400',
         amber: 'bg-amber-400',
         default: 'bg-gray-700'
     };
 
-    const baseClasses = `bg-[#1c2128] rounded-xl flex flex-col justify-between transition-all duration-300 h-full text-left shadow-lg overflow-hidden relative`;
+    const baseClasses = `bg-[#0a0a0a] rounded-xl flex flex-col justify-between transition-all duration-300 h-full text-left shadow-lg overflow-hidden relative`;
     
-    let variantClasses = `border border-transparent ${onClick ? 'cursor-pointer hover:border-cyan-400/50 hover:bg-[#222831]' : ''}`;
+    let variantClasses = `border border-transparent ${onClick ? 'cursor-pointer hover:border-green-400/50 hover:bg-[#111]' : ''}`;
 
     if (highlightColor) {
         const colorStyles = {
-            cyan: `border-cyan-400/60 shadow-cyan-500/10 cursor-pointer hover:bg-cyan-900/20 hover:shadow-cyan-500/20`,
+            green: `border-green-400/60 shadow-green-500/10 cursor-pointer hover:bg-green-900/20 hover:shadow-green-500/20`,
             amber: `border-amber-400/60 shadow-amber-500/10 cursor-pointer hover:bg-amber-900/20 hover:shadow-amber-500/20`
         };
         variantClasses = colorStyles[highlightColor];
@@ -112,7 +114,7 @@ const CoinDetailPage = () => {
     const [isSecurityWarningOpen, setSecurityWarningOpen] = useState(false);
     const [userVote, setUserVote] = useState<'bullish' | 'bearish' | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isStatsModalOpen, setIsStatsModalOpen] = useState(false); 
+    const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
 
     useEffect(() => {
         const handleHashChange = () => {
@@ -188,7 +190,7 @@ const CoinDetailPage = () => {
         }
     
         return [
-            { title: "Top 10 Holders", children: <div className="flex items-center space-x-2 text-cyan-400 font-bold"><Trophy size={20} className="text-yellow-400" /><span>Ver Lista</span></div>, onClick: () => setTopHoldersModalOpen(true), highlightColor: 'cyan', icon: Trophy },
+            { title: "Top 10 Holders", children: <div className="flex items-center space-x-2 text-[#00f5b3] font-bold"><Trophy size={20} className="text-yellow-400" /><span>Ver Lista</span></div>, onClick: () => setTopHoldersModalOpen(true), highlightColor: 'green', icon: Trophy },
             { title: "Market Cap", value: `$${coin.marketCap}`, icon: DollarSign },
             { title: "Liquidez", value: `$${coin.liquidity}`, icon: Droplets },
             { title: "Holders", value: coin.holders, icon: Users },
@@ -248,14 +250,14 @@ const CoinDetailPage = () => {
             <StatsModal isOpen={isStatsModalOpen} onClose={() => setIsStatsModalOpen(false)} advancedStats={advancedStats} />
 
             {/* Header */}
-            <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-3 flex items-center justify-between flex-wrap gap-4">
+            <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-3 flex items-center justify-between flex-wrap gap-4">
                 <div className="flex items-center space-x-3">
                     <div className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-3xl flex-shrink-0">{coin.emoji}</div>
                     <div>
                         <div className="flex items-center space-x-2">
                             <h1 className="text-2xl font-bold text-white">{coin.name}</h1>
                             <button className="text-gray-400 hover:text-yellow-400" title="Add to Watchlist"><Star size={18} /></button>
-                            <button className="text-gray-400 hover:text-cyan-400" title="Share"><Share2 size={18} /></button>
+                            <button className="text-gray-400 hover:text-[#00f5b3]" title="Share"><Share2 size={18} /></button>
                         </div>
                         <p className="text-sm text-gray-500">@{coin.symbol.toLowerCase()}/sol</p>
                     </div>
@@ -282,15 +284,15 @@ const CoinDetailPage = () => {
             </div>
 
             {/* Stats Cards Section */}
-            <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-4">
+            <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-4">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {basicStats.map((stat) => (
                         <StatCard key={stat.title} {...stat} />
                     ))}
                 </div>
                 
-                <div className="border-t border-[#30363D] mt-4 pt-3 text-center">
-                    <button onClick={() => setIsStatsModalOpen(true)} className="text-cyan-400 font-semibold text-sm hover:text-cyan-300">
+                <div className="border-t border-gray-800 mt-4 pt-3 text-center">
+                    <button onClick={() => setIsStatsModalOpen(true)} className="text-[#00f5b3] font-semibold text-sm hover:opacity-80">
                         Más Información 👇
                     </button>
                 </div>
@@ -301,7 +303,7 @@ const CoinDetailPage = () => {
                     <TradingViewChart />
                     <button
                         onClick={() => setIsChatVisible(!isChatVisible)}
-                        className="absolute top-1/2 -right-3 transform -translate-y-1/2 z-10 p-2 bg-[#161B22] border border-[#30363D] rounded-full text-gray-400 hover:bg-cyan-500/20 hover:text-white"
+                        className="absolute top-1/2 -right-3 transform -translate-y-1/2 z-10 p-2 bg-[#0a0a0a] border border-gray-800 rounded-full text-gray-400 hover:bg-green-500/20 hover:text-white"
                         aria-label={isChatVisible ? "Ocultar chat" : "Mostrar chat"}
                     >
                         {isChatVisible ? <ChevronsRight size={16} /> : <ChevronsLeft size={16} />}
@@ -316,7 +318,7 @@ const CoinDetailPage = () => {
                     <TransactionList coinSymbol={coin.symbol} />
                     <button
                         onClick={() => setIsSentimentVisible(!isSentimentVisible)}
-                        className="absolute top-1/2 -right-3 transform -translate-y-1/2 z-10 p-2 bg-[#161B22] border border-[#30363D] rounded-full text-gray-400 hover:bg-cyan-500/20 hover:text-white"
+                        className="absolute top-1/2 -right-3 transform -translate-y-1/2 z-10 p-2 bg-[#0a0a0a] border border-gray-800 rounded-full text-gray-400 hover:bg-green-500/20 hover:text-white"
                         aria-label={isSentimentVisible ? "Ocultar widgets" : "Mostrar widgets"}
                     >
                         {isSentimentVisible ? <ChevronsRight size={16} /> : <ChevronsLeft size={16} />}
@@ -324,11 +326,11 @@ const CoinDetailPage = () => {
                 </div>
 
                 <div style={{ gridArea: 'sentiment' }} className={`space-y-4 min-h-0 transition-all duration-300 ${!isSentimentVisible ? 'hidden' : ''}`}>
-                    <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-4">
-                        <h3 className="text-lg font-bold text-cyan-400 mb-2 text-center">Fear & Greed Index</h3>
+                    <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-4">
+                        <h3 className="text-lg font-bold text-[#00f5b3] mb-2 text-center">Fear & Greed Index</h3>
                         <FearGreedMeter value={coin.fearGreedIndex || 0} size={180} />
                     </div>
-                    <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-4">
+                    <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-4">
                         <CommunityVote
                             bullishVotes={coin.bullishVotes || 0}
                             bearishVotes={coin.bearishVotes || 0} 

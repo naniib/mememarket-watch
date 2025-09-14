@@ -15,7 +15,7 @@ const CommunityVote = ({ bullishVotes, bearishVotes, userVote, onVote, isAuthent
 
     return (
         <div>
-            <h3 className="text-lg font-bold text-cyan-400 mb-2 text-center">Community Sentiment</h3>
+            <h3 className="text-lg font-bold text-[#00f5b3] mb-2 text-center">Community Sentiment</h3>
             <p className="text-xs text-gray-400 mb-4 text-center">{totalVotes} total votes</p>
             
             <div className="flex space-x-4 my-4">
@@ -53,7 +53,7 @@ const CommunityVote = ({ bullishVotes, bearishVotes, userVote, onVote, isAuthent
                     </button>
                 </div>
             ) : (
-                <a href="#/login" className="block w-full text-center mt-4 bg-[#30363D] hover:bg-gray-700 text-gray-300 py-2 rounded-lg text-sm">
+                <a href="#/login" className="block w-full text-center mt-4 bg-gray-800 hover:bg-gray-700 text-gray-300 py-2 rounded-lg text-sm">
                     Login to cast your vote
                 </a>
             )}

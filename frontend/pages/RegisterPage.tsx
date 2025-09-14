@@ -1,5 +1,6 @@
 
 
+
 import React, { useState } from 'react';
 import { register } from '../api';
 
@@ -25,9 +26,9 @@ interface AuthLayoutProps {
 }
 
 const AuthLayout = ({ children }: AuthLayoutProps) => (
-    <div className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-[#100a26] p-4">
-        <div className="absolute top-0 right-0 translate-x-1/4 -translate-y-1/4 w-96 h-96 bg-purple-500/40 rounded-full filter blur-3xl opacity-50 animate-pulse [animation-delay:2s]"></div>
-        <div className="absolute bottom-0 left-0 -translate-x-1/4 translate-y-1/4 w-96 h-96 bg-pink-500/40 rounded-full filter blur-3xl opacity-50 animate-pulse"></div>
+    <div className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-black p-4">
+        <div className="absolute top-0 right-0 translate-x-1/4 -translate-y-1/4 w-96 h-96 bg-green-500/20 rounded-full filter blur-3xl opacity-50 animate-pulse [animation-delay:2s]"></div>
+        <div className="absolute bottom-0 left-0 -translate-x-1/4 translate-y-1/4 w-96 h-96 bg-green-500/20 rounded-full filter blur-3xl opacity-50 animate-pulse"></div>
         <div className="relative z-10 w-full max-w-sm">
             {children}
         </div>
@@ -72,15 +73,15 @@ const RegisterPage = () => {
 
     return (
         <AuthLayout>
-            <div className="bg-black/30 backdrop-blur-lg border border-white/10 rounded-2xl p-8 space-y-6 animate-fade-in">
+            <div className="bg-black/50 backdrop-blur-lg border border-gray-800 rounded-2xl p-8 space-y-6 animate-fade-in">
                 <header className="space-y-2 text-center">
                     <a href="#/" className="inline-block text-2xl font-bold mb-2 text-gray-500 hover:text-white" aria-label="Back to home">&larr;</a>
-                    <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">Join the Revolution</h1>
+                    <h1 className="text-3xl font-bold text-[#00f5b3]" style={{ textShadow: '0 0 8px rgba(0, 245, 179, 0.7)' }}>Join the Revolution</h1>
                     <p className="text-gray-400">Create your account</p>
                     <div className="flex justify-center space-x-3 pt-4">
-                        <div className="w-10 h-10 bg-pink-500/80 rounded-full flex items-center justify-center text-xl shadow-lg">✨</div>
-                        <div className="w-10 h-10 bg-red-500/80 rounded-full flex items-center justify-center text-xl shadow-lg">🔥</div>
-                        <div className="w-10 h-10 bg-blue-500/80 rounded-full flex items-center justify-center text-xl shadow-lg">💧</div>
+                        <div className="w-10 h-10 bg-green-500/20 border border-green-500/50 rounded-full flex items-center justify-center text-xl shadow-lg">✨</div>
+                        <div className="w-10 h-10 bg-green-500/20 border border-green-500/50 rounded-full flex items-center justify-center text-xl shadow-lg">🔥</div>
+                        <div className="w-10 h-10 bg-green-500/20 border border-green-500/50 rounded-full flex items-center justify-center text-xl shadow-lg">💧</div>
                     </div>
                 </header>
                 
@@ -100,7 +101,7 @@ const RegisterPage = () => {
                                 placeholder="Username"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                className="w-full pl-10 pr-4 py-3 bg-[#0D1117]/50 border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 text-white" />
+                                className="w-full pl-10 pr-4 py-3 bg-black/50 border border-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00f5b3] text-white" />
                         </div>
                     </div>
                     <div>
@@ -116,7 +117,7 @@ const RegisterPage = () => {
                                 placeholder="Email" 
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full pl-10 pr-4 py-3 bg-[#0D1117]/50 border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 text-white" />
+                                className="w-full pl-10 pr-4 py-3 bg-black/50 border border-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00f5b3] text-white" />
                         </div>
                     </div>
                     <div>
@@ -133,7 +134,7 @@ const RegisterPage = () => {
                                 placeholder="Password" 
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full pl-10 pr-4 py-3 bg-[#0D1117]/50 border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 text-white" />
+                                className="w-full pl-10 pr-4 py-3 bg-black/50 border border-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00f5b3] text-white" />
                         </div>
                     </div>
                     <div>
@@ -150,18 +151,18 @@ const RegisterPage = () => {
                                 placeholder="Confirm Password" 
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                className="w-full pl-10 pr-4 py-3 bg-[#0D1117]/50 border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 text-white" />
+                                className="w-full pl-10 pr-4 py-3 bg-black/50 border border-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00f5b3] text-white" />
                         </div>
                     </div>
                     <button 
                         type="submit" 
                         disabled={loading}
-                        className="w-full flex items-center justify-center bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold py-3 px-4 rounded-lg transition-transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                        className="w-full flex items-center justify-center bg-[#00f5b3] text-black font-bold py-3 px-4 rounded-lg transition-all hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(0,245,179,0.5)]">
                        {loading ? 'Creating Account...' : <><CreateAccountIcon /> Create Account</>}
                     </button>
                 </form>
                  <p className="text-center text-gray-400 text-sm">
-                    Already have an account? <a href="#/login" className="font-medium text-cyan-400 hover:underline">Sign in here</a>
+                    Already have an account? <a href="#/login" className="font-medium text-[#00f5b3] hover:underline">Sign in here</a>
                 </p>
             </div>
         </AuthLayout>

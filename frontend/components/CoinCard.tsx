@@ -59,7 +59,7 @@ const CoinCard = ({ coin, rank, category, onClick, isAuthenticated }: CoinCardPr
 
   return (
     <div 
-      className={`relative bg-gray-900/50 backdrop-blur-sm border ${styles.border} ${styles.hoverBorder} ${styles.shadow} rounded-xl p-3 cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg`}
+      className={`relative bg-black/50 backdrop-blur-sm border ${styles.border} ${styles.hoverBorder} ${styles.shadow} rounded-xl p-3 cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg`}
       onClick={onClick}
       aria-labelledby={`coin-name-${coin.id}`}
     >
@@ -69,7 +69,7 @@ const CoinCard = ({ coin, rank, category, onClick, isAuthenticated }: CoinCardPr
           <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${styles.rankBg}`}>
             #{rank}
           </div>
-          <div className="w-10 h-10 bg-gray-700/50 rounded-full flex items-center justify-center text-xl">
+          <div className="w-10 h-10 bg-gray-800/50 rounded-full flex items-center justify-center text-xl">
             {coin.emoji}
           </div>
           <div>

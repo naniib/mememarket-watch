@@ -90,9 +90,9 @@ const LiveChat = ({ coinId, coinName, isAuthenticated }: LiveChatProps) => {
   }, []);
 
   return (
-    <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-lg h-full flex flex-col">
-      <div className="flex items-center space-x-2 p-4 border-b border-gray-700/30">
-        <MessageCircle className="w-5 h-5 text-cyan-400" />
+    <div className="bg-[#0a0a0a] border border-gray-800 rounded-lg h-full flex flex-col">
+      <div className="flex items-center space-x-2 p-4 border-b border-gray-800">
+        <MessageCircle className="w-5 h-5 text-[#00f5b3]" />
         <h3 className="font-bold text-white">Live Chat - {coinName}</h3>
         <div className="ml-auto flex items-center space-x-1">
             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
@@ -112,7 +112,7 @@ const LiveChat = ({ coinId, coinName, isAuthenticated }: LiveChatProps) => {
                       {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
               </div>
-              <div className="mt-1 text-sm text-gray-200 bg-[#30363D] rounded-lg px-3 py-2 inline-block max-w-full break-words shadow">
+              <div className="mt-1 text-sm text-gray-200 bg-gray-800 rounded-lg px-3 py-2 inline-block max-w-full break-words shadow">
                   {msg.text}
               </div>
             </div>
@@ -120,7 +120,7 @@ const LiveChat = ({ coinId, coinName, isAuthenticated }: LiveChatProps) => {
         })}
       </div>
       
-      <div className="relative p-4 border-t border-gray-700/30">
+      <div className="relative p-4 border-t border-gray-800">
         {isAuthenticated ? (
           <div className="space-y-2">
             <form onSubmit={handleSendMessage} className="flex space-x-2 relative">
@@ -130,30 +130,30 @@ const LiveChat = ({ coinId, coinName, isAuthenticated }: LiveChatProps) => {
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   placeholder="Type a message..."
-                  className="w-full bg-gray-700/50 border border-gray-600/30 rounded px-3 py-2 pr-20 text-sm text-white placeholder-gray-400 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
+                  className="w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 pr-20 text-sm text-white placeholder-gray-400 focus:border-green-400 focus:ring-1 focus:ring-green-400/20 transition-all"
                 />
                 <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-1">
-                  <button type="button" onClick={() => setShowEmojiPicker(!showEmojiPicker)} className="p-1 text-gray-400 hover:text-yellow-400 transition-colors rounded hover:bg-gray-600/30">
+                  <button type="button" onClick={() => setShowEmojiPicker(!showEmojiPicker)} className="p-1 text-gray-400 hover:text-yellow-400 transition-colors rounded hover:bg-gray-700">
                     <Smile className="w-4 h-4" />
                   </button>
-                  <button type="button" className="p-1 text-gray-400 hover:text-pink-400 transition-colors rounded hover:bg-gray-600/30">
+                  <button type="button" className="p-1 text-gray-400 hover:text-pink-400 transition-colors rounded hover:bg-gray-700">
                     <Image className="w-4 h-4" />
                   </button>
                 </div>
               </div>
-              <button type="submit" className="bg-cyan-600 hover:bg-cyan-700 text-white px-3 py-2 rounded transition-colors font-bold">
+              <button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded transition-colors font-bold">
                 <Send className="w-4 h-4" />
               </button>
             </form>
             {showEmojiPicker && (
-              <div ref={emojiPickerRef} className="absolute bottom-full right-4 mb-2 z-50 border border-gray-600/30 rounded-lg overflow-hidden shadow-2xl">
+              <div ref={emojiPickerRef} className="absolute bottom-full right-4 mb-2 z-50 border border-gray-700 rounded-lg overflow-hidden shadow-2xl">
                 {/* FIX: Use the Theme enum for the theme prop instead of a string literal to fix the type error. */}
                 <EmojiPicker onEmojiClick={handleEmojiClick} theme={Theme.DARK} width={300} height={400} />
               </div>
             )}
           </div>
         ) : (
-          <a href="#/login" className="block w-full text-center bg-[#30363D] hover:bg-gray-700 text-gray-300 py-2 rounded-lg text-sm">
+          <a href="#/login" className="block w-full text-center bg-gray-800 hover:bg-gray-700 text-gray-300 py-2 rounded-lg text-sm">
               Login to join the conversation
           </a>
         )}

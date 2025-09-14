@@ -1,5 +1,6 @@
 
 
+
 import React, { useState } from 'react';
 import { login } from '../api';
 
@@ -22,9 +23,9 @@ interface AuthLayoutProps {
 }
 
 const AuthLayout = ({ children }: AuthLayoutProps) => (
-    <div className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-[#100a26] p-4">
-        <div className="absolute top-0 left-0 -translate-x-1/4 -translate-y-1/4 w-96 h-96 bg-purple-500/40 rounded-full filter blur-3xl opacity-50 animate-pulse"></div>
-        <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 w-96 h-96 bg-cyan-500/40 rounded-full filter blur-3xl opacity-50 animate-pulse [animation-delay:4s]"></div>
+    <div className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-black p-4">
+        <div className="absolute top-0 left-0 -translate-x-1/4 -translate-y-1/4 w-96 h-96 bg-green-500/20 rounded-full filter blur-3xl opacity-50 animate-pulse"></div>
+        <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 w-96 h-96 bg-green-500/20 rounded-full filter blur-3xl opacity-50 animate-pulse [animation-delay:4s]"></div>
         <div className="relative z-10 w-full max-w-sm">
             {children}
         </div>
@@ -60,15 +61,15 @@ const LoginPage = () => {
 
     return (
         <AuthLayout>
-            <div className="bg-black/30 backdrop-blur-lg border border-white/10 rounded-2xl p-8 space-y-6 animate-fade-in">
+            <div className="bg-black/50 backdrop-blur-lg border border-gray-800 rounded-2xl p-8 space-y-6 animate-fade-in">
                 <header className="space-y-2 text-center">
                     <a href="#/" className="inline-block text-2xl font-bold mb-2 text-gray-500 hover:text-white" aria-label="Back to home">&larr;</a>
-                    <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-pink-500 bg-clip-text text-transparent">Welcome Back</h1>
+                    <h1 className="text-3xl font-bold text-[#00f5b3]" style={{ textShadow: '0 0 8px rgba(0, 245, 179, 0.7)' }}>Welcome Back</h1>
                     <p className="text-gray-400">Sign in to your account</p>
                     <div className="flex justify-center space-x-3 pt-4">
-                        <div className="w-10 h-10 bg-yellow-400/80 rounded-full flex items-center justify-center text-xl shadow-lg">🚀</div>
-                        <div className="w-10 h-10 bg-cyan-400/80 rounded-full flex items-center justify-center text-xl shadow-lg">💎</div>
-                        <div className="w-10 h-10 bg-pink-400/80 rounded-full flex items-center justify-center text-xl shadow-lg">🌙</div>
+                        <div className="w-10 h-10 bg-green-500/20 border border-green-500/50 rounded-full flex items-center justify-center text-xl shadow-lg">🚀</div>
+                        <div className="w-10 h-10 bg-green-500/20 border border-green-500/50 rounded-full flex items-center justify-center text-xl shadow-lg">💎</div>
+                        <div className="w-10 h-10 bg-green-500/20 border border-green-500/50 rounded-full flex items-center justify-center text-xl shadow-lg">🌙</div>
                     </div>
                 </header>
                 
@@ -87,7 +88,7 @@ const LoginPage = () => {
                                 placeholder="Email" 
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full pl-10 pr-4 py-3 bg-[#0D1117]/50 border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white" />
+                                className="w-full pl-10 pr-4 py-3 bg-black/50 border border-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00f5b3] text-white" />
                         </div>
                     </div>
                     <div>
@@ -103,18 +104,18 @@ const LoginPage = () => {
                                 placeholder="Password" 
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full pl-10 pr-4 py-3 bg-[#0D1117]/50 border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white" />
+                                className="w-full pl-10 pr-4 py-3 bg-black/50 border border-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00f5b3] text-white" />
                         </div>
                     </div>
                     <button 
                         type="submit" 
                         disabled={loading}
-                        className="w-full flex items-center justify-center bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-3 px-4 rounded-lg transition-transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                        className="w-full flex items-center justify-center bg-[#00f5b3] text-black font-bold py-3 px-4 rounded-lg transition-all hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(0,245,179,0.5)]">
                        {loading ? 'Signing In...' : <><SignInIcon /> Sign In</>}
                     </button>
                 </form>
                  <p className="text-center text-gray-400 text-sm">
-                    Don't have an account? <a href="#/register" className="font-medium text-cyan-400 hover:underline">Register here</a>
+                    Don't have an account? <a href="#/register" className="font-medium text-[#00f5b3] hover:underline">Register here</a>
                 </p>
             </div>
         </AuthLayout>

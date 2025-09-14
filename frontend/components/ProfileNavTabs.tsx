@@ -26,7 +26,7 @@ const ProfileNavTabs = ({ activeTab, onTabChange }: ProfileNavTabsProps) => {
           >
             {tab}
             {activeTab === tab && (
-              <span className="absolute bottom-0 left-0 right-0 h-1 bg-cyan-400 rounded-full"></span>
+              <span className="absolute bottom-0 left-0 right-0 h-1 bg-[#00f5b3] rounded-full"></span>
             )}
           </button>
         ))}

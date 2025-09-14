@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-const LightningIcon = () => (
-    <svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-    </svg>
+const Logo = () => (
+    <img src="logo4.png" alt="MemeMarket Logo" className="w-8 h-8" />
 );
 
 const LogoutIcon = () => (
@@ -62,13 +60,13 @@ const Header = ({ user, onLogout, onLoginClick }: HeaderProps) => {
     }, []);
 
     return (
-        <header className="bg-[#161B22]/80 backdrop-blur-md border-b border-[#30363D] sticky top-0 z-50">
+        <header className="bg-black/80 backdrop-blur-md border-b border-gray-900 sticky top-0 z-50">
             <div className="container mx-auto px-4">
                 <div className="flex items-center justify-between h-16">
                     <a href="#/" className="flex items-center space-x-2">
-                        <LightningIcon />
+                        <Logo />
                         <span className="text-xl font-bold text-white">MemeMarket</span>
-                        <span className="text-xs font-mono bg-gray-700 text-cyan-400 px-2 py-0.5 rounded">WATCH</span>
+                        <span className="text-xs font-mono bg-gray-800 text-[#00f5b3] px-2 py-0.5 rounded">WATCH</span>
                     </a>
                     <div className="flex items-center space-x-6">
                         <a href="#/home" className="text-sm font-medium text-gray-300 hover:text-white">MemeWatch Social</a>
@@ -77,11 +75,11 @@ const Header = ({ user, onLogout, onLoginClick }: HeaderProps) => {
                                 NETWORKS <ChevronDownIcon />
                             </button>
                             {isNetworkDropdownOpen && (
-                                <div className="absolute right-0 mt-2 w-48 bg-[#161B22] border border-[#30363D] rounded-lg shadow-lg">
+                                <div className="absolute right-0 mt-2 w-48 bg-[#0a0a0a] border border-gray-800 rounded-lg shadow-lg">
                                     <ul className="py-2">
                                         {networks.map(network => (
                                             <li key={network.name}>
-                                                <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-[#30363D]">
+                                                <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
                                                     {network.logo}
                                                     {network.name}
                                                 </a>
@@ -98,7 +96,7 @@ const Header = ({ user, onLogout, onLoginClick }: HeaderProps) => {
                                 Logout
                             </button>
                         ) : (
-                            <button onClick={onLoginClick} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors">
+                            <button onClick={onLoginClick} className="bg-[#00f5b3] hover:bg-opacity-90 text-black font-bold py-2 px-4 rounded-lg text-sm transition-all duration-300 shadow-[0_0_10px_rgba(0,245,179,0.5)]">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline-block mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h5a3 3 0 013 3v1" /></svg>
                                 Login
                             </button>

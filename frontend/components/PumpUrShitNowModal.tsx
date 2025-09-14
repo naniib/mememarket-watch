@@ -1,4 +1,6 @@
 
+
+
 import React, { useState, useEffect } from 'react';
 
 // --- ICONS ---
@@ -12,8 +14,15 @@ const CreditCardIcon = () => <svg className="w-6 h-6 mr-3" fill="none" viewBox="
 const CryptoWalletIcon = () => <svg className="w-6 h-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>;
 
 // --- INTERFACES ---
+interface User {
+    id: number;
+    username: string;
+}
 interface PumpUrShitNowModalProps {
     onClose: () => void;
+    user: User | null;
+    onOpenAccountRequiredModal: () => void;
+    onOpenAuthModal: () => void;
 }
 
 interface Service {
@@ -22,7 +31,7 @@ interface Service {
 }
 
 // --- MAIN COMPONENT ---
-const PumpUrShitNowModal = ({ onClose }: PumpUrShitNowModalProps) => {
+const PumpUrShitNowModal = ({ onClose, user, onOpenAccountRequiredModal }: PumpUrShitNowModalProps) => {
     const [currentStep, setCurrentStep] = useState(1);
     const [selectedService, setSelectedService] = useState<Service | null>(null);
     const [selectedNetwork, setSelectedNetwork] = useState('SOLANA');
@@ -39,8 +48,15 @@ const PumpUrShitNowModal = ({ onClose }: PumpUrShitNowModalProps) => {
     }, []);
 
     const handleSelectService = (service: Service) => {
-        setSelectedService(service);
-        setCurrentStep(2);
+        if (!user) {
+            onClose();
+            onOpenAccountRequiredModal();
+            return;
+        }
+        
+        // For logged in users, show alert and close modal as per instructions
+        alert(`Paquete ${service.name} seleccionado. Procediendo al siguiente paso para usuario logueado.`);
+        onClose();
     };
 
     const nextStep = () => setCurrentStep(prev => (prev < 6 ? prev + 1 : prev));
@@ -60,11 +76,11 @@ const PumpUrShitNowModal = ({ onClose }: PumpUrShitNowModalProps) => {
 
     return (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in" onClick={onClose}>
-            <div className="relative w-full max-w-2xl bg-[#0d1117] border border-cyan-400/30 rounded-2xl shadow-lg shadow-cyan-500/20" onClick={e => e.stopPropagation()}>
+            <div className="relative w-full max-w-2xl bg-black border border-[#00f5b3]/30 rounded-2xl shadow-lg shadow-[#00f5b3]/20" onClick={e => e.stopPropagation()}>
                 <div className="p-6">
                     <div className="flex justify-between items-center mb-4">
                         <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full"></div>
+                            <div className="w-10 h-10 bg-gradient-to-br from-[#00f5b3] to-green-600 rounded-full"></div>
                             <div>
                                 <h2 className="text-xl font-bold text-white">PumpUr$hitNow</h2>
                                 <p className="text-sm text-gray-400">Launch your memecoin to the moon</p>
@@ -82,31 +98,23 @@ const PumpUrShitNowModal = ({ onClose }: PumpUrShitNowModalProps) => {
 // --- STEP COMPONENTS ---
 const Step1ChooseService = ({ onSelectService }: { onSelectService: (service: Service) => void }) => {
     const services = [
-        { name: "Credibility Boost", price: 299, features: ["Security Audit", "Verified Badge", "Trust Score", "Community Endorsement"], color: "orange" },
-        { name: "Visibility Package", price: 499, features: ["Featured Listing", "Banner Ads", "Social Media Push", "Influencer Network"], color: "blue" },
-        { name: "Hype Generator", price: 799, features: ["Viral Campaign", "Community Building", "Meme Creation", "Trending Boost"], color: "purple" },
+        { name: "Credibility Boost", price: 299, features: ["Security Audit", "Verified Badge", "Trust Score", "Community Endorsement"], color: "green" },
+        { name: "Visibility Package", price: 499, features: ["Featured Listing", "Banner Ads", "Social Media Push", "Influencer Network"], color: "green" },
+        { name: "Hype Generator", price: 799, features: ["Viral Campaign", "Community Building", "Meme Creation", "Trending Boost"], color: "green" },
     ];
     return (
         <div className="p-4">
-            <h3 className="text-center text-2xl font-bold text-white mb-2">Choose Your Service</h3>
+            <h3 className="text-center text-2xl font-bold text-white mb-2">Choose Your Paws</h3>
             <p className="text-center text-gray-400 mb-8">Select the perfect package to launch your memecoin</p>
             <div className="grid md:grid-cols-3 gap-6">
                 {services.map(service => (
-                    <div key={service.name} className={`p-6 rounded-xl border-2
-                        ${service.color === 'orange' ? 'border-orange-500/50 bg-orange-500/10' : ''}
-                        ${service.color === 'blue' ? 'border-cyan-500/50 bg-cyan-500/10' : ''}
-                        ${service.color === 'purple' ? 'border-purple-500/50 bg-purple-500/10' : ''}
-                    `}>
+                    <div key={service.name} className="p-6 rounded-xl border-2 border-green-500/50 bg-green-500/10">
                         <h4 className="font-bold text-xl text-white mb-2">{service.name}</h4>
                         <p className="text-3xl font-bold text-white mb-4">${service.price}</p>
                         <ul className="space-y-2 text-sm text-gray-300 mb-6">
                             {service.features.map(feature => <li key={feature}>✅ {feature}</li>)}
                         </ul>
-                        <button onClick={() => onSelectService(service)} className={`w-full font-bold py-2 rounded-lg
-                            ${service.color === 'orange' ? 'bg-orange-500 hover:bg-orange-600' : ''}
-                            ${service.color === 'blue' ? 'bg-cyan-500 hover:bg-cyan-600' : ''}
-                            ${service.color === 'purple' ? 'bg-purple-500 hover:bg-purple-600' : ''}
-                        `}>Select Package <ArrowRightIcon /></button>
+                        <button onClick={() => onSelectService(service)} className="w-full font-bold py-2 rounded-lg bg-green-500 hover:bg-green-600">Select Package</button>
                     </div>
                 ))}
             </div>
@@ -120,13 +128,13 @@ const FormStepLayout = ({ children, service, onNext, onBack, currentStep, totalS
         <p className="text-center text-gray-400 mb-4">Selected: {service?.name} - ${service?.price}</p>
         <div className="flex justify-center space-x-2 mb-8">
             {Array.from({ length: totalSteps }).map((_, i) => (
-                <div key={i} className={`w-3 h-3 rounded-full ${i < currentStep ? 'bg-cyan-400' : 'bg-gray-700'}`}></div>
+                <div key={i} className={`w-3 h-3 rounded-full ${i < currentStep ? 'bg-[#00f5b3]' : 'bg-gray-700'}`}></div>
             ))}
         </div>
         <div className="space-y-4">{children}</div>
         <div className="flex justify-between mt-8">
-            <button onClick={onBack} className="bg-[#161B22] border border-[#30363D] text-white font-bold py-2 px-6 rounded-lg hover:bg-[#30363D]">Back</button>
-            <button onClick={onNext} className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-2 px-6 rounded-lg flex items-center">{nextButtonText} <ArrowRightIcon /></button>
+            <button onClick={onBack} className="bg-gray-800 border border-gray-700 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-700">Back</button>
+            <button onClick={onNext} className="bg-[#00f5b3] text-black font-bold py-2 px-6 rounded-lg flex items-center">{nextButtonText} <ArrowRightIcon /></button>
         </div>
     </div>
 );
@@ -134,7 +142,7 @@ const FormStepLayout = ({ children, service, onNext, onBack, currentStep, totalS
 const FormInput = ({ label, type = 'text', placeholder = '' }: { label: string, type?: string, placeholder?: string }) => (
     <div>
         <label className="block text-sm font-medium text-gray-400 mb-1">{label}</label>
-        <input type={type} placeholder={placeholder} className="w-full bg-[#0D1117] border border-[#30363D] rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white" />
+        <input type={type} placeholder={placeholder} className="w-full bg-black/50 border border-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#00f5b3] text-white" />
     </div>
 );
 
@@ -162,7 +170,7 @@ const Step4Images = (props: any) => (
         <div className="grid grid-cols-2 gap-6">
             <div className="text-center">
                 <p className="font-semibold text-white mb-2">Logo</p>
-                <div className="flex items-center justify-center w-full h-40 bg-[#0D1117] border-2 border-dashed border-[#30363D] rounded-lg">
+                <div className="flex items-center justify-center w-full h-40 bg-black/50 border-2 border-dashed border-gray-800 rounded-lg">
                     <div className="text-center">
                         <UploadIcon />
                         <p className="text-sm text-gray-400">Upload Logo</p>
@@ -172,7 +180,7 @@ const Step4Images = (props: any) => (
             </div>
             <div className="text-center">
                 <p className="font-semibold text-white mb-2">Banner</p>
-                 <div className="flex items-center justify-center w-full h-40 bg-[#0D1117] border-2 border-dashed border-[#30363D] rounded-lg">
+                 <div className="flex items-center justify-center w-full h-40 bg-black/50 border-2 border-dashed border-gray-800 rounded-lg">
                     <div className="text-center">
                         <UploadIcon />
                         <p className="text-sm text-gray-400">Upload Banner</p>
@@ -200,7 +208,7 @@ const Step6Payment = ({ service, onBack, onClose, selectedNetwork, setSelectedNe
     return (
         <div className="p-4">
             <h3 className="text-center text-2xl font-bold text-white mb-4">Payment</h3>
-            <div className="bg-[#161B22] border border-[#30363D] rounded-lg p-4 text-center mb-6">
+            <div className="bg-gray-900 border border-gray-800 rounded-lg p-4 text-center mb-6">
                 <p className="text-gray-400">{service?.name}</p>
                 <p className="text-3xl font-bold text-white">${service?.price}</p>
             </div>
@@ -208,7 +216,7 @@ const Step6Payment = ({ service, onBack, onClose, selectedNetwork, setSelectedNe
             <p className="font-semibold text-white mb-2">Choose Network</p>
             <div className="space-y-3 mb-6">
                 {networks.map(net => (
-                    <button key={net.name} onClick={() => setSelectedNetwork(net.name)} className={`w-full flex justify-between items-center p-4 rounded-lg border-2 transition-all ${selectedNetwork === net.name ? `border-cyan-400 bg-cyan-500/10` : 'border-transparent bg-gradient-to-r ' + net.color}`}>
+                    <button key={net.name} onClick={() => setSelectedNetwork(net.name)} className={`w-full flex justify-between items-center p-4 rounded-lg border-2 transition-all ${selectedNetwork === net.name ? `border-[#00f5b3] bg-green-500/10` : 'border-transparent bg-gradient-to-r ' + net.color}`}>
                         <div className="flex items-center space-x-3">
                             {net.icon}
                             <div>
@@ -223,16 +231,16 @@ const Step6Payment = ({ service, onBack, onClose, selectedNetwork, setSelectedNe
 
             <p className="font-semibold text-white mb-2">Payment Method</p>
             <div className="space-y-3 mb-8">
-                <button onClick={() => setSelectedPaymentMethod('Credit/Debit Card')} className={`w-full flex items-center p-4 rounded-lg border-2 transition-all ${selectedPaymentMethod === 'Credit/Debit Card' ? 'border-cyan-400 bg-cyan-500/10' : 'border-transparent bg-blue-600'}`}>
+                <button onClick={() => setSelectedPaymentMethod('Credit/Debit Card')} className={`w-full flex items-center p-4 rounded-lg border-2 transition-all ${selectedPaymentMethod === 'Credit/Debit Card' ? 'border-[#00f5b3] bg-green-500/10' : 'border-transparent bg-gray-800'}`}>
                     <CreditCardIcon /> <span className="font-bold">Credit/Debit Card</span>
                 </button>
-                <button onClick={() => setSelectedPaymentMethod('Crypto Wallet')} className={`w-full flex items-center p-4 rounded-lg border-2 transition-all ${selectedPaymentMethod === 'Crypto Wallet' ? 'border-cyan-400 bg-cyan-500/10' : 'border-transparent bg-purple-600'}`}>
+                <button onClick={() => setSelectedPaymentMethod('Crypto Wallet')} className={`w-full flex items-center p-4 rounded-lg border-2 transition-all ${selectedPaymentMethod === 'Crypto Wallet' ? 'border-[#00f5b3] bg-green-500/10' : 'border-transparent bg-gray-800'}`}>
                     <CryptoWalletIcon /> <span className="font-bold">Crypto Wallet</span>
                 </button>
             </div>
             
             <button onClick={onClose} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg text-lg mb-3">Complete Payment - ${service?.price}</button>
-            <button onClick={onBack} className="w-full bg-[#161B22] border border-[#30363D] text-white font-bold py-2 rounded-lg hover:bg-[#30363D]">Back to Form</button>
+            <button onClick={onBack} className="w-full bg-gray-900 border border-gray-800 text-white font-bold py-2 rounded-lg hover:bg-gray-800">Back to Form</button>
         </div>
     );
 };

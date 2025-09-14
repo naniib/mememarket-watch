@@ -34,7 +34,7 @@ interface TransactionDetailModalProps {
 
 const InfoCard = ({ title, icon, children }: { title: string, icon: React.ReactNode, children: React.ReactNode }) => (
     <div className="bg-gray-800/50 border border-gray-700/50 rounded-lg p-4">
-        <div className="flex items-center space-x-2 text-cyan-400 mb-3">
+        <div className="flex items-center space-x-2 text-[#00f5b3] mb-3">
             {icon}
             <h4 className="font-bold">{title}</h4>
         </div>
@@ -64,10 +64,10 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction, coinSymbol }: Tr
             aria-labelledby="tx-detail-title"
         >
             <div
-                className="relative w-full max-w-3xl bg-[#0d1117] border border-cyan-400/30 rounded-2xl shadow-lg shadow-cyan-500/20"
+                className="relative w-full max-w-3xl bg-black border border-[#00f5b3]/30 rounded-2xl shadow-lg shadow-[#00f5b3]/20"
                 onClick={e => e.stopPropagation()}
             >
-                <header className="p-4 flex justify-between items-center border-b border-gray-700/30">
+                <header className="p-4 flex justify-between items-center border-b border-gray-800">
                     <h3 id="tx-detail-title" className="text-xl font-bold text-white">Transaction Details</h3>
                     <button onClick={onClose} className="text-gray-400 hover:text-white" aria-label="Close modal">
                         <X className="w-6 h-6" />
@@ -76,12 +76,12 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction, coinSymbol }: Tr
                 <div className="p-6 grid md:grid-cols-3 gap-4">
                     <InfoCard title="Transaction" icon={<Hash size={16} />}>
                         <InfoRow label="TX ID" value={
-                            <a href="#" className="text-cyan-400 hover:underline flex items-center gap-1">
+                            <a href="#" className="text-[#00f5b3] hover:underline flex items-center gap-1">
                                 {transaction.txId} <Copy size={12} />
                             </a>
                         } />
                         <InfoRow label="Explorer" value={
-                            <a href="#" className="text-cyan-400 hover:underline flex items-center gap-1">
+                            <a href="#" className="text-[#00f5b3] hover:underline flex items-center gap-1">
                                 Solscan <ExternalLink size={12} />
                             </a>
                         } />
@@ -97,7 +97,7 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction, coinSymbol }: Tr
                     
                     <InfoCard title="Maker" icon={<User size={16} />}>
                          <InfoRow label="Address" value={
-                            <a href="#" className="text-cyan-400 hover:underline flex items-center gap-1">
+                            <a href="#" className="text-[#00f5b3] hover:underline flex items-center gap-1">
                                 {transaction.maker} <Copy size={12} />
                             </a>
                         } />
@@ -122,21 +122,21 @@ const TransactionList = ({ coinSymbol }: TransactionListProps) => {
     };
 
     return (
-        <div className="bg-[#161B22]/80 backdrop-blur-sm border border-gray-700/50 rounded-lg h-full flex flex-col">
-            <div className="flex items-center justify-between p-3 border-b border-gray-700/50 flex-shrink-0">
+        <div className="bg-[#0a0a0a] border border-gray-800 rounded-lg h-full flex flex-col">
+            <div className="flex items-center justify-between p-3 border-b border-gray-800 flex-shrink-0">
                 <div className="flex items-center space-x-2">
-                    <button className="p-1.5 bg-gray-700/50 rounded hover:bg-gray-600"><Pause size={14} /></button>
-                    <button className="p-1.5 bg-gray-700/50 rounded hover:bg-gray-600"><Calendar size={14} /></button>
+                    <button className="p-1.5 bg-gray-800 rounded hover:bg-gray-700"><Pause size={14} /></button>
+                    <button className="p-1.5 bg-gray-800 rounded hover:bg-gray-700"><Calendar size={14} /></button>
                 </div>
                 <h3 className="text-lg font-bold text-white">Trades</h3>
                 <div className="flex items-center space-x-2">
-                    <button className="p-1.5 bg-gray-700/50 rounded hover:bg-gray-600"><ChevronsLeft size={14} /></button>
-                    <button className="p-1.5 bg-gray-700/50 rounded hover:bg-gray-600"><ChevronsRight size={14} /></button>
+                    <button className="p-1.5 bg-gray-800 rounded hover:bg-gray-700"><ChevronsLeft size={14} /></button>
+                    <button className="p-1.5 bg-gray-800 rounded hover:bg-gray-700"><ChevronsRight size={14} /></button>
                 </div>
             </div>
 
             <div className="text-xs font-mono text-gray-400 flex-grow flex flex-col min-h-0">
-                <div className="grid grid-cols-12 gap-x-2 px-3 py-2 border-b border-gray-700/50 sticky top-0 bg-[#161B22]/90 backdrop-blur-sm z-10 flex-shrink-0">
+                <div className="grid grid-cols-12 gap-x-2 px-3 py-2 border-b border-gray-800 sticky top-0 bg-[#0a0a0a]/90 backdrop-blur-sm z-10 flex-shrink-0">
                     <div className="col-span-2 flex items-center">Fecha <SortIcon /></div>
                     <div className="col-span-1">Tipo</div>
                     <div className="col-span-1 flex items-center">Precio <SortIcon /></div>
@@ -150,7 +150,7 @@ const TransactionList = ({ coinSymbol }: TransactionListProps) => {
 
                 <div className="flex-grow overflow-y-auto custom-scrollbar">
                     {mockAdvancedTransactions.map((tx, i) => (
-                        <div key={i} className="grid grid-cols-12 gap-x-2 items-center px-3 py-2.5 border-b border-gray-800 transition-colors duration-200 hover:bg-gray-800/50">
+                        <div key={i} className="grid grid-cols-12 gap-x-2 items-center px-3 py-2.5 border-b border-gray-900 transition-colors duration-200 hover:bg-gray-900/50">
                             <div className="col-span-2">{tx.date}</div>
                             <div className={`col-span-1 font-bold ${tx.type === 'buy' ? 'text-green-400' : 'text-red-400'}`}>{tx.type}</div>
                             <div className={`col-span-1 ${tx.type === 'buy' ? 'text-green-400' : 'text-red-400'}`}>{tx.priceUSD.toFixed(6)}</div>
@@ -161,11 +161,11 @@ const TransactionList = ({ coinSymbol }: TransactionListProps) => {
                             <div className="col-span-2">{tx.amountMemecoin.toLocaleString('en-US', {maximumFractionDigits: 2})}</div>
                             <div className="col-span-1">{tx.amountSOL.toFixed(4)}</div>
                             <div className="col-span-1">
-                                <a href="#" onClick={(e) => e.preventDefault()} className="text-cyan-400 hover:underline flex items-center">{tx.maker} <Copy size={12} className="ml-1" /></a>
+                                <a href="#" onClick={(e) => e.preventDefault()} className="text-[#00f5b3] hover:underline flex items-center">{tx.maker} <Copy size={12} className="ml-1" /></a>
                             </div>
                             <div className="col-span-1 flex items-center justify-between">
                                 <SolanaIcon />
-                                <span className="bg-gray-700 text-cyan-300 text-xs font-bold px-1.5 py-0.5 rounded-md">
+                                <span className="bg-gray-700 text-green-300 text-xs font-bold px-1.5 py-0.5 rounded-md">
                                     +{tx.otherTxCount}
                                 </span>
                                 <button onClick={() => setSelectedTx(tx)} className="text-gray-500 hover:text-white p-1 -mr-1" aria-label="View transaction details">
