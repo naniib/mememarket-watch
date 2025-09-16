@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, MessageCircle, Smile, Image } from 'lucide-react';
-// FIX: Import Theme from emoji-picker-react to use the correct type for the theme prop.
 import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
-import { getChatMessages, sendChatMessage } from '../api';
 
 interface LiveChatProps {
   coinId: string;
@@ -14,18 +12,40 @@ interface Message {
     id: number;
     text: string;
     userId: number;
-    coinId:string;
     createdAt: string;
     username: string;
     badge?: 'analyst' | 'admin' | null;
 }
 
+// --- Mock Data for Simulation ---
+const fakeUsernames = ['CryptoKing', 'MoonLover', 'AnonHodler', 'PumpMaster', 'DiamondHands', 'LamboDreamer', 'ApeIn', 'SatoshiJr'];
+const fakeMessages = ['To the moon! 🚀', 'When Lambo?', 'Pump it!', 'This is the way! 🙌', 'DYOR', 'LFG! 🔥', 'GM!', 'NGMI 📉', 'WGMI 💎', 'HODL!!!', 'Looks bullish', 'I am aping in!', 'ATH soon', 'Paper hands selling lol', 'Just bought more', '😂', '💯', '🤯'];
+const fakeGifs = [
+    'https://media.giphy.com/media/YprxQv4p4M2Ww/giphy.gif',
+    'https://cdn.pixabay.com/photo/2021/08/25/20/42/cat-6577457_960_720.png',
+    'https://media.giphy.com/media/tXL4FHPSnVJ0A/giphy.gif',
+    'https://media.giphy.com/media/3oKIPdG6K2Avf7S_Bu/giphy.gif',
+    'https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif',
+];
+
+const isImageUrl = (url: string) => {
+    return /\.(jpeg|jpg|gif|png)$/i.test(url);
+};
+
 const LiveChat = ({ coinId, coinName, isAuthenticated }: LiveChatProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [currentUser, setCurrentUser] = useState<{ id: number; username: string } | null>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+        setCurrentUser(JSON.parse(storedUser));
+    }
+  }, [isAuthenticated]);
 
   const scrollToBottom = () => {
     if (chatContainerRef.current) {
@@ -33,19 +53,25 @@ const LiveChat = ({ coinId, coinName, isAuthenticated }: LiveChatProps) => {
     }
   };
 
-  const fetchMessages = async () => {
-    if (!coinId) return;
-    try {
-        const data = await getChatMessages(coinId);
-        setMessages(data);
-    } catch (error) {
-        console.error('Failed to fetch messages:', error);
-    }
-  };
-
+  // Effect for generating automatic messages
   useEffect(() => {
-    fetchMessages();
-    const interval = setInterval(fetchMessages, 5000); // Poll for new messages every 5 seconds
+    setMessages([]); // Clear messages when coin changes
+    const interval = setInterval(() => {
+        const shouldSendGif = Math.random() < 0.1; // 10% chance of sending a GIF
+        const content = shouldSendGif
+            ? fakeGifs[Math.floor(Math.random() * fakeGifs.length)]
+            : fakeMessages[Math.floor(Math.random() * fakeMessages.length)];
+
+        const automaticMessage: Message = {
+            id: Date.now() + Math.random(),
+            text: content,
+            userId: Math.floor(Math.random() * 1000), // Fake user ID
+            username: fakeUsernames[Math.floor(Math.random() * fakeUsernames.length)],
+            createdAt: new Date().toISOString(),
+        };
+        setMessages(prev => [...prev, automaticMessage]);
+    }, Math.random() * 5000 + 5000); // Random interval between 5-10 seconds
+
     return () => clearInterval(interval);
   }, [coinId]);
 
@@ -56,19 +82,20 @@ const LiveChat = ({ coinId, coinName, isAuthenticated }: LiveChatProps) => {
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim() || !isAuthenticated) return;
+    if (!newMessage.trim() || !isAuthenticated || !currentUser) return;
 
-    try {
-        const token = localStorage.getItem('token');
-        if (!token) throw new Error("Not authenticated");
-        
-        await sendChatMessage(coinId, { text: newMessage }, token);
-        setNewMessage('');
-        setShowEmojiPicker(false);
-        fetchMessages(); // Immediately refetch messages after sending
-    } catch (error) {
-        console.error("Failed to send message:", error);
-    }
+    const messageToSend: Message = {
+        id: Date.now(),
+        text: newMessage,
+        userId: currentUser.id,
+        createdAt: new Date().toISOString(),
+        username: currentUser.username,
+        badge: 'admin', // Example badge for the current user
+    };
+
+    setMessages(prev => [...prev, messageToSend]);
+    setNewMessage('');
+    setShowEmojiPicker(false);
   };
 
   const handleEmojiClick = (emojiData: EmojiClickData) => {
@@ -90,7 +117,7 @@ const LiveChat = ({ coinId, coinName, isAuthenticated }: LiveChatProps) => {
   }, []);
 
   return (
-    <div className="bg-[#0a0a0a] border border-gray-800 rounded-lg h-full flex flex-col">
+    <div className="bg-[#0a0a0a] border border-gray-800 rounded-lg h-[450px] flex flex-col">
       <div className="flex items-center space-x-2 p-4 border-b border-gray-800">
         <MessageCircle className="w-5 h-5 text-[#00f5b3]" />
         <h3 className="font-bold text-white">Live Chat - {coinName}</h3>
@@ -103,6 +130,7 @@ const LiveChat = ({ coinId, coinName, isAuthenticated }: LiveChatProps) => {
       <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
         {messages.map((msg) => {
           const usernameColor = msg.badge ? 'text-yellow-400' : 'text-gray-200';
+          const isImage = isImageUrl(msg.text);
           return (
             <div key={msg.id}>
               <div className="flex items-baseline space-x-2">
@@ -112,8 +140,14 @@ const LiveChat = ({ coinId, coinName, isAuthenticated }: LiveChatProps) => {
                       {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
               </div>
-              <div className="mt-1 text-sm text-gray-200 bg-gray-800 rounded-lg px-3 py-2 inline-block max-w-full break-words shadow">
-                  {msg.text}
+              <div className="mt-1 max-w-full inline-block">
+                {isImage ? (
+                    <img src={msg.text} alt="chat-gif" className="max-w-[150px] h-auto rounded-lg mt-1 shadow" />
+                ) : (
+                    <div className="text-sm text-gray-200 bg-gray-800 rounded-lg px-3 py-2 inline-block max-w-full break-words shadow">
+                        {msg.text}
+                    </div>
+                )}
               </div>
             </div>
           );
@@ -147,7 +181,6 @@ const LiveChat = ({ coinId, coinName, isAuthenticated }: LiveChatProps) => {
             </form>
             {showEmojiPicker && (
               <div ref={emojiPickerRef} className="absolute bottom-full right-4 mb-2 z-50 border border-gray-700 rounded-lg overflow-hidden shadow-2xl">
-                {/* FIX: Use the Theme enum for the theme prop instead of a string literal to fix the type error. */}
                 <EmojiPicker onEmojiClick={handleEmojiClick} theme={Theme.DARK} width={300} height={400} />
               </div>
             )}

@@ -123,6 +123,9 @@ const CoinDetailPage = () => {
             const coinId = parts[2];
             const foundCoin = allCoins.find(c => c.id === coinId);
             setCoin(foundCoin || null);
+            // Reset visibility states on navigation to a new coin
+            setIsChatVisible(true);
+            setIsSentimentVisible(true);
         };
 
         handleHashChange(); 
@@ -134,33 +137,6 @@ const CoinDetailPage = () => {
             window.removeEventListener('hashchange', handleHashChange);
         };
     }, []);
-
-    // Cargar el estado desde localStorage cuando cambia la moneda
-    useEffect(() => {
-        if (coin?.id) {
-            // Cargar estado de chat
-            const savedChatState = localStorage.getItem(`isChatVisible_${coin.id}`);
-            setIsChatVisible(savedChatState !== null ? JSON.parse(savedChatState) : true);
-
-            // Cargar estado de sentimiento
-            const savedSentimentState = localStorage.getItem(`isSentimentVisible_${coin.id}`);
-            setIsSentimentVisible(savedSentimentState !== null ? JSON.parse(savedSentimentState) : true);
-        }
-    }, [coin?.id]);
-
-    // Guardar el estado del chat en localStorage para la moneda específica
-    useEffect(() => {
-        if (coin?.id) {
-            localStorage.setItem(`isChatVisible_${coin.id}`, JSON.stringify(isChatVisible));
-        }
-    }, [isChatVisible, coin?.id]);
-
-    // Guardar el estado de sentimiento en localStorage para la moneda específica
-    useEffect(() => {
-        if (coin?.id) {
-            localStorage.setItem(`isSentimentVisible_${coin.id}`, JSON.stringify(isSentimentVisible));
-        }
-    }, [isSentimentVisible, coin?.id]);
 
     const handleVote = (vote: 'bullish' | 'bearish') => {
         if (!isAuthenticated) return;
