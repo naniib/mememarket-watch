@@ -1,114 +1,50 @@
-import React, { useState } from 'react';
-import { TrendingUp, Heart, MessageCircle } from 'lucide-react';
+import React from 'react';
+import { Search } from 'lucide-react';
 
-// Mock Data for trending posts
-const trendingPostsData = [
-    {
-        rank: 1,
-        avatar: 'https://i.pravatar.cc/40?u=captain',
-        username: 'Captain_Hindsight',
-        content: 'Real Degens keep hodlin!',
-        likes: 12,
-        comments: 0,
-    },
-    {
-        rank: 2,
-        avatarInitial: 'J',
-        username: 'JONS_PLANET',
-        content: 'DEGENIN Not just a token, but a cult',
-        likes: 10,
-        comments: 0,
-    },
-    {
-        rank: 3,
-        avatar: 'https://i.pravatar.cc/40?u=something',
-        username: 'SomeThing',
-        content: 'I hope everyone had/will have a great day today.',
-        likes: 10,
-        comments: 0,
-    },
-    {
-        rank: 4,
-        avatarInitial: 'J',
-        username: 'JONS_PLANET',
-        content: 'DEGENIN is improving every day, and I would like to thank th...',
-        likes: 8,
-        comments: 0,
-    },
-    {
-        rank: 5,
-        avatar: 'https://i.pravatar.cc/40?u=satoshi',
-        username: 'Satoshi nakamoto',
-        content: 'we are a united community. dear comrades. i bought more $Deg...',
-        likes: 8,
-        comments: 1,
-    }
+const trendingTopics = [
+    { category: 'Memecoins · Trending', topic: '#DogeToTheMoon', posts: '12.1K posts' },
+    { category: 'Technology · Trending', topic: '#SolanaSummer', posts: '8,456 posts' },
+    { category: 'Memecoins · Trending', topic: '$PEPE', posts: '22.3K posts' },
+    { category: 'News · Trending', topic: 'SEC Regulations', posts: '5,123 posts' },
+    { category: 'Gaming · Trending', topic: '#Web3Gaming', posts: '3,876 posts' },
 ];
 
 const TrendingPosts = () => {
-    const [activeFilter, setActiveFilter] = useState('1h');
-
     return (
-        <div className="bg-[#161B22] border border-[#30363D] rounded-lg p-4 text-white w-full">
-            {/* Header */}
-            <div className="flex items-center space-x-2 mb-4">
-                <TrendingUp className="w-6 h-6" />
-                <h2 className="text-lg font-bold">Trending Posts</h2>
+        <div className="space-y-4">
+            {/* Search Bar */}
+            <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <input
+                    type="text"
+                    placeholder="Search on MemeWatch"
+                    className="w-full bg-[#161B22] border border-[#30363D] rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-neon-green"
+                />
             </div>
 
-            {/* Time Filters */}
-            <div className="flex bg-[#0D1117] rounded-lg p-1 mb-4">
-                {['1h', '24h', '7d'].map((filter) => (
-                    <button
-                        key={filter}
-                        onClick={() => setActiveFilter(filter)}
-                        className={`flex-1 py-1.5 text-sm font-semibold rounded-md transition-colors ${
-                            activeFilter === filter
-                                ? 'bg-[#30363D] text-white'
-                                : 'text-gray-400 hover:bg-[#30363D]/50'
-                        }`}
-                    >
-                        {filter}
-                    </button>
-                ))}
-            </div>
-
-            {/* Posts List */}
-            <ul className="space-y-4 mb-4">
-                {trendingPostsData.map(post => (
-                    <li key={post.rank} className="flex items-start space-x-3">
-                        <span className="text-gray-500 font-semibold text-sm pt-2">{post.rank}</span>
-                        <div className="flex-shrink-0">
-                            {post.avatar ? (
-                                <img src={post.avatar} alt={`${post.username} avatar`} className="w-10 h-10 rounded-full" />
-                            ) : (
-                                <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center font-bold text-lg">
-                                    {post.avatarInitial}
+            {/* Trending Card */}
+            <div className="bg-[#161B22] border border-[#30363D] rounded-xl">
+                <h3 className="text-xl font-bold p-4">What's Happening</h3>
+                <div className="space-y-2">
+                    {trendingTopics.map((item, index) => (
+                        <div key={index} className="px-4 py-3 hover:bg-[#1D2127] transition-colors cursor-pointer">
+                            <div className="flex justify-between items-center">
+                                <div>
+                                    <p className="text-xs text-gray-500">{item.category}</p>
+                                    <p className="font-bold text-white">{item.topic}</p>
+                                    <p className="text-xs text-gray-500">{item.posts}</p>
                                 </div>
-                            )}
-                        </div>
-                        <div className="flex-grow min-w-0">
-                            <p className="font-bold text-sm truncate">{post.username}</p>
-                            <p className="text-gray-400 text-sm truncate">{post.content}</p>
-                            <div className="flex items-center space-x-4 text-gray-500 mt-1">
-                                <div className="flex items-center space-x-1 text-xs">
-                                    <Heart size={14} />
-                                    <span>{post.likes}</span>
-                                </div>
-                                <div className="flex items-center space-x-1 text-xs">
-                                    <MessageCircle size={14} />
-                                    <span>{post.comments}</span>
+                                <div className="text-gray-500 hover:text-neon-green">
+                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" /></svg>
                                 </div>
                             </div>
                         </div>
-                    </li>
-                ))}
-            </ul>
-
-            {/* Footer Link */}
-            <a href="#" className="block text-center text-sm text-cyan-400 hover:underline">
-                View all trending
-            </a>
+                    ))}
+                </div>
+                <div className="p-4">
+                    <a href="#/trending" className="text-neon-green text-sm hover:underline">Show more</a>
+                </div>
+            </div>
         </div>
     );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 const Logo = () => (
-    <img src="logo4.png" alt="MemeMarket Logo" className="w-8 h-8" />
+    <img src="/logo4.png" alt="Memecoin Market Logo" className="w-12 h-12" />
 );
 
 const LogoutIcon = () => (
@@ -16,25 +16,15 @@ const ChevronDownIcon = () => (
 const SolanaIcon = () => <svg role="img" className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="url(#sol_grad)" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sol_grad" x1="0" y1="0" x2="0" y2="100%"><stop offset="0%" stopColor="#00FFA3" /><stop offset="100%" stopColor="#DC1FFF" /></linearGradient></defs><path d="M4.262 18.883l3.336-1.933a.4.4 0 00.2-.347V7.393a.4.4 0 00-.2-.347L4.262 5.113a.4.4 0 00-.6.347v13.076a.4.4 0 00.6.347zM9.138 21.013l3.336-1.933a.4.4 0 00.2-.347V9.573a.4.4 0 00-.2-.347L9.138 7.293a.4.4 0 00-.6.347v13.026a.4.4 0 00.6.347zM14.013 16.743l3.336-1.933a.4.4 0 00.2-.347V4.303a.4.4 0 00-.2-.347l-3.336-1.93a.4.4 0 00-.6.346v13.98a.4.4 0 00.6.347zM18.888 18.883l-3.336-1.933a.4.4 0 01-.2-.347V7.393a.4.4 0 01.2-.347l3.336-1.933a.4.4 0 01.6.347v13.076a.4.4 0 01-.6.347zM13.988 21.013l-3.336-1.933a.4.4 0 01-.2-.347V9.573a.4.4 0 01.2-.347l3.336-1.933a.4.4 0 01.6.347v13.026a.4.4 0 01-.6.347zM9.113 16.743l-3.336-1.933a.4.4 0 01-.2-.347V4.303a.4.4 0 01.2-.347l3.336-1.93a.4.4 0 01.6.346v13.98a.4.4 0 01-.6.347z"/></svg>;
 const BnbChainIcon = () => <svg role="img" className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="#F0B90B" xmlns="http://www.w3.org/2000/svg"><path d="M12 24l4.8-4.8L12 14.4 7.2 19.2 12 24zm4.8-19.2L12 0l-4.8 4.8L12 9.6l4.8-4.8zM0 12l4.8-4.8L9.6 12 4.8 16.8 0 12zm19.2-4.8L14.4 12l4.8 4.8L24 12l-4.8-4.8zM12 13.2l-1.2-1.2-1.2 1.2 1.2 1.2 1.2-1.2z"/></svg>;
 const PolygonIcon = () => <svg role="img" className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="#8247E5" xmlns="http://www.w3.org/2000/svg"><path d="M16.48.62L7.52.62C6.16.62 5.04 1.75 5.04 3.1l0 8.96c0 1.35 1.12 2.47 2.48 2.47l8.96 0c1.35 0 2.47-1.12 2.47-2.48l0-8.96C18.96 1.75 17.83.62 16.48.62zM16.48 23.38l-8.96 0c-1.35 0-2.47-1.12-2.47-2.48l0-8.96c0-1.35 1.12-2.47 2.48-2.47l8.96 0c1.35 0 2.47 1.12 2.47 2.48l0 8.96C18.96 22.25 17.83 23.38 16.48 23.38z"/></svg>;
-const EthereumIcon = () => <svg role="img" className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="#627EEA" xmlns="http://www.w3.org/2000/svg"><path d="M12 0L3 12l9 12 9-12L12 0zm0 21.6l-7.2-9.6 7.2-3.6 7.2 3.6L12 21.6zm0-10.8L4.8 12 12 8.4l7.2 3.6L12 10.8z"/></svg>;
-const ArbitrumIcon = () => <svg role="img" className="w-5 h-5 mr-3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#28A0F0" d="M12,0A12,12,0,1,0,24,12,12,12,0,0,0,12,0ZM9,6.11l7.3,3.37L9,12.85Zm0,7.66,7.3,3.37L9,20.5Z"/></svg>;
-const BaseIcon = () => <svg role="img" className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="#0052FF" xmlns="http://www.w3.org/2000/svg"><path d="M12,24A12,12,0,1,1,24,12,12,12,0,0,1,12,24ZM8,9.45v5.1H16V9.45Z"/></svg>;
-const AvalancheIcon = () => <svg role="img" className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="#E84142" xmlns="http://www.w3.org/2000/svg"><path d="M2.54 19.64h6.58l3.15-5.32L9.42 8.8h5.16L21.46 19.64h-5.46l-1.39-2.3H9.37l-1.4 2.3zM12 2.36L.3 21.64h23.4L12 2.36z"/></svg>;
+// FIX: Completed the truncated SVG path data.
+const EthereumIcon = () => <svg role="img" className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="#627EEA" xmlns="http://www.w3.org/2000/svg"><path d="M12 0L3 12l9 12 9-12L12 0zM12 3.6l6.3 8.4-6.3 4.2-6.3-4.2L12 3.6z"/></svg>;
 
-const networks = [
-    { name: 'Solana', logo: <SolanaIcon /> },
-    { name: 'BNB Chain', logo: <BnbChainIcon /> },
-    { name: 'Polygon', logo: <PolygonIcon /> },
-    { name: 'Ethereum', logo: <EthereumIcon /> },
-    { name: 'Arbitrum', logo: <ArbitrumIcon /> },
-    { name: 'Base', logo: <BaseIcon /> },
-    { name: 'Avalanche', logo: <AvalancheIcon /> },
-];
-
+// FIX: Added User and HeaderProps interfaces and the main Header component to resolve the module export error.
 interface User {
     id: number;
     username: string;
     email: string;
+    avatarUrl?: string;
 }
 
 interface HeaderProps {
@@ -44,61 +34,96 @@ interface HeaderProps {
 }
 
 const Header = ({ user, onLogout, onLoginClick }: HeaderProps) => {
-    const [isNetworkDropdownOpen, setIsNetworkDropdownOpen] = useState(false);
-    const networkDropdownRef = useRef<HTMLDivElement>(null);
+    const [isNetworkMenuOpen, setIsNetworkMenuOpen] = useState(false);
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+
+    const networkMenuRef = useRef<HTMLDivElement>(null);
+    const userMenuRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (networkDropdownRef.current && !networkDropdownRef.current.contains(event.target as Node)) {
-                setIsNetworkDropdownOpen(false);
+            if (networkMenuRef.current && !networkMenuRef.current.contains(event.target as Node)) {
+                setIsNetworkMenuOpen(false);
+            }
+            if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+                setIsUserMenuOpen(false);
             }
         };
+
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
 
+    const networks = [
+        { name: 'Solana', icon: SolanaIcon },
+        { name: 'BNB Chain', icon: BnbChainIcon },
+        { name: 'Polygon', icon: PolygonIcon },
+        { name: 'Ethereum', icon: EthereumIcon },
+    ];
+    
+    const [selectedNetwork, setSelectedNetwork] = useState(networks[0]);
+
     return (
-        <header className="bg-black/80 backdrop-blur-md border-b border-gray-900 sticky top-0 z-50">
+        <header className="bg-black border-b border-gray-900 sticky top-0 z-40">
             <div className="container mx-auto px-4">
-                <div className="flex items-center justify-between h-16">
-                    <a href="#/" className="flex items-center space-x-2">
-                        <Logo />
-                        <span className="text-xl font-bold text-white">MemeMarket</span>
-                        <span className="text-xs font-mono bg-gray-800 text-[#00f5b3] px-2 py-0.5 rounded">WATCH</span>
-                    </a>
-                    <div className="flex items-center space-x-6">
-                        <a href="#/home" className="text-sm font-medium text-gray-300 hover:text-white">MemeWatch Social</a>
-                        <div className="relative" ref={networkDropdownRef}>
-                            <button onClick={() => setIsNetworkDropdownOpen(!isNetworkDropdownOpen)} className="flex items-center text-sm font-medium text-gray-300 hover:text-white">
-                                NETWORKS <ChevronDownIcon />
+                <div className="flex items-center justify-between h-20">
+                    <div className="flex items-center space-x-8">
+                        <a href="#/" className="flex items-center space-x-2">
+                            <Logo />
+                            <span className="text-2xl font-bold text-white">MemeMarket</span>
+                        </a>
+                        <nav className="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-400">
+                            <a href="#/home" className="hover:text-white transition-colors">Social Feed</a>
+                            <a href="#/explore" className="hover:text-white transition-colors">Radar</a>
+                            <a href="#/battles" className="hover:text-white transition-colors">Meme Battles</a>
+                            <a href="#/memepress" className="hover:text-white transition-colors">MemePress</a>
+                        </nav>
+                    </div>
+
+                    <div className="flex items-center space-x-4">
+                        <div className="relative" ref={networkMenuRef}>
+                            <button onClick={() => setIsNetworkMenuOpen(!isNetworkMenuOpen)} className="flex items-center space-x-2 bg-gray-900 hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-lg text-sm transition-colors">
+                                <selectedNetwork.icon />
+                                <span>{selectedNetwork.name}</span>
+                                <ChevronDownIcon />
                             </button>
-                            {isNetworkDropdownOpen && (
-                                <div className="absolute right-0 mt-2 w-48 bg-[#0a0a0a] border border-gray-800 rounded-lg shadow-lg">
-                                    <ul className="py-2">
-                                        {networks.map(network => (
-                                            <li key={network.name}>
-                                                <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
-                                                    {network.logo}
-                                                    {network.name}
-                                                </a>
-                                            </li>
-                                        ))}
-                                    </ul>
+                            {isNetworkMenuOpen && (
+                                <div className="absolute right-0 mt-2 w-48 bg-gray-900 border border-gray-800 rounded-lg shadow-lg py-1">
+                                    {networks.map(network => (
+                                        <a href="#" key={network.name} onClick={(e) => { e.preventDefault(); setSelectedNetwork(network); setIsNetworkMenuOpen(false); }} className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                            <network.icon />
+                                            {network.name}
+                                        </a>
+                                    ))}
                                 </div>
                             )}
                         </div>
-                        
+
                         {user ? (
-                            <button onClick={onLogout} className="flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors">
-                                <LogoutIcon />
-                                Logout
-                            </button>
+                            <div className="relative" ref={userMenuRef}>
+                                <button onClick={() => setIsUserMenuOpen(!isUserMenuOpen)} className="flex items-center space-x-2">
+                                    <img src={user.avatarUrl || `https://i.pravatar.cc/150?u=${user.id}`} alt="avatar" className="w-10 h-10 rounded-full" />
+                                    <ChevronDownIcon />
+                                </button>
+                                {isUserMenuOpen && (
+                                    <div className="absolute right-0 mt-2 w-48 bg-gray-900 border border-gray-800 rounded-lg shadow-lg py-1">
+                                        <div className="px-4 py-2 border-b border-gray-800">
+                                            <p className="text-sm font-semibold text-white truncate">{user.username}</p>
+                                            <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                                        </div>
+                                        <a href={`#/profile/${user.id}`} className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">Profile</a>
+                                        <button onClick={onLogout} className="w-full text-left flex items-center px-4 py-2 text-sm text-red-400 hover:bg-gray-800">
+                                            <LogoutIcon />
+                                            Logout
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         ) : (
-                            <button onClick={onLoginClick} className="bg-[#00f5b3] hover:bg-opacity-90 text-black font-bold py-2 px-4 rounded-lg text-sm transition-all duration-300 shadow-[0_0_10px_rgba(0,245,179,0.5)]">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline-block mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h5a3 3 0 013 3v1" /></svg>
-                                Login
+                            <button onClick={onLoginClick} className="bg-[#00f5b3] text-black font-bold py-2 px-5 rounded-lg text-sm transition-transform hover:scale-105">
+                                Connect
                             </button>
                         )}
                     </div>

@@ -50,14 +50,14 @@ const CreatePostForm = ({ onPostCreated }: CreatePostFormProps) => {
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     placeholder="What's on your mind?"
-                    className="w-full bg-[#0D1117] border border-[#30363D] rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-cyan-500 text-white text-sm h-24 resize-none"
+                    className="w-full bg-[#0D1117] border border-[#30363D] rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-neon-green text-white text-sm h-24 resize-none"
                     disabled={loading}
                 />
                 {error && <p className="text-red-400 text-sm mt-2">{error}</p>}
                 <div className="flex justify-end mt-4">
                     <button
                         type="submit"
-                        className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="bg-neon-green text-black hover:bg-opacity-90 font-bold py-2 px-4 rounded-lg text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={loading || !content.trim()}
                     >
                         {loading ? 'Posting...' : 'Post'}

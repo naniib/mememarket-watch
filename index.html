@@ -5,6 +5,17 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MemeMarket Watch</title>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'neon-green': '#00f5b3',
+            }
+          }
+        }
+      }
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- TradingView Charting Library script -->
     <script type="text/javascript" src="/charting_library/charting_library.standalone.js"></script>
@@ -89,7 +100,7 @@
 }
 </script>
 </head>
-  <body class="bg-[#0D1117] text-gray-300 font-sans">
+  <body class="bg-black text-gray-100 font-sans">
     <div id="root"></div>
     <script type="module" src="./frontend/index.tsx"></script>
   </body>

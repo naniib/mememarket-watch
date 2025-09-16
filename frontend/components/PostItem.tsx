@@ -41,13 +41,13 @@ const PostItem = ({ post }: { post: Post }) => {
     const userInitial = post.user.username.charAt(0).toUpperCase();
 
     return (
-        <article className="p-4 border-b border-gray-800 hover:bg-[#161B22]/50 transition-colors cursor-pointer">
+        <article className="p-4 border-b border-gray-800 hover:bg-black/20 transition-colors cursor-pointer">
             <div className="flex space-x-4">
                 <a href={`#/profile/${post.user.id}`} className="flex-shrink-0">
                     {post.user.avatarUrl ? (
                         <img src={post.user.avatarUrl} alt={post.user.username} className="w-12 h-12 rounded-full" />
                     ) : (
-                         <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center font-bold text-white text-xl">
+                         <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center font-bold text-white text-xl">
                             {userInitial}
                         </div>
                     )}
@@ -55,12 +55,12 @@ const PostItem = ({ post }: { post: Post }) => {
                 <div className="flex-1">
                     <div className="flex items-center space-x-2">
                         <a href={`#/profile/${post.user.id}`} className="font-bold text-white hover:underline">{post.user.username}</a>
-                        <Verified size={16} className="text-cyan-400 fill-cyan-400" />
+                        <Verified size={16} className="text-[#00f5b3] fill-[#00f5b3] drop-shadow-[0_0_5px_rgba(0,245,179,0.7)]" />
                         <span className="text-sm text-gray-500">· {formatTimeAgo(post.createdAt)}</span>
                     </div>
                     <p className="text-gray-300 mt-1 whitespace-pre-wrap">{post.content}</p>
                     <div className="flex items-center justify-between text-gray-500 mt-4 max-w-sm">
-                        <button onClick={() => console.log('Botón Comentar presionado')} className="flex items-center space-x-2 hover:text-cyan-400">
+                        <button onClick={() => console.log('Botón Comentar presionado')} className="flex items-center space-x-2 hover:text-[#00f5b3]">
                             <MessageCircle size={18} />
                             <span>{post._count.comments}</span>
                         </button>
@@ -72,7 +72,7 @@ const PostItem = ({ post }: { post: Post }) => {
                             <Heart size={18} />
                             <span>{post._count.likes}</span>
                         </button>
-                        <button onClick={() => console.log('Botón Compartir presionado')} className="hover:text-cyan-400">
+                        <button onClick={() => console.log('Botón Compartir presionado')} className="hover:text-[#00f5b3]">
                             <Upload size={18} />
                         </button>
                     </div>

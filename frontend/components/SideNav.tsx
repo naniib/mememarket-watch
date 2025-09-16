@@ -15,9 +15,12 @@ interface NavLinkProps {
 }
 
 const NavLink = ({ href, icon: Icon, text, isActive }: NavLinkProps) => {
-    const activeClass = isActive ? 'font-bold bg-[#1D2127]' : 'text-gray-400';
+    const baseClasses = 'flex items-center space-x-4 px-4 py-3 rounded-full transition-colors duration-200 text-xl';
+    const activeClasses = 'bg-[#00f5b3] text-black font-bold shadow-[0_0_15px_rgba(0,245,179,0.7)]';
+    const inactiveClasses = 'text-gray-300 hover:bg-gray-800 hover:text-white';
+    
     return (
-        <a href={href} className={`flex items-center space-x-4 px-4 py-3 rounded-full hover:bg-[#1D2127] transition-colors duration-200 text-xl ${activeClass}`}>
+        <a href={href} className={`${baseClasses} ${isActive ? activeClasses : inactiveClasses}`}>
             <Icon className="w-7 h-7" />
             <span>{text}</span>
         </a>
@@ -58,7 +61,7 @@ const SideNav = ({ user, onLogout, onConnectClick, onCreatePostClick }: SideNavP
             <div>
                 {user ? (
                     <div className="mb-4 px-2">
-                         <a href={`#/profile/${user.id}`} className="flex items-center space-x-3 p-2 rounded-full hover:bg-[#1D2127]">
+                         <a href={`#/profile/${user.id}`} className="flex items-center space-x-3 p-2 rounded-full hover:bg-gray-800">
                             <img src={user.avatarUrl || `https://i.pravatar.cc/150?u=${user.id}`} alt="avatar" className="w-10 h-10 rounded-full" />
                             <div className="text-left flex-grow truncate">
                                 <p className="font-bold truncate">{user.username}</p>
@@ -68,7 +71,7 @@ const SideNav = ({ user, onLogout, onConnectClick, onCreatePostClick }: SideNavP
                     </div>
                 ) : (
                      <div className="mb-4 px-2">
-                        <button onClick={onCreatePostClick} className="w-full flex items-center justify-center space-x-2 text-lg font-bold py-3 px-4 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 transition-opacity text-white">
+                        <button onClick={onCreatePostClick} className="w-full flex items-center justify-center space-x-2 text-lg font-bold py-3 px-4 rounded-lg bg-[#00f5b3] text-black hover:opacity-90 transition-opacity">
                            <Zap className="w-6 h-6" />
                            <span>Connect</span>
                         </button>
@@ -84,12 +87,12 @@ const SideNav = ({ user, onLogout, onConnectClick, onCreatePostClick }: SideNavP
 
             <div className="flex flex-col space-y-4">
                 {user ? (
-                     <button onClick={onLogout} className="flex items-center space-x-4 px-4 py-3 rounded-full hover:bg-[#1D2127] transition-colors duration-200 text-gray-400 text-xl w-full">
+                     <button onClick={onLogout} className="flex items-center space-x-4 px-4 py-3 rounded-full hover:bg-gray-800 transition-colors duration-200 text-gray-300 text-xl w-full">
                         <LogOut className="w-7 h-7" />
                         <span>Cerrar sesión</span>
                     </button>
                 ) : (
-                    <button onClick={onConnectClick} className="flex items-center space-x-4 px-4 py-3 rounded-full hover:bg-[#1D2127] transition-colors duration-200 text-gray-400 text-xl w-full">
+                    <button onClick={onConnectClick} className="flex items-center space-x-4 px-4 py-3 rounded-full hover:bg-gray-800 transition-colors duration-200 text-gray-300 text-xl w-full">
                         <LogIn className="w-7 h-7" />
                         <span>Iniciar Sesión</span>
                     </button>
@@ -97,14 +100,14 @@ const SideNav = ({ user, onLogout, onConnectClick, onCreatePostClick }: SideNavP
                 <div className="space-y-4">
                     <a
                         href="#/"
-                        className="w-full text-lg font-bold py-3 px-4 rounded-lg text-center bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 transition-colors text-white flex items-center justify-center space-x-2"
+                        className="w-full text-lg font-bold py-3 px-4 rounded-lg text-center bg-[#00f5b3] hover:opacity-90 transition-all text-black flex items-center justify-center space-x-2 shadow-[0_0_10px_rgba(0,245,179,0.7)] hover:shadow-[0_0_15px_rgba(0,245,179,0.9)]"
                     >
                         <LineChart className="w-6 h-6" />
                         <span>MemeMarket</span>
                     </a>
                     <button 
-                        onClick={user ? () => { /* Logic for logged in user */ alert('Open create post modal/page'); } : onCreatePostClick}
-                        className="w-full text-lg text-white font-bold py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 transition-opacity flex items-center justify-center space-x-2"
+                        onClick={user ? () => { alert('Open create post modal/page'); } : onCreatePostClick}
+                        className="w-full text-lg text-black font-bold py-3 rounded-lg bg-[#00f5b3] hover:opacity-90 transition-all flex items-center justify-center space-x-2 shadow-[0_0_15px_rgba(0,245,179,0.7)] hover:shadow-[0_0_20px_rgba(0,245,179,0.9)]"
                     >
                         <PenSquare className="w-6 h-6" />
                         <span>Crear publicación</span>

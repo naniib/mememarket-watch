@@ -33,7 +33,7 @@ const ArticleDetailPage = () => {
                 {/* --- COLUMNA IZQUIERDA: CONTENIDO DEL ARTÍCULO --- */}
                 <div className="lg:col-span-2">
                     <div className="mb-6">
-                        <a href="#/memepress" className="flex items-center space-x-2 text-cyan-400 hover:text-cyan-300 transition-colors text-sm">
+                        <a href="#/memepress" className="flex items-center space-x-2 text-neon-green hover:opacity-80 transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" />
                             <span>Volver a MemePress & Humor</span>
                         </a>
@@ -78,7 +78,7 @@ const ArticleDetailPage = () => {
                                     <Heart size={20} />
                                     <span>2.1K Me Gusta</span>
                                 </button>
-                                <button className="flex items-center space-x-2 hover:text-cyan-400">
+                                <button className="flex items-center space-x-2 hover:text-neon-green">
                                     <MessageCircle size={20} />
                                     <span>345 Comentarios</span>
                                 </button>
@@ -96,7 +96,7 @@ const ArticleDetailPage = () => {
                                     <div className="w-10 h-10 bg-blue-500 rounded-full flex-shrink-0"></div>
                                     <textarea
                                         placeholder="Escribe tu comentario..."
-                                        className="w-full bg-[#0D1117] border border-[#30363D] rounded-lg p-3 focus:outline-none focus:ring-1 focus:ring-cyan-500 text-sm"
+                                        className="w-full bg-[#0D1117] border border-[#30363D] rounded-lg p-3 focus:outline-none focus:ring-1 focus:ring-neon-green text-sm"
                                         rows={3}
                                     />
                                 </div>
@@ -128,7 +128,7 @@ const ArticleDetailPage = () => {
                         <ul className="space-y-3">
                             {recentNews.map((news, index) => (
                                 <li key={index}>
-                                    <a href={news.href} className="text-gray-300 hover:text-cyan-400 transition-colors text-base font-semibold">
+                                    <a href={news.href} className="text-gray-300 hover:text-neon-green transition-colors text-base font-semibold">
                                         {news.title}
                                     </a>
                                 </li>

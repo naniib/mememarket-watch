@@ -1,9 +1,9 @@
 
 
+
 import React, { useState, useEffect } from 'react';
 import { allCoins, type Coin } from '../data';
 import CoinCard from '../components/CoinCard';
-import PumpUrShitNowModal from '../components/PumpUrShitNowModal';
 
 // --- Local Components for HomePage ---
 
@@ -129,14 +129,12 @@ interface User {
 
 interface HomePageProps {
     user: User | null;
-    onOpenAccountRequiredModal: () => void;
-    onOpenAuthModal: () => void;
+    onOpenPumpModal: () => void;
 }
 
 // --- Main HomePage Component ---
-const HomePage = ({ user, onOpenAccountRequiredModal, onOpenAuthModal }: HomePageProps) => {
+const HomePage = ({ user, onOpenPumpModal }: HomePageProps) => {
     const [searchQuery, setSearchQuery] = useState('');
-    const [isPumpModalOpen, setIsPumpModalOpen] = useState(false);
     const isAuthenticated = !!user;
 
     const handleCoinSelect = (coin: Coin) => {
@@ -154,14 +152,6 @@ const HomePage = ({ user, onOpenAccountRequiredModal, onOpenAuthModal }: HomePag
 
     return (
         <div className="container mx-auto px-6 py-8 relative">
-            {isPumpModalOpen && 
-                <PumpUrShitNowModal 
-                    onClose={() => setIsPumpModalOpen(false)} 
-                    user={user}
-                    onOpenAccountRequiredModal={onOpenAccountRequiredModal}
-                    onOpenAuthModal={onOpenAuthModal}
-                />
-            }
             
             <div className="flex justify-end mb-8">
                 <SearchBar value={searchQuery} onChange={setSearchQuery} />
@@ -190,7 +180,7 @@ const HomePage = ({ user, onOpenAccountRequiredModal, onOpenAuthModal }: HomePag
             </div>
 
             <div className="flex justify-center mb-8">
-                <PumpButton onClick={() => setIsPumpModalOpen(true)} />
+                <PumpButton onClick={onOpenPumpModal} />
             </div>
 
             <div className="mb-8">

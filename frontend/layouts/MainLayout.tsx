@@ -19,7 +19,7 @@ interface MainLayoutProps {
 
 const MainLayout = ({ children, showTrendingSidebar = true, user, onLogout, onConnectClick, onCreatePostClick }: MainLayoutProps) => {
     return (
-        <div className="flex w-full justify-center bg-[#0D1117] text-white">
+        <div className="flex w-full justify-center">
             <div className="flex w-full max-w-9xl">
                 {/* 1. Sidebar Izquierda */}
                 <header className="w-[275px] flex-shrink-0">
@@ -34,7 +34,7 @@ const MainLayout = ({ children, showTrendingSidebar = true, user, onLogout, onCo
                 </header>
 
                 {/* 2. Contenido Central */}
-                <main className="w-full px-6">
+                <main className="w-full">
                     {children}
                 </main>
                 

@@ -1,13 +1,14 @@
 
 
 import React from 'react';
-import { Diamond, Flame, User, Calendar, Edit, ThumbsUp, Users, UserPlus, Trophy } from 'lucide-react';
+import { Diamond, Flame, User, Calendar, Edit, ThumbsUp, Users, UserPlus } from 'lucide-react';
+import LottieTrophy from '../components/LottieTrophy';
 
 // --- COMPONENTES DE DISEÑO ---
 
 // Tarjeta de Logro rediseñada como Medalla
 const AchievementCard = ({ icon: Icon, title, value, footer, iconBgClass }: { icon: React.ElementType, title: string, value: string, footer: string, iconBgClass: string }) => (
-    <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4 flex flex-col justify-between items-center text-center transition-all duration-300 hover:border-cyan-400/50 hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-500/10">
+    <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4 flex flex-col justify-between items-center text-center transition-all duration-300 hover:border-neon-green/50 hover:-translate-y-1 hover:shadow-xl hover:shadow-neon-green/10">
         <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-3 ${iconBgClass}`}>
             <Icon size={32} className="text-white drop-shadow-lg" />
         </div>
@@ -38,7 +39,7 @@ const LeaderboardItem = ({ rank, username, points }: { rank: number, username: s
                 </div>
                 <span className="font-semibold text-white">{username}</span>
             </div>
-            <div className="flex items-center space-x-2 font-mono text-cyan-400">
+            <div className="flex items-center space-x-2 font-mono text-neon-green">
                 <Diamond size={16} />
                 <span>{points.toLocaleString()}</span>
             </div>
@@ -57,7 +58,7 @@ const FidelityPage = () => {
     const progressPercentage = (currentPoints / nextRankPoints) * 100;
 
     const achievements = [
-        { icon: User, title: "Perfil Completo", value: "75%", footer: "¡Casi lo tienes!", iconBgClass: "bg-gradient-to-br from-cyan-500 to-blue-600" },
+        { icon: User, title: "Perfil Completo", value: "75%", footer: "¡Casi lo tienes!", iconBgClass: "bg-neon-green/20" },
         { icon: Users, title: "Seguidores", value: "8 / 20", footer: "Crea contenido de valor", iconBgClass: "bg-gradient-to-br from-teal-500 to-green-600" },
         { icon: UserPlus, title: "Siguiendo", value: "15 / 25", footer: "Conecta con la comunidad", iconBgClass: "bg-gradient-to-br from-sky-500 to-indigo-600" },
         { icon: Edit, title: "Posts Creados", value: "5 / 10", footer: "Siguiente hito", iconBgClass: "bg-gradient-to-br from-purple-500 to-violet-600" },
@@ -77,20 +78,20 @@ const FidelityPage = () => {
         <section className="col-span-2 border-r border-gray-800 max-w-[800px] w-full mx-auto">
             <header className="sticky top-0 z-10 backdrop-blur-md bg-[#0D1117]/80 border-b border-gray-800 p-5">
                 <h1 className="text-xl font-bold flex items-center">
-                    <Trophy className="mr-2 text-yellow-400" />
+                    <LottieTrophy />
                     Fidelity
                 </h1>
             </header>
 
             <div className="p-6 space-y-12">
                 {/* --- TARJETA DE ESTATUS PRINCIPAL --- */}
-                <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 text-center animate-fade-in shadow-2xl shadow-cyan-500/10 ring-1 ring-cyan-500/20">
+                <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 text-center animate-fade-in shadow-2xl shadow-neon-green/10 ring-1 ring-neon-green/20">
                     <h2 className="text-sm text-gray-400 uppercase tracking-widest">Rango Actual</h2>
                     <h3 className="text-5xl font-bold bg-gradient-to-r from-yellow-300 to-amber-500 bg-clip-text text-transparent my-2 drop-shadow-[0_2px_4px_rgba(252,211,77,0.3)]">{currentRank}</h3>
                     
                     <div className="flex items-center justify-center space-x-8 text-gray-300 my-6 text-lg">
                         <div className="flex items-center space-x-2">
-                            <Diamond size={20} className="text-cyan-400" />
+                            <Diamond size={20} className="text-neon-green" />
                             <span>{currentPoints.toLocaleString()} Puntos</span>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -102,7 +103,7 @@ const FidelityPage = () => {
                     <div>
                         <div className="w-full bg-gray-700/50 rounded-full h-4 border border-gray-600 overflow-hidden shadow-inner">
                             <div
-                                className="bg-gradient-to-r from-cyan-400 to-blue-500 h-full rounded-full transition-all duration-1000 ease-out"
+                                className="bg-neon-green h-full rounded-full transition-all duration-1000 ease-out"
                                 style={{ width: `${progressPercentage}%` }}
                             ></div>
                         </div>

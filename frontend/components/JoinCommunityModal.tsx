@@ -16,7 +16,7 @@ const JoinCommunityModal = ({ onClose, onConnect }: JoinCommunityModalProps) => 
             aria-labelledby="join-community-title"
         >
             <div 
-                className="relative w-full max-w-md bg-gradient-to-br from-[#10141a] to-[#0D1117] border border-cyan-400/30 rounded-2xl shadow-2xl shadow-cyan-500/10"
+                className="relative w-full max-w-md bg-gradient-to-br from-[#10141a] to-[#0D1117] border border-neon-green/30 rounded-2xl shadow-2xl shadow-neon-green/10"
                 onClick={e => e.stopPropagation()}
             >
                 <header className="p-4 flex justify-end items-center">
@@ -26,7 +26,7 @@ const JoinCommunityModal = ({ onClose, onConnect }: JoinCommunityModalProps) => 
                 </header>
 
                 <div className="p-8 pt-0 text-center">
-                    <div className="w-20 h-20 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-white mx-auto mb-6 shadow-lg">
+                    <div className="w-20 h-20 bg-neon-green rounded-full flex items-center justify-center text-black mx-auto mb-6 shadow-lg">
                         <Users size={40} />
                     </div>
                     
@@ -40,7 +40,7 @@ const JoinCommunityModal = ({ onClose, onConnect }: JoinCommunityModalProps) => 
                     <div className="flex flex-col space-y-3">
                         <button 
                             onClick={onConnect}
-                            className="w-full flex items-center justify-center text-lg font-bold py-3 px-4 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 transition-opacity text-white"
+                            className="w-full flex items-center justify-center text-lg font-bold py-3 px-4 rounded-lg bg-neon-green text-black hover:opacity-90 transition-opacity"
                         >
                             <Zap className="w-5 h-5 mr-2" />
                             Connect & Join

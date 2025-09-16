@@ -76,16 +76,11 @@ const ProfilePage = () => {
     };
 
     useEffect(() => {
-        // Auth Guard: Redirect if not logged in
-        const token = localStorage.getItem('token');
-        if (!token) {
-            window.location.hash = '#/home';
-            return;
-        }
-
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             setLoggedInUser(JSON.parse(storedUser));
+        } else {
+            setLoggedInUser(null);
         }
 
         if (userId) {
@@ -94,7 +89,7 @@ const ProfilePage = () => {
             setError('User ID not found in URL.');
             setLoading(false);
         }
-    }, [userId]);
+    }, [userId, localStorage.getItem('token')]); // Re-run effect if token changes (login/logout)
 
     const handlePostCreated = (newPost: Post) => {
         setPosts(prevPosts => [newPost, ...prevPosts]);

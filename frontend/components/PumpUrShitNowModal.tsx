@@ -23,6 +23,7 @@ interface PumpUrShitNowModalProps {
     user: User | null;
     onOpenAccountRequiredModal: () => void;
     onOpenAuthModal: () => void;
+    onSetPendingAction: () => void;
 }
 
 interface Service {
@@ -31,7 +32,7 @@ interface Service {
 }
 
 // --- MAIN COMPONENT ---
-const PumpUrShitNowModal = ({ onClose, user, onOpenAccountRequiredModal }: PumpUrShitNowModalProps) => {
+const PumpUrShitNowModal = ({ onClose, user, onOpenAccountRequiredModal, onOpenAuthModal, onSetPendingAction }: PumpUrShitNowModalProps) => {
     const [currentStep, setCurrentStep] = useState(1);
     const [selectedService, setSelectedService] = useState<Service | null>(null);
     const [selectedNetwork, setSelectedNetwork] = useState('SOLANA');
@@ -47,20 +48,21 @@ const PumpUrShitNowModal = ({ onClose, user, onOpenAccountRequiredModal }: PumpU
         };
     }, []);
 
+    const nextStep = () => setCurrentStep(prev => (prev < 6 ? prev + 1 : prev));
+    const prevStep = () => setCurrentStep(prev => (prev > 1 ? prev - 1 : prev));
+
     const handleSelectService = (service: Service) => {
         if (!user) {
+            onSetPendingAction();
             onClose();
             onOpenAccountRequiredModal();
             return;
         }
-        
-        // For logged in users, show alert and close modal as per instructions
-        alert(`Paquete ${service.name} seleccionado. Procediendo al siguiente paso para usuario logueado.`);
-        onClose();
-    };
 
-    const nextStep = () => setCurrentStep(prev => (prev < 6 ? prev + 1 : prev));
-    const prevStep = () => setCurrentStep(prev => (prev > 1 ? prev - 1 : prev));
+        // For logged-in users, set the service and move to the next step.
+        setSelectedService(service);
+        nextStep();
+    };
 
     const renderContent = () => {
         switch (currentStep) {
@@ -76,9 +78,10 @@ const PumpUrShitNowModal = ({ onClose, user, onOpenAccountRequiredModal }: PumpU
 
     return (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in" onClick={onClose}>
-            <div className="relative w-full max-w-2xl bg-black border border-[#00f5b3]/30 rounded-2xl shadow-lg shadow-[#00f5b3]/20" onClick={e => e.stopPropagation()}>
-                <div className="p-6">
-                    <div className="flex justify-between items-center mb-4">
+            <div className="relative w-full max-w-2xl bg-black border border-[#00f5b3]/30 rounded-2xl shadow-lg shadow-[#00f5b3]/20 flex flex-col max-h-[90vh]" onClick={e => e.stopPropagation()}>
+                {/* Modal Header */}
+                <div className="p-6 flex-shrink-0 border-b border-gray-800">
+                    <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-3">
                             <div className="w-10 h-10 bg-gradient-to-br from-[#00f5b3] to-green-600 rounded-full"></div>
                             <div>
@@ -88,6 +91,10 @@ const PumpUrShitNowModal = ({ onClose, user, onOpenAccountRequiredModal }: PumpU
                         </div>
                         <button onClick={onClose} className="text-gray-400 hover:text-white"><CloseIcon /></button>
                     </div>
+                </div>
+
+                {/* Scrollable Content */}
+                <div className="overflow-y-auto custom-scrollbar">
                     {renderContent()}
                 </div>
             </div>

@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { LogIn } from 'lucide-react';
 
@@ -28,7 +29,7 @@ const AccountRequiredModal = ({ onClose, onOpenAuthModal }: AccountRequiredModal
                         Please{' '}
                         <button 
                             onClick={onOpenAuthModal}
-                            className="inline-block bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold py-2 px-4 rounded-lg transition-transform hover:scale-105"
+                            className="inline-block bg-neon-green text-black font-bold py-2 px-4 rounded-lg transition-transform hover:scale-105"
                         >
                             <LogIn className="inline-block w-4 h-4 mr-1.5" />
                             Sign in
@@ -39,7 +40,7 @@ const AccountRequiredModal = ({ onClose, onOpenAuthModal }: AccountRequiredModal
                     <a 
                         href="#/" 
                         onClick={onClose}
-                        className="text-sm text-gray-500 hover:text-cyan-400 hover:underline"
+                        className="text-sm text-gray-500 hover:text-neon-green hover:underline"
                     >
                         Go back to Home Page
                     </a>

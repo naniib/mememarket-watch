@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { X, AlertTriangle } from 'lucide-react';
 
@@ -68,7 +69,7 @@ const SecurityWarningModal = ({ isOpen, onClose }: SecurityWarningModalProps) =>
                     </button>
                     <button 
                         onClick={handleConfirm}
-                        className="px-6 py-2 font-bold text-white bg-cyan-600 hover:bg-cyan-700 rounded-lg transition-colors"
+                        className="px-6 py-2 font-bold text-black bg-neon-green hover:bg-opacity-90 rounded-lg transition-colors"
                     >
                         Entendido, Continuar
                     </button>

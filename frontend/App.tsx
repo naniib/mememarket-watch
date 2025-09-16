@@ -1,5 +1,8 @@
 
 
+
+
+
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -19,6 +22,7 @@ import FidelityPage from './pages/FidelityPage';
 import AuthModal from './components/AuthModal'; 
 import JoinCommunityModal from './components/JoinCommunityModal';
 import AccountRequiredModal from './components/AccountRequiredModal';
+import PumpUrShitNowModal from './components/PumpUrShitNowModal';
 
 interface User {
     id: number;
@@ -89,6 +93,8 @@ const App = () => {
     const [showJoinModal, setShowJoinModal] = useState(false);
     const [showAuthModal, setShowAuthModal] = useState(false);
     const [showAccountRequiredModal, setShowAccountRequiredModal] = useState(false);
+    const [isPumpModalOpen, setIsPumpModalOpen] = useState(false);
+    const [pendingAction, setPendingAction] = useState<string | null>(null);
 
     useEffect(() => {
         // Centralized user state initialization
@@ -113,13 +119,17 @@ const App = () => {
         localStorage.setItem('token', token);
         setUser(loggedInUser);
         setShowAuthModal(false);
+        
+        if (pendingAction === 'pump-shit-now') {
+            setIsPumpModalOpen(true);
+            setPendingAction(null); // Reset
+        }
     };
 
     const handleLogout = () => {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
         setUser(null);
-        window.location.hash = '#/home';
     };
 
     const handleOpenAuthModal = () => {
@@ -139,6 +149,7 @@ const App = () => {
         onOpenJoinCommunityModal: () => setShowJoinModal(true),
         onOpenAccountRequiredModal: handleOpenAccountRequiredModal,
         onOpenAuthModal: handleOpenAuthModal,
+        onOpenPumpModal: () => setIsPumpModalOpen(true),
     };
 
     if (Layout) {
@@ -153,6 +164,15 @@ const App = () => {
                 >
                     <Component {...componentProps} />
                 </Layout>
+                {isPumpModalOpen && 
+                    <PumpUrShitNowModal 
+                        onClose={() => setIsPumpModalOpen(false)} 
+                        user={user}
+                        onOpenAccountRequiredModal={handleOpenAccountRequiredModal}
+                        onOpenAuthModal={handleOpenAuthModal}
+                        onSetPendingAction={() => setPendingAction('pump-shit-now')}
+                    />
+                }
                 {showJoinModal && <JoinCommunityModal onClose={() => setShowJoinModal(false)} onConnect={handleOpenAuthModal} />}
                 {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLoginSuccess={handleLoginSuccess} />}
                 {showAccountRequiredModal && <AccountRequiredModal onClose={() => setShowAccountRequiredModal(false)} onOpenAuthModal={handleOpenAuthModal} />}
@@ -164,13 +184,22 @@ const App = () => {
 
     return (
         <>
-            <div className="min-h-screen flex flex-col bg-black text-gray-300">
+            <div className="min-h-screen flex flex-col">
                 {showHeaderFooter && <Header user={user} onLogout={handleLogout} onLoginClick={() => setShowAuthModal(true)} />}
                 <main className={mainClass}>
                     <Component {...componentProps} />
                 </main>
                 {showHeaderFooter && <Footer />}
             </div>
+            {isPumpModalOpen && 
+                <PumpUrShitNowModal 
+                    onClose={() => setIsPumpModalOpen(false)} 
+                    user={user}
+                    onOpenAccountRequiredModal={handleOpenAccountRequiredModal}
+                    onOpenAuthModal={handleOpenAuthModal}
+                    onSetPendingAction={() => setPendingAction('pump-shit-now')}
+                />
+            }
             {showJoinModal && <JoinCommunityModal onClose={() => setShowJoinModal(false)} onConnect={handleOpenAuthModal} />}
             {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLoginSuccess={handleLoginSuccess} />}
             {showAccountRequiredModal && <AccountRequiredModal onClose={() => setShowAccountRequiredModal(false)} onOpenAuthModal={handleOpenAuthModal} />}

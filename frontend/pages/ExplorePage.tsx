@@ -35,14 +35,14 @@ const PolishedGems = () => (
     <h2 className="text-2xl font-bold text-white mb-4">💎 Gemas Pulidas</h2>
     <ol className="space-y-3">
       {polishedGems.map(gem => (
-        <li key={gem.rank} className="bg-[#161B22] border border-[#30363D] rounded-lg p-4 flex items-center justify-between transition-all hover:border-cyan-400/50 hover:bg-[#1D2127]">
+        <li key={gem.rank} className="bg-[#161B22] border border-[#30363D] rounded-lg p-4 flex items-center justify-between transition-all hover:border-neon-green/50 hover:bg-[#1D2127]">
           <div className="flex items-center space-x-4">
             <span className="text-xl font-bold text-gray-500 w-8 text-center">{gem.rank}</span>
             <div className="w-12 h-12 bg-gray-700/50 rounded-full flex items-center justify-center text-2xl">{gem.emoji}</div>
             <span className="font-semibold text-white text-lg">{gem.name}</span>
           </div>
           <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-1 text-green-400">
+            <div className="flex items-center space-x-1 text-neon-green">
               <ShieldCheck size={20} />
               <span className="text-sm font-semibold">Confianza Alta</span>
             </div>
@@ -68,19 +68,19 @@ const UpcomingLaunches = () => (
           <h3 className="font-bold text-white text-lg">{launch.name}</h3>
           <p className="text-xs text-gray-500">{launch.time}</p>
           <div className="w-full">
-            <div className="flex justify-between items-center text-xs text-cyan-400 mb-1">
+            <div className="flex justify-between items-center text-xs text-neon-green mb-1">
               <span>Medidor de Buzz</span>
               <span>{launch.buzz}%</span>
             </div>
             <div className="w-full bg-gray-700 rounded-full h-2.5">
-              <div className="bg-cyan-400 h-2.5 rounded-full" style={{ width: `${launch.buzz}%` }}></div>
+              <div className="bg-neon-green h-2.5 rounded-full" style={{ width: `${launch.buzz}%` }}></div>
             </div>
           </div>
         </div>
       ))}
     </div>
     <div className="mt-6">
-        <button className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-3 px-4 rounded-lg transition-transform hover:scale-105">
+        <button className="w-full bg-neon-green text-black font-bold py-3 px-4 rounded-lg transition-transform hover:scale-105">
             Got your own Memecoin? PumpUr$hitHere! 🚀
         </button>
     </div>
@@ -93,7 +93,7 @@ const TopHunters = () => {
             case 1: return 'border-yellow-400 bg-yellow-400/10 hover:shadow-yellow-400/20';
             case 2: return 'border-gray-400 bg-gray-400/10 hover:shadow-gray-400/20';
             case 3: return 'border-orange-400 bg-orange-400/10 hover:shadow-orange-400/20';
-            default: return 'border-[#30363D] hover:border-cyan-400/50';
+            default: return 'border-[#30363D] hover:border-neon-green/50';
         }
     };
     
@@ -108,7 +108,7 @@ const TopHunters = () => {
                 <img src={hunter.avatar} alt={hunter.username} className="w-12 h-12 rounded-full" />
                 <span className="font-semibold text-white text-lg">{hunter.username}</span>
               </div>
-              <div className="flex items-center space-x-2 text-cyan-400 font-bold">
+              <div className="flex items-center space-x-2 text-neon-green font-bold">
                 <Diamond size={18} />
                 <span>{hunter.score.toLocaleString()} Puntos</span>
               </div>
@@ -165,7 +165,7 @@ const ExplorePage = () => {
                     >
                         {tab}
                         {activeTab === tab && (
-                          <span className="absolute bottom-0 left-0 right-0 h-1 bg-cyan-400 rounded-full"></span>
+                          <span className="absolute bottom-0 left-0 right-0 h-1 bg-neon-green rounded-full"></span>
                         )}
                     </button>
                 ))}

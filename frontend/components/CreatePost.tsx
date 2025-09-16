@@ -25,7 +25,7 @@ const CreatePost = ({ postContent, onContentChange, onPostSubmit }: CreatePostPr
                  {user && user.avatarUrl ? (
                     <img src={user.avatarUrl} alt={user.username} className="w-12 h-12 rounded-full" />
                 ) : (
-                    <div className="w-12 h-12 bg-blue-500 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-white text-xl">
+                    <div className="w-12 h-12 bg-gray-700 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-white text-xl">
                         {userInitial}
                     </div>
                 )}
@@ -41,13 +41,13 @@ const CreatePost = ({ postContent, onContentChange, onPostSubmit }: CreatePostPr
                         onChange={(e) => onContentChange(e.target.value)}
                     />
                     <div className="flex items-center justify-between mt-4">
-                        <div className="flex space-x-4 text-cyan-400">
-                            <button onClick={() => alert('Funcionalidad de añadir foto no implementada')} className="hover:bg-cyan-400/10 p-2 rounded-full"><Image size={20} /></button>
-                            <button onClick={() => alert('Funcionalidad de añadir emoji no implementada')} className="hover:bg-cyan-400/10 p-2 rounded-full"><Smile size={20} /></button>
+                        <div className="flex space-x-4 text-[#00f5b3]">
+                            <button onClick={() => alert('Funcionalidad de añadir foto no implementada')} className="hover:bg-[#00f5b3]/10 p-2 rounded-full transition-all hover:[&>svg]:drop-shadow-[0_0_3px_#00f5b3]"><Image size={20} /></button>
+                            <button onClick={() => alert('Funcionalidad de añadir emoji no implementada')} className="hover:bg-[#00f5b3]/10 p-2 rounded-full transition-all hover:[&>svg]:drop-shadow-[0_0_3px_#00f5b3]"><Smile size={20} /></button>
                         </div>
                         <button 
                             onClick={onPostSubmit}
-                            className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-full text-sm transition-colors disabled:opacity-50"
+                            className="bg-[#00f5b3] hover:bg-opacity-90 text-black font-bold py-2 px-4 rounded-full text-sm transition-all disabled:opacity-50 shadow-[0_0_10px_rgba(0,245,179,0.7)] hover:shadow-[0_0_15px_rgba(0,245,179,0.9)]"
                             disabled={!postContent.trim()}
                         >
                             Post

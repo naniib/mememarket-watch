@@ -48,7 +48,7 @@ const MemeBattlesPage = ({ user, onOpenJoinCommunityModal }: MemeBattlesPageProp
                             onClick={() => setActiveArena(arena)}
                             className={`font-bold py-2 px-3 sm:px-6 rounded-lg text-base sm:text-lg transition-colors duration-200 ${
                                 activeArena === arena
-                                ? 'bg-cyan-600 text-white shadow-md shadow-cyan-500/20'
+                                ? 'bg-neon-green text-black shadow-md shadow-neon-green/20'
                                 : 'bg-transparent text-gray-400 hover:bg-[#30363D]'
                             }`}
                         >
@@ -66,7 +66,7 @@ const MemeBattlesPage = ({ user, onOpenJoinCommunityModal }: MemeBattlesPageProp
                                 onClick={() => setActiveTimeframe(timeframe)}
                                 className={`text-sm px-4 py-1.5 rounded-md border transition-colors duration-200 ${
                                     activeTimeframe === timeframe
-                                    ? 'bg-gray-700 text-white border-[#4A5568]'
+                                    ? 'bg-neon-green text-black border-neon-green'
                                     : 'bg-[#161B22] text-gray-400 hover:bg-gray-700 border-[#30363D]'
                                 }`}
                             >
@@ -102,8 +102,8 @@ const MemeBattlesPage = ({ user, onOpenJoinCommunityModal }: MemeBattlesPageProp
                             <div className="text-center p-4 bg-green-900/30 border-2 border-green-500/50 rounded-lg">
                                 <button
                                     onClick={() => setSelectedChoice('pump')}
-                                    className={`w-full h-32 text-4xl font-black bg-green-600 hover:bg-green-700 rounded-lg transition-all hover:scale-105 ${
-                                        selectedChoice === 'pump' ? 'border-2 border-green-400 shadow-lg shadow-green-500/50' : ''
+                                    className={`w-full h-32 text-4xl font-black bg-neon-green text-black hover:opacity-90 rounded-lg transition-all hover:scale-105 ${
+                                        selectedChoice === 'pump' ? 'border-2 border-white shadow-lg shadow-neon-green/50' : ''
                                     }`}
                                 >
                                     PUMP IT! 🐂
@@ -117,7 +117,7 @@ const MemeBattlesPage = ({ user, onOpenJoinCommunityModal }: MemeBattlesPageProp
                                 <button
                                     onClick={() => setSelectedChoice('dump')}
                                     className={`w-full h-32 text-4xl font-black bg-red-600 hover:bg-red-700 rounded-lg transition-all hover:scale-105 ${
-                                        selectedChoice === 'dump' ? 'border-2 border-red-400 shadow-lg shadow-red-500/50' : ''
+                                        selectedChoice === 'dump' ? 'border-2 border-white shadow-lg shadow-red-500/50' : ''
                                     }`}
                                 >
                                     DUMP IT! 🐻
@@ -139,11 +139,11 @@ const MemeBattlesPage = ({ user, onOpenJoinCommunityModal }: MemeBattlesPageProp
                                     placeholder="Puntos a apostar"
                                     value={betAmount}
                                     onChange={(e) => setBetAmount(e.target.value)}
-                                    className="w-full sm:w-64 bg-[#0D1117] border border-[#30363D] rounded-lg px-4 py-3 text-center focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white text-lg font-mono"
+                                    className="w-full sm:w-64 bg-[#0D1117] border border-[#30363D] rounded-lg px-4 py-3 text-center focus:outline-none focus:ring-2 focus:ring-neon-green text-white text-lg font-mono"
                                 />
                                 <button
                                     onClick={handleConfirmVote}
-                                    className="w-full sm:w-auto text-lg font-bold py-3 px-8 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 transition-opacity"
+                                    className="w-full sm:w-auto text-lg font-bold py-3 px-8 rounded-lg bg-neon-green text-black hover:opacity-90 transition-opacity"
                                 >
                                     Confirmar Voto
                                 </button>

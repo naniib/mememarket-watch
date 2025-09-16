@@ -48,7 +48,7 @@ const AuthModal = ({ onClose, onLoginSuccess }: AuthModalProps) => {
             aria-labelledby="auth-modal-title"
         >
             <div 
-                className="relative w-full max-w-sm bg-gradient-to-br from-[#10141a] to-[#0D1117] border border-[#30363D] rounded-2xl shadow-2xl shadow-cyan-500/10"
+                className="relative w-full max-w-sm bg-gradient-to-br from-[#10141a] to-[#0D1117] border border-[#30363D] rounded-2xl shadow-2xl shadow-neon-green/10"
                 onClick={e => e.stopPropagation()}
             >
                 <header className="p-4 flex justify-end">
@@ -56,7 +56,7 @@ const AuthModal = ({ onClose, onLoginSuccess }: AuthModalProps) => {
                 </header>
 
                 <div className="p-8 pt-0">
-                    <h1 id="auth-modal-title" className="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-cyan-400 to-pink-500 bg-clip-text text-transparent">
+                    <h1 id="auth-modal-title" className="text-3xl font-bold text-center mb-2 text-neon-green">
                         {isLoginView ? 'Welcome Back' : 'Join the Revolution'}
                     </h1>
                     <p className="text-gray-400 text-center mb-6">
@@ -69,19 +69,19 @@ const AuthModal = ({ onClose, onLoginSuccess }: AuthModalProps) => {
                         {!isLoginView && (
                             <div className="relative">
                                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                <input type="text" placeholder="Username" required value={username} onChange={e => setUsername(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#0D1117]/50 border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white" />
+                                <input type="text" placeholder="Username" required value={username} onChange={e => setUsername(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#0D1117]/50 border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-neon-green text-white" />
                             </div>
                         )}
                         <div className="relative">
                             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                            <input type="email" placeholder="Email" required value={email} onChange={e => setEmail(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#0D1117]/50 border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white" />
+                            <input type="email" placeholder="Email" required value={email} onChange={e => setEmail(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#0D1117]/50 border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-neon-green text-white" />
                         </div>
                         <div className="relative">
                             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                            <input type="password" placeholder="Password" required value={password} onChange={e => setPassword(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#0D1117]/50 border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white" />
+                            <input type="password" placeholder="Password" required value={password} onChange={e => setPassword(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#0D1117]/50 border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-neon-green text-white" />
                         </div>
 
-                        <button type="submit" disabled={loading} className="w-full flex items-center justify-center bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-3 px-4 rounded-lg transition-transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <button type="submit" disabled={loading} className="w-full flex items-center justify-center bg-neon-green text-black font-bold py-3 px-4 rounded-lg transition-transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
                             {loading ? 'Processing...' : (
                                 isLoginView ? <><LogIn className="mr-2" /> Sign In</> : <><UserPlus className="mr-2" /> Create Account</>
                             )}
@@ -90,7 +90,7 @@ const AuthModal = ({ onClose, onLoginSuccess }: AuthModalProps) => {
 
                     <p className="text-center text-gray-400 text-sm mt-6">
                         {isLoginView ? "Don't have an account? " : "Already have an account? "}
-                        <button onClick={() => { setIsLoginView(!isLoginView); setError(''); }} className="font-medium text-cyan-400 hover:underline">
+                        <button onClick={() => { setIsLoginView(!isLoginView); setError(''); }} className="font-medium text-neon-green hover:underline">
                             {isLoginView ? "Register here" : "Sign in here"}
                         </button>
                     </p>

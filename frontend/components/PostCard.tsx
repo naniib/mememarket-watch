@@ -36,7 +36,7 @@ const PostCard = ({ post }: { post: Post }) => {
     return (
         <div className="bg-[#161B22] border border-[#30363D] rounded-lg p-4 transition-colors duration-200">
             <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-gradient-to-tr from-neon-green to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-xl font-bold text-white">{post.user.username.charAt(0).toUpperCase()}</span>
                 </div>
                 <div className="flex-grow">
@@ -48,13 +48,13 @@ const PostCard = ({ post }: { post: Post }) => {
                     <p className="text-gray-300 mt-2 whitespace-pre-wrap">{post.content}</p>
 
                     <div className="flex items-center space-x-6 text-sm text-gray-400 mt-4">
-                        <button className="flex items-center space-x-1.5 hover:text-cyan-400">
+                        <button className="flex items-center space-x-1.5 hover:text-neon-green">
                             <LikeIcon /> <span>{post._count.likes}</span>
                         </button>
-                        <button className="flex items-center space-x-1.5 hover:text-cyan-400">
+                        <button className="flex items-center space-x-1.5 hover:text-neon-green">
                             <CommentIcon /> <span>{post._count.comments}</span>
                         </button>
-                        <button className="flex items-center space-x-1.5 hover:text-cyan-400">
+                        <button className="flex items-center space-x-1.5 hover:text-neon-green">
                             <ShareIcon /> <span>{post.shareCount}</span>
                         </button>
                     </div>
