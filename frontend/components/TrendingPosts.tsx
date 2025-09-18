@@ -25,16 +25,16 @@ const TrendingPosts = () => {
             {/* Trending Card */}
             <div className="bg-[#161B22] border border-[#30363D] rounded-xl">
                 <h3 className="text-xl font-bold p-4">What's Happening</h3>
-                <div className="space-y-2">
+                <div className="px-4 pb-2">
                     {trendingTopics.map((item, index) => (
-                        <div key={index} className="px-4 py-3 hover:bg-[#1D2127] transition-colors cursor-pointer">
+                        <div key={index} className="p-3 mb-2 rounded-lg hover:bg-neon-blue/10 transition-colors cursor-pointer">
                             <div className="flex justify-between items-center">
                                 <div>
                                     <p className="text-xs text-gray-500">{item.category}</p>
                                     <p className="font-bold text-white">{item.topic}</p>
                                     <p className="text-xs text-gray-500">{item.posts}</p>
                                 </div>
-                                <div className="text-gray-500 hover:text-neon-green">
+                                <div className="text-gray-500 hover:text-neon-blue">
                                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" /></svg>
                                 </div>
                             </div>
@@ -42,7 +42,7 @@ const TrendingPosts = () => {
                     ))}
                 </div>
                 <div className="p-4">
-                    <a href="#/trending" className="text-neon-green text-sm hover:underline">Show more</a>
+                    <a href="#/trending" className="text-neon-blue text-sm hover:underline">Show more</a>
                 </div>
             </div>
         </div>

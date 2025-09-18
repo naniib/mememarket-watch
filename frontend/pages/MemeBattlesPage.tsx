@@ -11,8 +11,8 @@ interface MemeBattlesPageProps {
 }
 
 const MemeBattlesPage = ({ user, onOpenJoinCommunityModal }: MemeBattlesPageProps) => {
-    const [activeArena, setActiveArena] = useState('Batallas Relámpago');
-    const [activeTimeframe, setActiveTimeframe] = useState('1 Minuto');
+    const [activeArena, setActiveArena] = useState('Batallas Tácticas');
+    const [activeTimeframe, setActiveTimeframe] = useState('5 Minutos');
     const [betAmount, setBetAmount] = useState('');
     const [selectedChoice, setSelectedChoice] = useState<'pump' | 'dump' | null>(null);
 
@@ -46,10 +46,10 @@ const MemeBattlesPage = ({ user, onOpenJoinCommunityModal }: MemeBattlesPageProp
                         <button
                             key={arena}
                             onClick={() => setActiveArena(arena)}
-                            className={`font-bold py-2 px-3 sm:px-6 rounded-lg text-base sm:text-lg transition-colors duration-200 ${
+                            className={`font-bold py-2 px-3 sm:px-6 rounded-lg text-sm sm:text-base transition-all duration-200 ${
                                 activeArena === arena
-                                ? 'bg-neon-green text-black shadow-md shadow-neon-green/20'
-                                : 'bg-transparent text-gray-400 hover:bg-[#30363D]'
+                                ? 'bg-neon-green text-black shadow-md shadow-neon-green/30'
+                                : 'bg-transparent text-gray-300 hover:bg-gray-800/50 hover:text-white'
                             }`}
                         >
                             {arena}
@@ -58,7 +58,7 @@ const MemeBattlesPage = ({ user, onOpenJoinCommunityModal }: MemeBattlesPageProp
                 </div>
 
                 {/* Selector de Temporalidades (para Batallas Relámpago) */}
-                {activeArena === 'Batallas Relámpago' && (
+                {activeArena === 'Batallas Tácticas' && (
                     <div className="flex space-x-2 mb-8">
                         {timeframes.map(timeframe => (
                              <button
@@ -66,8 +66,8 @@ const MemeBattlesPage = ({ user, onOpenJoinCommunityModal }: MemeBattlesPageProp
                                 onClick={() => setActiveTimeframe(timeframe)}
                                 className={`text-sm px-4 py-1.5 rounded-md border transition-colors duration-200 ${
                                     activeTimeframe === timeframe
-                                    ? 'bg-neon-green text-black border-neon-green'
-                                    : 'bg-[#161B22] text-gray-400 hover:bg-gray-700 border-[#30363D]'
+                                    ? 'bg-neon-green text-black border-neon-green font-bold shadow-md shadow-neon-green/20'
+                                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:border-gray-500 border-gray-700'
                                 }`}
                             >
                                 {timeframe}
@@ -77,7 +77,7 @@ const MemeBattlesPage = ({ user, onOpenJoinCommunityModal }: MemeBattlesPageProp
                 )}
                 
                 {/* Contenido de la Arena */}
-                {activeArena === 'Batallas Relámpago' && (
+                {(activeArena === 'Batallas Tácticas' || activeArena === 'Batallas Relámpago') && (
                     <div className="w-full max-w-4xl bg-[#161B22] border border-[#30363D] rounded-xl p-6 animate-fade-in">
                         {/* 1. Título del Token y Contador */}
                         <div className="text-center mb-6">
@@ -103,7 +103,7 @@ const MemeBattlesPage = ({ user, onOpenJoinCommunityModal }: MemeBattlesPageProp
                                 <button
                                     onClick={() => setSelectedChoice('pump')}
                                     className={`w-full h-32 text-4xl font-black bg-neon-green text-black hover:opacity-90 rounded-lg transition-all hover:scale-105 ${
-                                        selectedChoice === 'pump' ? 'border-2 border-white shadow-lg shadow-neon-green/50' : ''
+                                        selectedChoice === 'pump' ? 'ring-4 ring-white ring-offset-2 ring-offset-green-800' : ''
                                     }`}
                                 >
                                     PUMP IT! 🐂
@@ -116,8 +116,8 @@ const MemeBattlesPage = ({ user, onOpenJoinCommunityModal }: MemeBattlesPageProp
                             <div className="text-center p-4 bg-red-900/30 border-2 border-red-500/50 rounded-lg">
                                 <button
                                     onClick={() => setSelectedChoice('dump')}
-                                    className={`w-full h-32 text-4xl font-black bg-red-600 hover:bg-red-700 rounded-lg transition-all hover:scale-105 ${
-                                        selectedChoice === 'dump' ? 'border-2 border-white shadow-lg shadow-red-500/50' : ''
+                                    className={`w-full h-32 text-4xl font-black bg-red-600 text-white hover:bg-red-700 rounded-lg transition-all hover:scale-105 ${
+                                        selectedChoice === 'dump' ? 'ring-4 ring-white ring-offset-2 ring-offset-red-800' : ''
                                     }`}
                                 >
                                     DUMP IT! 🐻
@@ -153,12 +153,6 @@ const MemeBattlesPage = ({ user, onOpenJoinCommunityModal }: MemeBattlesPageProp
                 )}
 
                  {/* Marcadores de posición para otras arenas */}
-                {activeArena === 'Batallas Tácticas' && (
-                    <div className="text-center text-gray-400 p-10 bg-[#161B22] border border-dashed border-[#30363D] rounded-xl">
-                        <h2 className="text-2xl font-bold text-white mb-2">Batallas Tácticas</h2>
-                        <p>Próximamente: Batallas semanales con mayores recompensas.</p>
-                    </div>
-                )}
                 {activeArena === 'Eventos Especiales' && (
                     <div className="text-center text-gray-400 p-10 bg-[#161B22] border border-dashed border-[#30363D] rounded-xl">
                         <h2 className="text-2xl font-bold text-white mb-2">Eventos Especiales</h2>

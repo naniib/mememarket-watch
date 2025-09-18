@@ -41,7 +41,7 @@ const PostItem = ({ post }: { post: Post }) => {
     const userInitial = post.user.username.charAt(0).toUpperCase();
 
     return (
-        <article className="p-4 border-b border-gray-800 hover:bg-black/20 transition-colors cursor-pointer">
+        <article className="p-4 border-b border-gray-800 hover:bg-neon-green/10 transition-colors cursor-pointer">
             <div className="flex space-x-4">
                 <a href={`#/profile/${post.user.id}`} className="flex-shrink-0">
                     {post.user.avatarUrl ? (

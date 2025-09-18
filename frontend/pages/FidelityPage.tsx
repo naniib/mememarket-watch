@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { Diamond, Flame, User, Calendar, Edit, ThumbsUp, Users, UserPlus } from 'lucide-react';
 import LottieTrophy from '../components/LottieTrophy';
@@ -8,7 +6,7 @@ import LottieTrophy from '../components/LottieTrophy';
 
 // Tarjeta de Logro rediseñada como Medalla
 const AchievementCard = ({ icon: Icon, title, value, footer, iconBgClass }: { icon: React.ElementType, title: string, value: string, footer: string, iconBgClass: string }) => (
-    <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4 flex flex-col justify-between items-center text-center transition-all duration-300 hover:border-neon-green/50 hover:-translate-y-1 hover:shadow-xl hover:shadow-neon-green/10">
+    <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4 flex flex-col justify-between items-center text-center transition-all duration-300 hover:border-neon-green hover:shadow-xl hover:shadow-neon-green/10">
         <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-3 ${iconBgClass}`}>
             <Icon size={32} className="text-white drop-shadow-lg" />
         </div>
@@ -31,7 +29,7 @@ const LeaderboardItem = ({ rank, username, points }: { rank: number, username: s
     const { medal, text } = getRankStyle(rank);
 
     return (
-        <li className="flex items-center justify-between p-3 bg-gray-800/30 rounded-md">
+        <li className="flex items-center justify-between p-3 bg-gray-800/30 rounded-md border border-[#30363D] hover:border-neon-green hover:bg-[#1D2127] transition-all">
             <div className="flex items-center space-x-4">
                 <span className={`font-bold text-lg w-8 text-center ${text}`}>{medal}</span>
                 <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center font-bold text-white">
@@ -85,7 +83,7 @@ const FidelityPage = () => {
 
             <div className="p-6 space-y-12">
                 {/* --- TARJETA DE ESTATUS PRINCIPAL --- */}
-                <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 text-center animate-fade-in shadow-2xl shadow-neon-green/10 ring-1 ring-neon-green/20">
+                <div className="bg-gray-900 border border-neon-green rounded-xl p-6 text-center animate-fade-in shadow-2xl shadow-neon-green/20">
                     <h2 className="text-sm text-gray-400 uppercase tracking-widest">Rango Actual</h2>
                     <h3 className="text-5xl font-bold bg-gradient-to-r from-yellow-300 to-amber-500 bg-clip-text text-transparent my-2 drop-shadow-[0_2px_4px_rgba(252,211,77,0.3)]">{currentRank}</h3>
                     

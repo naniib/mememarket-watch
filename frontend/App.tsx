@@ -1,8 +1,5 @@
 
 
-
-
-
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -144,11 +141,11 @@ const App = () => {
 
     const { Component, Layout, showHeaderFooter, layoutProps } = renderPage(path);
     
+    // FIX: Consolidate all possible props into one object to satisfy different component requirements and fix type errors.
     const componentProps = {
         user: user,
         onOpenJoinCommunityModal: () => setShowJoinModal(true),
         onOpenAccountRequiredModal: handleOpenAccountRequiredModal,
-        onOpenAuthModal: handleOpenAuthModal,
         onOpenPumpModal: () => setIsPumpModalOpen(true),
     };
 
@@ -159,9 +156,10 @@ const App = () => {
                     {...layoutProps}
                     user={user}
                     onLogout={handleLogout}
-                    onConnectClick={() => setShowAuthModal(true)}
-                    onCreatePostClick={() => setShowJoinModal(true)}
+                    onConnectClick={handleOpenAuthModal}
+                    onCreatePostClick={() => user ? alert('Open create post modal') : setShowJoinModal(true)}
                 >
+                    {/* FIX: Spread the consolidated componentProps object. */}
                     <Component {...componentProps} />
                 </Layout>
                 {isPumpModalOpen && 
@@ -185,8 +183,9 @@ const App = () => {
     return (
         <>
             <div className="min-h-screen flex flex-col">
-                {showHeaderFooter && <Header user={user} onLogout={handleLogout} onLoginClick={() => setShowAuthModal(true)} />}
+                {showHeaderFooter && <Header user={user} onLogout={handleLogout} onLoginClick={handleOpenAuthModal} />}
                 <main className={mainClass}>
+                    {/* FIX: Spread the consolidated componentProps object and remove the redundant explicit prop. */}
                     <Component {...componentProps} />
                 </main>
                 {showHeaderFooter && <Footer />}

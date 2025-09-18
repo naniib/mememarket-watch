@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 
 // Define interfaces for the data structures
@@ -34,7 +32,7 @@ const PostCard = ({ post }: { post: Post }) => {
     };
 
     return (
-        <div className="bg-[#161B22] border border-[#30363D] rounded-lg p-4 transition-colors duration-200">
+        <div className="bg-[#161B22] border border-[#30363D] rounded-lg p-4 transition-all duration-200 hover:border-neon-green">
             <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 bg-gradient-to-tr from-neon-green to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-xl font-bold text-white">{post.user.username.charAt(0).toUpperCase()}</span>

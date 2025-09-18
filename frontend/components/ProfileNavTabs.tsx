@@ -10,24 +10,21 @@ const ProfileNavTabs = ({ activeTab, onTabChange }: ProfileNavTabsProps) => {
 
   return (
     <div className="border-b border-gray-800">
-      <nav className="flex space-x-4" aria-label="Tabs">
+      <nav className="flex space-x-4 overflow-x-auto px-4" aria-label="Tabs">
         {tabs.map((tab) => (
           <button
             key={tab}
             onClick={() => onTabChange(tab)}
-            className={`relative px-3 py-4 text-sm font-medium transition-colors duration-200
+            className={`px-3 py-4 text-sm font-medium whitespace-nowrap transition-all duration-200
               ${
                 activeTab === tab
-                  ? 'text-white'
-                  : 'text-gray-500 hover:text-white'
+                  ? 'border-b-4 border-neon-blue text-neon-blue font-bold'
+                  : 'text-gray-300 border-b-4 border-transparent hover:text-neon-blue/80 hover:border-neon-blue/50'
               }
             `}
             aria-current={activeTab === tab ? 'page' : undefined}
           >
             {tab}
-            {activeTab === tab && (
-              <span className="absolute bottom-0 left-0 right-0 h-1 bg-neon-green rounded-full"></span>
-            )}
           </button>
         ))}
       </nav>

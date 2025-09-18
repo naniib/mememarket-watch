@@ -63,7 +63,7 @@ const UpcomingLaunches = () => (
     <h2 className="text-2xl font-bold text-white mb-4">🚀 Lanzamientos en la Mira</h2>
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {upcomingLaunches.map(launch => (
-        <div key={launch.name} className="bg-[#161B22] border border-[#30363D] rounded-lg p-4 flex flex-col items-center space-y-3">
+        <div key={launch.name} className="border border-electric-purple/50 rounded-lg p-4 bg-[#161B22] flex flex-col items-center space-y-3 transition-all hover:bg-electric-purple/10 hover:shadow-lg hover:shadow-electric-purple/20">
           <div className="w-16 h-16 bg-gray-700/50 rounded-full flex items-center justify-center text-3xl">{launch.emoji}</div>
           <h3 className="font-bold text-white text-lg">{launch.name}</h3>
           <p className="text-xs text-gray-500">{launch.time}</p>
@@ -154,19 +154,16 @@ const ExplorePage = () => {
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
-                        className={`relative px-3 py-4 text-sm font-medium transition-colors duration-200
+                        className={`px-3 py-4 text-sm font-medium transition-all duration-200
                           ${
                             activeTab === tab
-                              ? 'text-white'
-                              : 'text-gray-500 hover:text-white'
+                              ? 'border-b-4 border-electric-purple text-electric-purple font-bold'
+                              : 'text-gray-300 border-b-4 border-transparent hover:text-electric-purple/80 hover:border-electric-purple/50'
                           }
                         `}
                         aria-current={activeTab === tab ? 'page' : undefined}
                     >
                         {tab}
-                        {activeTab === tab && (
-                          <span className="absolute bottom-0 left-0 right-0 h-1 bg-neon-green rounded-full"></span>
-                        )}
                     </button>
                 ))}
             </nav>
