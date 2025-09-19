@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'; // <-- ASEGÚRATE DE QUE LA PRIMERA LÍNEA SEA ASÍ
 import { Shield, X, CheckCircle, AlertTriangle, XCircle } from 'lucide-react';
 
 interface AuditModalProps {
@@ -123,9 +123,9 @@ const AuditModal = ({ isOpen, onClose }: AuditModalProps) => {
                 </div>
 
                 <footer className="p-4 border-t border-gray-800 bg-black/50 rounded-b-2xl">
-                     <p className="text-xs text-gray-500 text-center">
-                         Disclaimer: This is an automated audit and is for informational purposes only. It is not financial advice. Always conduct your own research.
-                     </p>
+                       <p className="text-xs text-gray-500 text-center">
+                           Disclaimer: This is an automated audit and is for informational purposes only. It is not financial advice. Always conduct your own research.
+                       </p>
                 </footer>
             </div>
         </div>

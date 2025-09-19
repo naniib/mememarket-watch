@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { X, Users, Zap } from 'lucide-react';
 
@@ -16,8 +15,9 @@ const JoinCommunityModal = ({ onClose, onConnect }: JoinCommunityModalProps) => 
             aria-modal="true"
             aria-labelledby="join-community-title"
         >
+            {/* CAMBIO 1: Borde y sombra con el color oficial */}
             <div 
-                className="relative w-full max-w-md bg-[#0D1117] border border-[#30363D] rounded-xl shadow-2xl shadow-black/50"
+                className="relative w-full max-w-md bg-[#0D1117] border border-emerald-400/30 rounded-xl shadow-2xl shadow-emerald-400/20"
                 onClick={e => e.stopPropagation()}
             >
                 <div className="absolute top-4 right-4">
@@ -37,16 +37,19 @@ const JoinCommunityModal = ({ onClose, onConnect }: JoinCommunityModalProps) => 
                     </p>
                     
                     <div className="flex flex-col items-center space-y-4">
+                        {/* CAMBIO 2: Botón principal con el color oficial y efecto de brillo */}
                         <button 
                             onClick={onConnect}
-                            className="w-full flex items-center justify-center font-semibold py-3 px-4 rounded-lg bg-[#161B22] border border-[#30363D] text-gray-300 hover:border-neon-green hover:text-neon-green transition-colors"
+                            className="w-full flex items-center justify-center font-bold py-3 px-4 rounded-lg bg-emerald-400 text-black transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg hover:shadow-emerald-400/40"
                         >
                             <Zap className="w-5 h-5 mr-2" />
                             Connect & Join
                         </button>
+
+                        {/* CAMBIO 3: Botón secundario rediseñado (más pequeño y sutil) */}
                         <button 
                             onClick={onClose}
-                            className="font-semibold py-2 px-4 text-gray-500 hover:text-white transition-colors"
+                            className="px-6 py-2 text-sm font-semibold text-gray-300 border border-gray-700 rounded-lg transition-colors duration-200 hover:border-emerald-400 hover:text-emerald-400"
                         >
                             Maybe later
                         </button>

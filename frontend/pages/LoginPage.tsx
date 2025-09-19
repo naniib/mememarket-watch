@@ -10,8 +10,8 @@ interface AuthLayoutProps {
 
 const AuthLayout = ({ children }: AuthLayoutProps) => (
     <div className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-black p-4">
-        <div className="absolute top-0 left-0 -translate-x-1/4 -translate-y-1/4 w-96 h-96 bg-neon-blue/20 rounded-full filter blur-3xl opacity-50 animate-pulse"></div>
-        <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 w-96 h-96 bg-neon-blue/20 rounded-full filter blur-3xl opacity-50 animate-pulse [animation-delay:4s]"></div>
+        <div className="absolute top-0 left-0 -translate-x-1/4 -translate-y-1/4 w-96 h-96 bg-cyan-500/20 rounded-full filter blur-3xl opacity-50 animate-pulse"></div>
+        <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 w-96 h-96 bg-cyan-500/20 rounded-full filter blur-3xl opacity-50 animate-pulse [animation-delay:4s]"></div>
         <div className="relative z-10 w-full max-w-sm">
             {children}
         </div>
@@ -48,9 +48,9 @@ const LoginPage = () => {
 
     return (
         <AuthLayout>
-            <div className="bg-[#10141a]/80 backdrop-blur-lg border border-neon-blue/30 rounded-2xl p-8 space-y-6 animate-fade-in shadow-2xl shadow-neon-blue/20">
+            <div className="bg-[#10141a]/80 backdrop-blur-lg border border-cyan-500/30 rounded-2xl p-8 space-y-6 animate-fade-in shadow-2xl shadow-cyan-500/20">
                 <header className="space-y-2 text-center">
-                    <h1 className="text-3xl font-bold text-neon-blue" style={{ textShadow: '0 0 15px rgba(0, 229, 255, 0.9)' }}>Welcome Back</h1>
+                    <h1 className="text-3xl font-bold text-cyan-400" style={{ textShadow: '0 0 15px rgba(6, 182, 212, 0.9)' }}>Welcome Back</h1>
                     <p className="text-gray-400">Sign in to your account</p>
                 </header>
                 
@@ -69,7 +69,7 @@ const LoginPage = () => {
                                 placeholder="Email" 
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full pl-10 pr-4 py-3 bg-[#0D1117] border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-neon-blue text-white placeholder:text-gray-500 transition-colors" />
+                                className="w-full pl-10 pr-4 py-3 bg-[#0D1117] border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white placeholder:text-gray-500 transition-colors" />
                         </div>
                     </div>
                     <div>
@@ -85,18 +85,18 @@ const LoginPage = () => {
                                 placeholder="Password" 
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full pl-10 pr-4 py-3 bg-[#0D1117] border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-neon-blue text-white placeholder:text-gray-500 transition-colors" />
+                                className="w-full pl-10 pr-4 py-3 bg-[#0D1117] border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white placeholder:text-gray-500 transition-colors" />
                         </div>
                     </div>
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full flex items-center justify-center bg-neon-blue text-white font-bold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                        className="w-full flex items-center justify-center bg-cyan-500 text-white font-bold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                        {loading ? 'Signing In...' : <><LogIn className="mr-2" /> Sign In</>}
                     </button>
                 </form>
                  <p className="text-center text-gray-400 text-sm">
-                    Don't have an account? <a href="#/register" className="font-bold text-neon-blue">Register here</a>
+                    Don't have an account? <a href="#/register" className="font-bold text-cyan-400">Register here</a>
                 </p>
             </div>
         </AuthLayout>

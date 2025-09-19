@@ -43,7 +43,7 @@ const CreatePostForm = ({ onPostCreated }: CreatePostFormProps) => {
     };
 
     return (
-        <div className="border border-neon-blue rounded-lg p-4 bg-[#161B22]">
+        <div className="border border-cyan-500 rounded-lg p-4 bg-[#161B22]">
             <h3 className="text-lg font-bold text-white mb-4">Create a new post</h3>
             <form onSubmit={handleSubmit}>
                 <textarea

@@ -18,8 +18,8 @@ const ProfileNavTabs = ({ activeTab, onTabChange }: ProfileNavTabsProps) => {
             className={`px-3 py-4 text-sm font-medium whitespace-nowrap transition-all duration-200
               ${
                 activeTab === tab
-                  ? 'border-b-4 border-neon-blue text-neon-blue font-bold'
-                  : 'text-gray-300 border-b-4 border-transparent hover:text-neon-blue/80 hover:border-neon-blue/50'
+                  ? 'border-b-2 border-emerald-400 text-emerald-400 font-bold' // <-- CAMBIO 1: Color activo
+                  : 'text-gray-400 border-b-2 border-transparent hover:text-emerald-400/80 hover:border-emerald-400/50' // <-- CAMBIO 2: Color hover
               }
             `}
             aria-current={activeTab === tab ? 'page' : undefined}
