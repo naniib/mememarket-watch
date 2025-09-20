@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Home, User, Search, Trophy, LogOut, Swords, Newspaper, LineChart, PenSquare, LogIn, Zap } from 'lucide-react';
+import { Home, User, Search, Trophy, LogOut, Swords, Newspaper, LineChart, PenSquare, LogIn, Zap, BarChart2 } from 'lucide-react';
 
 interface User {
     id: number;
@@ -52,6 +52,7 @@ const SideNav = ({ user, onLogout, onConnectClick, onCreatePostClick }: SideNavP
         { text: 'Radar', href: '#/explore', icon: Search, requiresAuth: false },
         { text: 'Meme Battles', href: '#/battles', icon: Swords, requiresAuth: false },
         { text: 'MemePress & Humor', href: '#/memepress', icon: Newspaper, requiresAuth: false },
+        { text: 'Trending', href: '#/trending', icon: BarChart2, requiresAuth: false },
         { text: 'Fidelity', href: '#/fidelity', icon: Trophy, requiresAuth: true },
     ];
 

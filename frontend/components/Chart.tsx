@@ -1,163 +1,151 @@
-import React, { useEffect, useRef, memo } from 'react';
-import { Maximize, Minimize } from 'lucide-react';
+import React from 'react';
+import { TrendingUp } from 'lucide-react';
+import TimeframeSelector from './TimeframeSelector';
 import type { Coin } from '../data';
-
-declare global {
-    interface Window {
-        TradingView: any;
-    }
-}
 
 interface ChartProps {
   coin: Coin;
-  isChartFullscreen: boolean;
-  setIsChartFullscreen: (isFullscreen: boolean) => void;
+  timeframe: string;
+  onTimeframeChange: (timeframe: string) => void;
 }
 
-// Datafeed configuration for TradingView
-const configurationData = {
-    supported_resolutions: ['1', '5', '15', '30', '60', '1D', '1W', '1M'],
-    exchanges: [{
-        value: 'MemeMarket',
-        name: 'MemeMarket',
-        desc: 'MemeMarket Watch Exchange'
-    }],
-    symbols_types: [{
-        name: 'crypto',
-        value: 'crypto'
-    }]
-};
+const Chart = ({ coin, timeframe, onTimeframeChange }: ChartProps) => {
+  // Mock chart data that simulates fluctuations based on coin properties
+  const generateMockData = () => {
+    const points = 50;
+    let currentPrice = coin.price;
 
-// Dark theme overrides for the chart
-const darkThemeOverrides = {
-    "paneProperties.background": "#0D1117",
-    "paneProperties.vertGridProperties.color": "#161B22",
-    "paneProperties.horzGridProperties.color": "#161B22",
-    "symbolWatermarkProperties.transparency": 90,
-    "scalesProperties.textColor": "#AAA",
-    "mainSeriesProperties.candleStyle.upColor": "#10b981",
-    "mainSeriesProperties.candleStyle.downColor": "#ef4444",
-    "mainSeriesProperties.candleStyle.drawWick": true,
-    "mainSeriesProperties.candleStyle.wickUpColor": "#10b981",
-    "mainSeriesProperties.candleStyle.wickDownColor": "#ef4444",
-};
+    // 1. Determine volatility based on riskLevel
+    const riskVolatility = {
+      'LOW': 0.5,
+      'MEDIUM': 1.0,
+      'HIGH': 1.5,
+    };
+    const volatilityMultiplier = riskVolatility[coin.riskLevel] || 1.0;
 
-// The TradingView Chart component
-const Chart = ({ coin, isChartFullscreen, setIsChartFullscreen }: ChartProps) => {
-    const chartContainerRef = useRef<HTMLDivElement>(null);
-    const widgetRef = useRef<any>(null);
+    // 2. Determine trend/drift based on Fear & Greed Index
+    // (fearGreedIndex - 50) gives a range from -50 (fear) to +50 (greed)
+    // This creates a slight drift in the price direction.
+    const drift = (coin.fearGreedIndex - 50) * (currentPrice * 0.0005);
 
-    useEffect(() => {
-        if (!chartContainerRef.current || !('TradingView' in window)) {
-            return;
-        }
-        
-        const datafeed = {
-             onReady: (callback: (config: any) => void) => {
-                setTimeout(() => callback(configurationData));
-            },
-            resolveSymbol: (
-                symbolName: string, 
-                onSymbolResolvedCallback: (symbolInfo: any) => void, 
-            ) => {
-                 const symbolInfo = {
-                    name: coin.symbol,
-                    ticker: coin.symbol,
-                    description: coin.name,
-                    type: 'crypto',
-                    session: '24x7',
-                    timezone: 'Etc/UTC',
-                    exchange: 'MemeMarket',
-                    minmov: 1,
-                    pricescale: 100000000,
-                    has_intraday: true,
-                    has_no_volume: false,
-                    supported_resolutions: configurationData.supported_resolutions,
-                    volume_precision: 2,
-                    data_status: 'streaming',
-                };
-                setTimeout(() => onSymbolResolvedCallback(symbolInfo));
-            },
-             getBars: (
-                symbolInfo: any, 
-                resolution: string, 
-                periodParams: any, 
-                onHistoryCallback: (bars: any[], meta: any) => void, 
-            ) => {
-                const { countBack } = periodParams;
-                 if (!countBack) {
-                    onHistoryCallback([], { noData: true });
-                    return;
-                }
-                 const resolutionToMs: { [key: string]: number } = {
-                    '1': 60000, '5': 300000, '15': 900000, '30': 1800000, '60': 3600000,
-                    '1D': 86400000, '1W': 604800000, '1M': 2592000000,
-                };
-                const intervalMs = resolutionToMs[resolution] || 3600000;
+    // Generate points working backwards from the current price
+    const dataPoints = [{
+      y: currentPrice,
+      timestamp: new Date()
+    }];
 
-                const bars = [];
-                let price = coin.price;
-                let currentTime = Math.floor(Date.now() / intervalMs) * intervalMs;
+    for (let i = 1; i < points; i++) {
+      // Random fluctuation
+      const randomFactor = (Math.random() - 0.5);
+      // Fluctuation is a small percentage of the current price, scaled by volatility
+      const fluctuation = randomFactor * currentPrice * 0.02 * volatilityMultiplier;
+      
+      // Calculate the previous price by reversing the trend's effect
+      let prevPrice = currentPrice - (drift / points) - fluctuation;
 
-                 for (let i = 0; i < countBack + 150; i++) { // Generate more bars for context
-                    const volatility = price * 0.05; // 5% volatility per bar
-                    const open = price;
-                    const close = open + (Math.random() - 0.48) * volatility; // Slight bullish bias
-                    const high = Math.max(open, close) + Math.random() * volatility * 0.5;
-                    const low = Math.min(open, close) - Math.random() * volatility * 0.5;
-                    const volume = (1 + Math.random()) * 100;
+      // Ensure price doesn't go negative or zero to avoid calculation issues
+      currentPrice = Math.max(prevPrice, 0.000001);
+      
+      dataPoints.push({
+        y: currentPrice,
+        timestamp: new Date(Date.now() - i * 60000)
+      });
+    }
+    
+    // Reverse the array to get chronological order and add x coordinates
+    return dataPoints.reverse().map((point, index) => ({
+      ...point,
+      x: index,
+    }));
+  };
 
-                    bars.push({ time: currentTime, open, high, low, close, volume });
-                    price = Math.max(0.000001, close); // Prevent negative prices
-                    currentTime -= intervalMs;
-                }
-                onHistoryCallback(bars.reverse(), { noData: false });
-            },
-            subscribeBars: () => {},
-            unsubscribeBars: () => {},
-        };
+  const data = generateMockData();
+  const isPositive = data.length > 1 ? data[data.length - 1].y > data[0].y : true;
+  const minPrice = Math.min(...data.map(d => d.y));
+  const maxPrice = Math.max(...data.map(d => d.y));
+  const priceRange = maxPrice - minPrice;
 
-        const widgetOptions = {
-            symbol: coin.symbol,
-            datafeed: datafeed,
-            interval: '15',
-            container: chartContainerRef.current,
-            library_path: '/charting_library/',
-            locale: 'en',
-            disabled_features: ['use_localstorage_for_settings', 'header_symbol_search', 'header_compare'],
-            enabled_features: ['study_templates'],
-            charts_storage_url: 'https://saveload.tradingview.com',
-            charts_storage_api_version: '1.1',
-            client_id: 'tradingview.com',
-            user_id: 'public_user_id',
-            fullscreen: false,
-            autosize: true,
-            theme: 'Dark' as 'Dark' | 'Light',
-            overrides: darkThemeOverrides,
-        };
-        
-        widgetRef.current = new window.TradingView.widget(widgetOptions);
+  const getPointsString = (normalize: (y: number) => number) => {
+    if (data.length < 2) return '';
+    return data.map((point, index) => 
+      `${(index / (data.length - 1)) * 100},${normalize(point.y)}`
+    ).join(' ');
+  };
+  
+  const normalizeY = (y: number) => {
+      if (priceRange === 0) return 50;
+      return 100 - (((y - minPrice) / priceRange) * 80 + 10);
+  };
 
-        return () => {
-            if (widgetRef.current) {
-                widgetRef.current.remove();
-                widgetRef.current = null;
-            }
-        };
-    }, [coin]);
+  const points = getPointsString(normalizeY);
 
-    return (
-         <div className={`relative w-full border border-gray-700/30 rounded-lg overflow-hidden ${isChartFullscreen ? 'flex-grow' : 'h-[500px]'}`}>
-            <div ref={chartContainerRef} className="w-full h-full" id="tv_chart_container" />
-             <button
-                onClick={() => setIsChartFullscreen(!isChartFullscreen)}
-                className="absolute top-3 right-12 z-20 p-2 bg-gray-800/80 backdrop-blur-sm rounded-md text-gray-400 hover:text-white hover:bg-gray-700/80 transition-all"
-                title={isChartFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
-            >
-                {isChartFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
-            </button>
+  return (
+    <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/30 rounded-lg p-6 h-full flex flex-col">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
+        <div className="flex items-center space-x-2">
+          <TrendingUp className="w-6 h-6 text-cyan-400" />
+          <h3 className="text-xl font-bold text-white">Price Chart</h3>
         </div>
-    );
+        
+        <TimeframeSelector 
+          selected={timeframe}
+          onChange={onTimeframeChange}
+        />
+      </div>
+      
+      <div className="relative flex-grow bg-gray-900/50 rounded border border-gray-600/30 overflow-hidden">
+        <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
+          <defs>
+            <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor={isPositive ? "#10b981" : "#ef4444"} stopOpacity="0.3" />
+              <stop offset="100%" stopColor={isPositive ? "#10b981" : "#ef4444"} stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          
+          <polyline
+            fill="none"
+            stroke={isPositive ? "#10b981" : "#ef4444"}
+            strokeWidth="0.5"
+            points={points}
+            vectorEffect="non-scaling-stroke"
+          />
+          
+          <polygon
+            fill="url(#chartGradient)"
+            points={`${points} 100,100 0,100`}
+          />
+        </svg>
+        
+        <div className="absolute top-4 left-4 bg-gray-800/80 backdrop-blur-sm rounded px-3 py-1 border border-gray-600/30">
+          <div className="text-sm text-gray-400">Current Price</div>
+          <div className={`text-lg font-mono font-bold ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
+            ${data.length > 0 ? data[data.length - 1].y.toFixed(6) : '0.000000'}
+          </div>
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 text-center text-sm">
+        <div>
+          <div className="text-gray-400">High</div>
+          <div className="text-green-400 font-mono">${maxPrice.toFixed(6)}</div>
+        </div>
+        <div>
+          <div className="text-gray-400">Low</div>
+          <div className="text-red-400 font-mono">${minPrice.toFixed(6)}</div>
+        </div>
+        <div>
+          <div className="text-gray-400">Volume</div>
+          <div className="text-cyan-400 font-mono">{coin.volume24h}</div>
+        </div>
+        <div>
+          <div className="text-gray-400">Change</div>
+          <div className={`font-mono ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
+            {isPositive ? '+' : ''}{data.length > 1 ? (((data[data.length - 1].y / data[0].y) - 1) * 100).toFixed(2) : '0.00'}%
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
-export default memo(Chart);
+export default Chart;

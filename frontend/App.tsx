@@ -16,10 +16,11 @@ import MemeBattlesPage from './pages/MemeBattlesPage';
 import MemePressPage from './pages/MemePressPage'; 
 import ArticleDetailPage from './pages/ArticleDetailPage'; 
 import FidelityPage from './pages/FidelityPage';
-import AuthModal from './components/AuthModal'; 
+import TrendingPage from './pages/TrendingPage'; // Importar la nueva página
+import AuthModal from './components/AuthModal';
 import JoinCommunityModal from './components/JoinCommunityModal';
-import AccountRequiredModal from './components/AccountRequiredModal';
 import PumpUrShitNowModal from './components/PumpUrShitNowModal';
+import AccountRequiredModal from './components/AccountRequiredModal';
 
 interface User {
     id: number;
@@ -28,182 +29,211 @@ interface User {
     avatarUrl?: string;
 }
 
-// A router component to determine which page and layout to render
-const renderPage = (path: string) => {
-    // Routes with MainLayout
-    if (path.startsWith('/profile/edit')) {
-        return { Component: EditProfilePage, Layout: MainLayout };
-    }
-    if (path.startsWith('/profile/')) {
-        return { Component: ProfilePage, Layout: MainLayout };
-    }
-    if (path === '/home') {
-        return { Component: SocialHomePage, Layout: MainLayout };
-    }
-    // AQUÍ ESTÁ EL CAMBIO
-    if (path === '/explore') {
-        return { Component: ExplorePage, Layout: MainLayout };
-    }
-    if (path === '/battles') {
-        return { Component: MemeBattlesPage, Layout: MainLayout };
-    }
-    if (path.startsWith('/memepress/')) {
-        return { Component: ArticleDetailPage, Layout: MainLayout, layoutProps: { showTrendingSidebar: false } };
-    }
-    if (path === '/memepress') {
-        return { Component: MemePressPage, Layout: MainLayout, layoutProps: { showTrendingSidebar: false } };
-    }
-    if (path === '/fidelity') {
-        return { Component: FidelityPage, Layout: MainLayout };
-    }
-
-    // Routes with standard Header/Footer
-    if (path.startsWith('/coin/')) {
-        return { Component: CoinDetailPage, showHeaderFooter: true };
-    }
-    
-    // Standalone routes (no layout, no header/footer)
-    switch (path) {
-        case '/login':
-            return { Component: LoginPage, showHeaderFooter: false };
-        case '/register':
-            return { Component: RegisterPage, showHeaderFooter: false };
-        case '/':
-            return { Component: HomePage, showHeaderFooter: true };
-        default:
-            // Fallback to HomePage for any unknown route
-            return { Component: HomePage, showHeaderFooter: true };
-    }
-};
-
-
 const App = () => {
-    const getPathFromHash = () => {
-        let path = window.location.hash.substring(1);
-        if (!path) return '/';
-        if (!path.startsWith('/')) path = '/' + path;
-        return path.split('?')[0];
-    };
-    
-    const [path, setPath] = useState(getPathFromHash());
+    const getPathFromHash = () => {
+        let path = window.location.hash.substring(1);
+        if (!path) return '/';
+        if (!path.startsWith('/')) path = '/' + path;
+        return path.split('?')[0];
+    };
+    
+    const [path, setPath] = useState(getPathFromHash());
     const [user, setUser] = useState<User | null>(null);
-    const [showJoinModal, setShowJoinModal] = useState(false);
-    const [showAuthModal, setShowAuthModal] = useState(false);
-    const [showAccountRequiredModal, setShowAccountRequiredModal] = useState(false);
-    const [isPumpModalOpen, setIsPumpModalOpen] = useState(false);
-    const [pendingAction, setPendingAction] = useState<string | null>(null);
+    const [isAuthModalOpen, setAuthModalOpen] = useState(false);
+    const [isJoinCommunityModalOpen, setJoinCommunityModalOpen] = useState(false);
+    const [isPumpModalOpen, setPumpModalOpen] = useState(false);
+    const [isAccountRequiredModalOpen, setAccountRequiredModalOpen] = useState(false);
+    const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
 
-    useEffect(() => {
-        // Centralized user state initialization
+    useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             try {
                 setUser(JSON.parse(storedUser));
             } catch (e) {
                 console.error("Failed to parse user from localStorage", e);
-                localStorage.clear(); // Clear corrupted data
+                localStorage.clear();
             }
         }
 
-        const onLocationChange = () => setPath(getPathFromHash());
-        window.addEventListener('hashchange', onLocationChange);
-        onLocationChange();
-        return () => window.removeEventListener('hashchange', onLocationChange);
-    }, []);
-
-    const handleLoginSuccess = (loggedInUser: User, token: string) => {
-        localStorage.setItem('user', JSON.stringify(loggedInUser));
-        localStorage.setItem('token', token);
-        setUser(loggedInUser);
-        setShowAuthModal(false);
-        
-        if (pendingAction === 'pump-shit-now') {
-            setIsPumpModalOpen(true);
-            setPendingAction(null); // Reset
-        }
-    };
+        const onLocationChange = () => setPath(getPathFromHash());
+        window.addEventListener('hashchange', onLocationChange);
+        onLocationChange();
+        return () => window.removeEventListener('hashchange', onLocationChange);
+    }, []);
 
     const handleLogout = () => {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
         setUser(null);
+        window.location.hash = '#/';
     };
 
-    const handleOpenAuthModal = () => {
-        setShowJoinModal(false);
-        setShowAccountRequiredModal(false);
-        setShowAuthModal(true);
+    const handleLoginSuccess = (loggedInUser: User, token: string) => {
+        localStorage.setItem('user', JSON.stringify(loggedInUser));
+        localStorage.setItem('token', token);
+        setUser(loggedInUser);
+        closeAllModals();
+
+        if (pendingAction) {
+            pendingAction();
+            setPendingAction(null);
+        } else if (window.location.hash.includes('/login') || window.location.hash.includes('/register')) {
+            window.location.hash = '#/home';
+        }
     };
 
-    const handleOpenAccountRequiredModal = () => {
-        setShowAccountRequiredModal(true);
+    const handleConnectClick = () => {
+        closeAllModals();
+        setAuthModalOpen(true);
     };
 
-    const { Component, Layout, showHeaderFooter, layoutProps } = renderPage(path);
+    const handleCreatePostClick = () => {
+        if (!user) {
+            setJoinCommunityModalOpen(true);
+        } else {
+            // Placeholder for create post modal or action
+            alert('Create post functionality will be implemented here.');
+        }
+    };
+
+    const handleOpenPumpModal = () => {
+        closeAllModals();
+        setPumpModalOpen(true);
+    };
     
-    // FIX: Consolidate all possible props into one object to satisfy different component requirements and fix type errors.
-    const componentProps = {
-        user: user,
-        onOpenJoinCommunityModal: () => setShowJoinModal(true),
-        onOpenAccountRequiredModal: handleOpenAccountRequiredModal,
-        onOpenPumpModal: () => setIsPumpModalOpen(true),
+    const handleSetPendingPumpAction = () => {
+        setPendingAction(() => () => {
+             // We need a slight delay to ensure the auth modal is closed
+            setTimeout(() => setPumpModalOpen(true), 100);
+        });
     };
 
-    if (Layout) {
-        return (
-            <>
-                <Layout 
-                    {...layoutProps}
-                    user={user}
-                    onLogout={handleLogout}
-                    onConnectClick={handleOpenAuthModal}
-                    onCreatePostClick={() => user ? alert('Open create post modal') : setShowJoinModal(true)}
-                >
-                    {/* FIX: Spread the consolidated componentProps object. */}
-                    <Component {...componentProps} />
-                </Layout>
-                {isPumpModalOpen && 
-                    <PumpUrShitNowModal 
-                        onClose={() => setIsPumpModalOpen(false)} 
-                        user={user}
-                        onOpenAccountRequiredModal={handleOpenAccountRequiredModal}
-                        onOpenAuthModal={handleOpenAuthModal}
-                        onSetPendingAction={() => setPendingAction('pump-shit-now')}
-                    />
+    const closeAllModals = () => {
+        setAuthModalOpen(false);
+        setJoinCommunityModalOpen(false);
+        setPumpModalOpen(false);
+        setAccountRequiredModalOpen(false);
+    };
+
+    const renderPage = () => {
+        let LayoutComponent: React.ElementType | null = null;
+        let PageComponent: React.ElementType | null = null;
+        let showHeaderFooter = false;
+        let layoutProps: any = {};
+
+        // MainLayout Routes
+        const mainLayoutRoutes: Record<string, { component: React.ElementType, props?: any }> = {
+            '/home': { component: SocialHomePage, props: { showTrendingSidebar: true } },
+            '/explore': { component: ExplorePage, props: { showTrendingSidebar: true } },
+            '/battles': { component: MemeBattlesPage, props: { user, onOpenJoinCommunityModal: () => setJoinCommunityModalOpen(true) } },
+            '/memepress': { component: MemePressPage, props: { showTrendingSidebar: false } },
+            '/fidelity': { component: FidelityPage },
+            '/trending': { component: TrendingPage, props: { showTrendingSidebar: true } }, // Añadir ruta de Trending
+        };
+
+        // FIX: Add useStandardHeader to the type to resolve TypeScript errors.
+        const pathPrefixes: Record<string, { component: React.ElementType, props?: any, useStandardHeader?: boolean }> = {
+            '/profile/edit': { component: EditProfilePage },
+            '/profile/': { component: ProfilePage },
+            '/memepress/': { component: ArticleDetailPage, props: { showTrendingSidebar: false } },
+            '/coin/': { component: CoinDetailPage, useStandardHeader: true },
+        };
+
+        let found = false;
+        for (const prefix in pathPrefixes) {
+            if (path.startsWith(prefix)) {
+                PageComponent = pathPrefixes[prefix].component;
+                if (pathPrefixes[prefix].useStandardHeader) {
+                    showHeaderFooter = true;
+                } else {
+                    LayoutComponent = MainLayout;
+                    layoutProps = pathPrefixes[prefix].props || {};
                 }
-                {showJoinModal && <JoinCommunityModal onClose={() => setShowJoinModal(false)} onConnect={handleOpenAuthModal} />}
-                {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLoginSuccess={handleLoginSuccess} />}
-                {showAccountRequiredModal && <AccountRequiredModal onClose={() => setShowAccountRequiredModal(false)} onOpenAuthModal={handleOpenAuthModal} />}
-            </>
-        );
-    }
-
-    const mainClass = 'flex-grow overflow-y-auto';
-
-    return (
-        <>
-            <div className="min-h-screen flex flex-col">
-                {showHeaderFooter && <Header user={user} onLogout={handleLogout} onLoginClick={handleOpenAuthModal} />}
-                <main className={mainClass}>
-                    {/* FIX: Spread the consolidated componentProps object and remove the redundant explicit prop. */}
-                    <Component {...componentProps} />
-                </main>
-                {showHeaderFooter && <Footer />}
-            </div>
-            {isPumpModalOpen && 
-                <PumpUrShitNowModal 
-                    onClose={() => setIsPumpModalOpen(false)} 
-                    user={user}
-                    onOpenAccountRequiredModal={handleOpenAccountRequiredModal}
-                    onOpenAuthModal={handleOpenAuthModal}
-                    onSetPendingAction={() => setPendingAction('pump-shit-now')}
-                />
+                found = true;
+                break;
             }
-            {showJoinModal && <JoinCommunityModal onClose={() => setShowJoinModal(false)} onConnect={handleOpenAuthModal} />}
-            {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLoginSuccess={handleLoginSuccess} />}
-            {showAccountRequiredModal && <AccountRequiredModal onClose={() => setShowAccountRequiredModal(false)} onOpenAuthModal={handleOpenAuthModal} />}
+        }
+        
+        if (!found && mainLayoutRoutes[path]) {
+            PageComponent = mainLayoutRoutes[path].component;
+            LayoutComponent = MainLayout;
+            layoutProps = mainLayoutRoutes[path].props || {};
+            found = true;
+        }
+
+        // Standalone Routes
+        if (!found) {
+            switch (path) {
+                case '/login':
+                    PageComponent = LoginPage;
+                    break;
+                case '/register':
+                    PageComponent = RegisterPage;
+                    break;
+                case '/':
+                    PageComponent = HomePage;
+                    showHeaderFooter = true;
+                    break;
+                default:
+                    // Fallback for any unknown route
+                    PageComponent = () => <div className="text-center p-10">404 - Page Not Found</div>;
+                    showHeaderFooter = true;
+            }
+        }
+        
+        if (LayoutComponent) {
+            return (
+                <LayoutComponent 
+                    user={user} 
+                    onLogout={handleLogout} 
+                    onConnectClick={handleConnectClick}
+                    onCreatePostClick={handleCreatePostClick}
+                    {...layoutProps}
+                >
+                    <PageComponent />
+                </LayoutComponent>
+            );
+        }
+
+        if (showHeaderFooter) {
+            return (
+                <>
+                    <Header user={user} onLogout={handleLogout} onLoginClick={() => setAuthModalOpen(true)} />
+                    <PageComponent onOpenPumpModal={handleOpenPumpModal}/>
+                    <Footer />
+                </>
+            );
+        }
+
+        return <PageComponent />;
+    };
+
+    return (
+        <>
+            {renderPage()}
+            {isAuthModalOpen && <AuthModal onClose={closeAllModals} onLoginSuccess={handleLoginSuccess} />}
+            {isJoinCommunityModalOpen && <JoinCommunityModal onClose={closeAllModals} onConnect={handleConnectClick} />}
+            {isPumpModalOpen && (
+                <PumpUrShitNowModal 
+                    user={user}
+                    onClose={closeAllModals} 
+                    onOpenAccountRequiredModal={() => setAccountRequiredModalOpen(true)}
+                    onOpenAuthModal={handleConnectClick}
+                    onSetPendingAction={handleSetPendingPumpAction}
+                />
+            )}
+            {isAccountRequiredModalOpen && (
+                <AccountRequiredModal 
+                    onClose={closeAllModals} 
+                    onOpenAuthModal={() => {
+                        closeAllModals();
+                        handleConnectClick();
+                    }} 
+                />
+            )}
         </>
-    );
+    );
 };
 
 export default App;

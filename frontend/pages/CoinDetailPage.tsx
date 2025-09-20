@@ -1,10 +1,7 @@
-
-
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { Star, Share2, Copy, Globe, Send, Search, ChevronsLeft, ChevronsRight, Users, ExternalLink, Trophy, Package, Zap, PieChart, ArrowRightLeft, Box, Coins, Percent, Clock, DollarSign, Droplets, RefreshCw, BarChart, TrendingUp, TrendingDown } from 'lucide-react';
 import { allCoins, Coin } from '../data';
-import TradingViewChart from '../tradingview/TradingViewChart';
+import Chart from '../components/Chart';
 import LiveChat from '../components/LiveChat';
 import FearGreedMeter from '../components/FearGreedMeter';
 import CommunityVote from '../components/CommunityVote';
@@ -115,6 +112,7 @@ const CoinDetailPage = () => {
     const [userVote, setUserVote] = useState<'bullish' | 'bearish' | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
+    const [timeframe, setTimeframe] = useState('1H');
 
     useEffect(() => {
         const handleHashChange = () => {
@@ -205,7 +203,7 @@ const CoinDetailPage = () => {
         return {
             display: 'grid',
             gridTemplateColumns: isAnySidebarVisible ? '1fr 400px' : '1fr 0px',
-            gridTemplateRows: 'auto minmax(0, 1fr)',
+            gridTemplateRows: '450px auto',
             gridTemplateAreas: areas,
             gap: isAnySidebarVisible ? '1rem' : '0',
         };
@@ -275,8 +273,8 @@ const CoinDetailPage = () => {
             </div>
             
             <main style={gridStyle as React.CSSProperties} className="transition-all duration-300">
-                <div style={{ gridArea: 'chart' }} className="relative min-h-[450px]">
-                    <TradingViewChart />
+                <div style={{ gridArea: 'chart' }} className="relative flex flex-col">
+                    <Chart coin={coin} timeframe={timeframe} onTimeframeChange={setTimeframe} />
                     <button
                         onClick={() => setIsChatVisible(!isChatVisible)}
                         className="absolute top-1/2 -right-3 transform -translate-y-1/2 z-10 p-2 bg-[#0a0a0a] border border-gray-800 rounded-full text-gray-400 hover:bg-green-500/20 hover:text-white"
@@ -290,7 +288,7 @@ const CoinDetailPage = () => {
                     <LiveChat coinId={coin.id} coinName={coin.name} isAuthenticated={isAuthenticated} />
                 </div>
                 
-                <div style={{ gridArea: 'trades' }} className="relative min-h-[500px]">
+                <div style={{ gridArea: 'trades' }} className="relative flex flex-col">
                     <TransactionList coinSymbol={coin.symbol} />
                     <button
                         onClick={() => setIsSentimentVisible(!isSentimentVisible)}
@@ -301,7 +299,7 @@ const CoinDetailPage = () => {
                     </button>
                 </div>
 
-                <div style={{ gridArea: 'sentiment' }} className={`space-y-4 min-h-0 transition-all duration-300 ${!isSentimentVisible ? 'hidden' : ''}`}>
+                <div style={{ gridArea: 'sentiment' }} className={`flex flex-col space-y-4 min-h-0 transition-all duration-300 ${!isSentimentVisible ? 'hidden' : ''}`}>
                     <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-4">
                         <h3 className="text-lg font-bold text-[#00f5b3] mb-2 text-center">Fear & Greed Index</h3>
                         <FearGreedMeter value={coin.fearGreedIndex || 0} size={180} />

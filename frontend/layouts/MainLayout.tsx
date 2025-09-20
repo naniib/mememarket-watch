@@ -1,3 +1,4 @@
+
 import React from 'react';
 import SideNav from '../components/SideNav';
 import TrendingPosts from '../components/TrendingPosts';
@@ -40,7 +41,7 @@ const MainLayout = ({ children, showTrendingSidebar = true, user, onLogout, onCo
                 
                 {/* 3. Columna Derecha: Trending */}
                 {showTrendingSidebar && (
-                    <aside className="hidden lg:block p-8">
+                    <aside className="hidden md:block p-8">
                         <div className="sticky top-4 w-[400px]">
                             <TrendingPosts />
                         </div>

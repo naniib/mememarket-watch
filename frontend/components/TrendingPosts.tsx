@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { Search } from 'lucide-react';
+import { Search, Flame } from 'lucide-react';
 
 const trendingTopics = [
     { category: 'Memecoins · Trending', topic: '#DogeToTheMoon', posts: '12.1K posts' },
@@ -18,18 +19,18 @@ const TrendingPosts = () => {
                 <input
                     type="text"
                     placeholder="Search on MemeWatch"
-                    // ### CAMBIO 1: Unificamos el color del 'focus' ###
                     className="w-full bg-[#161B22] border border-[#30363D] rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-400"
                 />
             </div>
 
             {/* Trending Card */}
             <div className="bg-[#161B22] border border-[#30363D] rounded-xl">
-                {/* ### CAMBIO 2: Añadimos color al título ### */}
-                <h3 className="text-xl font-bold p-4 text-emerald-400">What's Happening</h3>
+                <div className="p-4 flex items-center">
+                    <Flame className="w-6 h-6 mr-3 text-red-500 animate-pulse" />
+                    <h3 className="text-xl font-bold text-emerald-400">Trending Posts</h3>
+                </div>
                 <div className="px-4 pb-2">
                     {trendingTopics.map((item, index) => (
-                        // ### CAMBIO 3: Unificamos el color del 'hover' ###
                         <div key={index} className="p-3 mb-2 rounded-lg hover:bg-emerald-400/10 transition-colors cursor-pointer">
                             <div className="flex justify-between items-center">
                                 <div>
@@ -45,8 +46,7 @@ const TrendingPosts = () => {
                     ))}
                 </div>
                 <div className="p-4">
-                    {/* ### CAMBIO 4: Corregimos color y enlace del "Show more" ### */}
-                    <a href="#/explore" className="text-emerald-400 text-sm hover:underline">Show more</a>
+                    <a href="#/trending" className="text-emerald-400 text-sm hover:underline">Show more</a>
                 </div>
             </div>
         </div>
