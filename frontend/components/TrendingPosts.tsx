@@ -18,23 +18,26 @@ const TrendingPosts = () => {
                 <input
                     type="text"
                     placeholder="Search on MemeWatch"
-                    className="w-full bg-[#161B22] border border-[#30363D] rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-neon-green"
+                    // ### CAMBIO 1: Unificamos el color del 'focus' ###
+                    className="w-full bg-[#161B22] border border-[#30363D] rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-400"
                 />
             </div>
 
             {/* Trending Card */}
             <div className="bg-[#161B22] border border-[#30363D] rounded-xl">
-                <h3 className="text-xl font-bold p-4">What's Happening</h3>
+                {/* ### CAMBIO 2: Añadimos color al título ### */}
+                <h3 className="text-xl font-bold p-4 text-emerald-400">What's Happening</h3>
                 <div className="px-4 pb-2">
                     {trendingTopics.map((item, index) => (
-                        <div key={index} className="p-3 mb-2 rounded-lg hover:bg-neon-blue/10 transition-colors cursor-pointer">
+                        // ### CAMBIO 3: Unificamos el color del 'hover' ###
+                        <div key={index} className="p-3 mb-2 rounded-lg hover:bg-emerald-400/10 transition-colors cursor-pointer">
                             <div className="flex justify-between items-center">
                                 <div>
                                     <p className="text-xs text-gray-500">{item.category}</p>
                                     <p className="font-bold text-white">{item.topic}</p>
                                     <p className="text-xs text-gray-500">{item.posts}</p>
                                 </div>
-                                <div className="text-gray-500 hover:text-neon-blue">
+                                <div className="text-gray-500 hover:text-emerald-400">
                                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" /></svg>
                                 </div>
                             </div>
@@ -42,7 +45,8 @@ const TrendingPosts = () => {
                     ))}
                 </div>
                 <div className="p-4">
-                    <a href="#/trending" className="text-neon-blue text-sm hover:underline">Show more</a>
+                    {/* ### CAMBIO 4: Corregimos color y enlace del "Show more" ### */}
+                    <a href="#/explore" className="text-emerald-400 text-sm hover:underline">Show more</a>
                 </div>
             </div>
         </div>

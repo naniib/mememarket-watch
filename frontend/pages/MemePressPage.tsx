@@ -49,10 +49,16 @@ const MemePressPage = () => {
             <div className="p-5 flex justify-center">
                 <div className="w-full max-w-4xl animate-fade-in">
                     {articles.map((article) => (
+                        // ### CAMBIO PRINCIPAL AQUÍ: Añadimos borde y sombra de neón ###
                         <a 
                             key={article.slug} 
                             href={`#/memepress/${article.slug}`}
-                            className="block bg-[#161B22] border border-[#30363D] rounded-xl p-6 mb-6 transition-all duration-200 hover:border-neon-blue hover:bg-[#1D2127] group"
+                            className="block bg-[#161B22] border border-emerald-400/30 rounded-xl p-6 mb-6 transition-all duration-300 hover:bg-[#1D2127] group neon-card"
+                            style={{ 
+                                boxShadow: '0 0 15px rgba(52, 211, 153, 0.20)',
+                                // Descomenta la siguiente línea si quieres también el brillo interior
+                                // boxShadow: '0 0 15px rgba(52, 211, 153, 0.25), inset 0 0 4px rgba(52, 211, 153, 0.4)'
+                            }}
                         >
                             <img 
                                 src={article.imageUrl} 
@@ -61,11 +67,13 @@ const MemePressPage = () => {
                             />
                             
                             <div className="flex items-center space-x-4">
-                                <span className="bg-purple-600/20 text-purple-300 px-2 py-1 rounded text-xs font-semibold">{article.category}</span>
+                                {/* ### CAMBIO 2: Etiqueta de categoría con el color oficial ### */}
+                                <span className="bg-emerald-400/20 text-emerald-300 px-2 py-1 rounded text-xs font-semibold">{article.category}</span>
                                 <span className="text-gray-400 text-sm">{article.date}</span>
                             </div>
 
-                            <h2 className="text-xl font-bold text-white mt-2 mb-2 group-hover:text-neon-blue transition-colors">
+                            {/* ### CAMBIO 3: Título con hover al color oficial ### */}
+                            <h2 className="text-xl font-bold text-white mt-2 mb-2 group-hover:text-emerald-400 transition-colors">
                                 {article.title}
                             </h2>
 
