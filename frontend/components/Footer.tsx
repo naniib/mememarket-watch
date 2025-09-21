@@ -1,7 +1,8 @@
+
 import React from 'react';
 
 const Logo = () => (
-    <img src="/logo4.png" alt="MemeMarket Logo" className="w-8 h-8" />
+    <img src="https://i.imgur.com/2jgOCyH.png" alt="MemeMarket Logo featuring Nelson the cat" className="w-8 h-8 rounded-full object-cover" />
 );
 
 const XIcon = () => <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>;
@@ -14,8 +15,8 @@ const Footer = () => (
             <div className="flex flex-col md:flex-row items-center justify-between">
                 <div className="flex items-center space-x-2 mb-4 md:mb-0">
                     <Logo />
-                    <span className="text-xl font-bold text-white">MemeMarket</span>
-                    <span className="text-xs font-mono bg-gray-800 text-[#00f5b3] px-2 py-0.5 rounded">WATCH</span>
+                    <span className="text-xl font-display text-white tracking-wide">MemeMarket</span>
+                    <span className="text-xs font-display bg-gray-800 text-[#00f5b3] px-2 py-0.5 rounded tracking-widest">WATCH</span>
                 </div>
                 <nav className="flex items-center space-x-6 text-sm text-gray-400 mb-4 md:mb-0">
                     <a href="#" className="hover:text-white transition-colors">About</a>

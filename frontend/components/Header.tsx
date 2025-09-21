@@ -1,7 +1,8 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 
 const Logo = () => (
-    <img src="/logo4.png" alt="Memecoin Market Logo" className="w-12 h-12" />
+    <img src="https://i.imgur.com/2jgOCyH.png" alt="MemeMarket Logo featuring Nelson the cat" className="w-12 h-12 rounded-full object-cover" />
 );
 
 const LogoutIcon = () => (
@@ -70,7 +71,8 @@ const Header = ({ user, onLogout, onLoginClick }: HeaderProps) => {
                     <div className="flex items-center">
                         <a href="#/" className="flex items-center space-x-2">
                             <Logo />
-                            <span className="text-2xl font-bold text-white">MemeMarket</span>
+                            <span className="text-2xl font-display text-white tracking-wide">MemeMarket</span>
+                            <span className="text-xs font-display bg-gray-800 text-[#00f5b3] px-2 py-0.5 rounded-md tracking-widest">WATCH</span>
                         </a>
                     </div>
 
