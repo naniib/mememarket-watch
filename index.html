@@ -7,9 +7,13 @@
     <title>MemeMarket Watch</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+      // Custom Tailwind theme extension: adds custom background and color palette for MemeMarket Watch branding
       tailwind.config = {
         theme: {
           extend: {
+            backgroundColor: {
+              'custom-dark': '#10141a', // New custom background color
+            },
             colors: {
               'neon-green': '#00f5b3',
               'neon-blue': '#00E5FF',
@@ -56,6 +60,7 @@
         scrollbar-width: thin;
         scrollbar-color: #30363D #161B22;
       }
+      
       
       /* Animation for the new Top Holders button */
       @keyframes pulse-border {
