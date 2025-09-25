@@ -1,5 +1,6 @@
 
 
+
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -66,7 +67,6 @@ const App = () => {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
         setUser(null);
-        window.location.hash = '#/';
     };
 
     const handleLoginSuccess = (loggedInUser: User, token: string) => {
@@ -121,6 +121,7 @@ const App = () => {
         let PageComponent: React.ElementType | null = null;
         let showHeaderFooter = false;
         let layoutProps: any = {};
+        let pageProps: any = {};
 
         // MainLayout Routes
         const mainLayoutRoutes: Record<string, { component: React.ElementType, props?: any }> = {
@@ -167,12 +168,15 @@ const App = () => {
             switch (path) {
                 case '/login':
                     PageComponent = LoginPage;
+                    pageProps = { onLoginSuccess: handleLoginSuccess };
                     break;
                 case '/register':
                     PageComponent = RegisterPage;
+                    pageProps = { onLoginSuccess: handleLoginSuccess };
                     break;
                 case '/':
                     PageComponent = HomePage;
+                    pageProps = { onOpenPumpModal: handleOpenPumpModal };
                     showHeaderFooter = true;
                     break;
                 default:
@@ -191,7 +195,7 @@ const App = () => {
                     onCreatePostClick={handleCreatePostClick}
                     {...layoutProps}
                 >
-                    <PageComponent />
+                    <PageComponent {...pageProps} />
                 </LayoutComponent>
             );
         }
@@ -200,13 +204,13 @@ const App = () => {
             return (
                 <>
                     <Header user={user} onLogout={handleLogout} onLoginClick={() => setAuthModalOpen(true)} />
-                    <PageComponent onOpenPumpModal={handleOpenPumpModal}/>
+                    <PageComponent {...pageProps}/>
                     <Footer />
                 </>
             );
         }
 
-        return <PageComponent />;
+        return <PageComponent {...pageProps}/>;
     };
 
     return (

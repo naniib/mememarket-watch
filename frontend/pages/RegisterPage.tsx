@@ -1,6 +1,7 @@
 
 
 
+
 import React, { useState } from 'react';
 import { register } from '../api';
 
@@ -35,8 +36,11 @@ const AuthLayout = ({ children }: AuthLayoutProps) => (
     </div>
 );
 
+interface RegisterPageProps {
+    onLoginSuccess: (user: any, token: string) => void;
+}
 
-const RegisterPage = () => {
+const RegisterPage = ({ onLoginSuccess }: RegisterPageProps) => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -57,11 +61,7 @@ const RegisterPage = () => {
 
         try {
             const data = await register({ username, email, password });
-            
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
-
-            window.location.hash = '#/';
+            onLoginSuccess(data.user, data.token);
 
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An unknown error occurred');
