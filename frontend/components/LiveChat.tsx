@@ -21,11 +21,11 @@ interface Message {
 const fakeUsernames = ['CryptoKing', 'MoonLover', 'AnonHodler', 'PumpMaster', 'DiamondHands', 'LamboDreamer', 'ApeIn', 'SatoshiJr'];
 const fakeMessages = ['To the moon! 🚀', 'When Lambo?', 'Pump it!', 'This is the way! 🙌', 'DYOR', 'LFG! 🔥', 'GM!', 'NGMI 📉', 'WGMI 💎', 'HODL!!!', 'Looks bullish', 'I am aping in!', 'ATH soon', 'Paper hands selling lol', 'Just bought more', '😂', '💯', '🤯'];
 const fakeGifs = [
-    'https://media.giphy.com/media/YprxQv4p4M2Ww/giphy.gif',
-    'https://cdn.pixabay.com/photo/2021/08/25/20/42/cat-6577457_960_720.png',
-    'https://media.giphy.com/media/tXL4FHPSnVJ0A/giphy.gif',
-    'https://media.giphy.com/media/3oKIPdG6K2Avf7S_Bu/giphy.gif',
-    'https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif',
+    'https://media.giphy.com/media/oNFP9kltPi7fp8TUAV/giphy.gif',
+    'https://media.giphy.com/media/Y2ZUWLrTy6r57v6K9m/giphy.gif',
+    'https://media.giphy.com/media/qrwthQPPQrtEk/giphy.gif',
+    'https://media.giphy.com/media/9C1nyePnovqlpEYFMD/giphy.gif',
+    'https://media.giphy.com/media/5efT9uLuaJoM3lGKvB/giphy.gif',
 ];
 
 const isImageUrl = (url: string) => {
@@ -117,8 +117,8 @@ const LiveChat = ({ coinId, coinName, isAuthenticated }: LiveChatProps) => {
   }, []);
 
   return (
-    <div style={{ height: '100%' }} className="bg-[#0a0a0a] border border-gray-800 rounded-lg flex flex-col">
-      <div className="flex items-center space-x-2 p-4 border-b border-gray-800">
+    <div className="bg-[#0a0a0a] border border-gray-800 rounded-lg flex flex-col h-full">
+      <div className="flex items-center space-x-2 p-4 border-b border-gray-800 flex-shrink-0">
         <MessageCircle className="w-5 h-5 text-[#00f5b3]" />
         <h3 className="font-bold text-white">Live Chat - {coinName}</h3>
         <div className="ml-auto flex items-center space-x-1">
@@ -154,7 +154,7 @@ const LiveChat = ({ coinId, coinName, isAuthenticated }: LiveChatProps) => {
         })}
       </div>
       
-      <div className="relative p-4 border-t border-gray-800">
+      <div className="relative p-4 border-t border-gray-800 flex-shrink-0">
         {isAuthenticated ? (
           <div className="space-y-2">
             <form onSubmit={handleSendMessage} className="flex space-x-2 relative">

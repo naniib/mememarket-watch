@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Star, Share2, Copy, Globe, Send, Search, ChevronsLeft, ChevronsRight, Users, ExternalLink, Trophy, Package, Zap, PieChart, ArrowRightLeft, Box, Coins, Percent, Clock, DollarSign, Droplets, RefreshCw, BarChart, TrendingUp, TrendingDown } from 'lucide-react';
 import { allCoins, Coin } from '../data';
-import Chart from '../components/Chart';
+import TradingViewWidget from '../components/TradingViewWidget';
 import LiveChat from '../components/LiveChat';
 import FearGreedMeter from '../components/FearGreedMeter';
 import CommunityVote from '../components/CommunityVote';
@@ -101,6 +101,16 @@ export const StatCard = ({ title, value, children, onClick, info, highlightColor
     return React.createElement(onClick ? 'button' : 'div', commonProps, content);
 };
 
+const Resizer = ({ onMouseDown }: { onMouseDown: (e: React.MouseEvent) => void }) => (
+    <div
+        onMouseDown={onMouseDown}
+        className="w-full h-4 bg-transparent cursor-ns-resize flex items-center justify-center group flex-shrink-0"
+        aria-label="Resize chart"
+        role="separator"
+    >
+        <div className="w-12 h-1.5 bg-gray-700 rounded-full group-hover:bg-neon-green transition-colors"></div>
+    </div>
+);
 
 const CoinDetailPage = () => {
     const [coin, setCoin] = useState<Coin | null>(null);
@@ -112,7 +122,45 @@ const CoinDetailPage = () => {
     const [userVote, setUserVote] = useState<'bullish' | 'bearish' | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
-    const [timeframe, setTimeframe] = useState('1H');
+    
+    const [chartHeight, setChartHeight] = useState(450);
+    const [isResizing, setIsResizing] = useState(false);
+    const resizeRef = useRef<{ startY: number; startHeight: number } | null>(null);
+
+    const handleMouseDown = useCallback((e: React.MouseEvent) => {
+        e.preventDefault();
+        setIsResizing(true);
+        resizeRef.current = {
+            startY: e.clientY,
+            startHeight: chartHeight,
+        };
+    }, [chartHeight]);
+
+    const handleMouseMove = useCallback((e: MouseEvent) => {
+        if (!isResizing || !resizeRef.current) return;
+        const deltaY = e.clientY - resizeRef.current.startY;
+        const newHeight = resizeRef.current.startHeight + deltaY;
+        const minHeight = 400;
+        const maxHeight = window.innerHeight * 0.8;
+        setChartHeight(Math.max(minHeight, Math.min(newHeight, maxHeight)));
+    }, [isResizing]);
+
+    const handleMouseUp = useCallback(() => {
+        setIsResizing(false);
+        resizeRef.current = null;
+    }, []);
+
+    useEffect(() => {
+        if (isResizing) {
+            window.addEventListener('mousemove', handleMouseMove);
+            window.addEventListener('mouseup', handleMouseUp);
+        }
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [isResizing, handleMouseMove, handleMouseUp]);
+
 
     useEffect(() => {
         const handleHashChange = () => {
@@ -121,7 +169,6 @@ const CoinDetailPage = () => {
             const coinId = parts[2];
             const foundCoin = allCoins.find(c => c.id === coinId);
             setCoin(foundCoin || null);
-            // Reset visibility states on navigation to a new coin
             setIsChatVisible(true);
             setIsSentimentVisible(true);
         };
@@ -203,9 +250,9 @@ const CoinDetailPage = () => {
         return {
             display: 'grid',
             gridTemplateColumns: isAnySidebarVisible ? '1fr 400px' : '1fr 0px',
-            gridTemplateRows: '450px auto',
+            gridTemplateRows: `auto 1fr`,
             gridTemplateAreas: areas,
-            gap: isAnySidebarVisible ? '1rem' : '0',
+            gap: '1rem',
         };
     }, [isChatVisible, isSentimentVisible]);
 
@@ -273,8 +320,11 @@ const CoinDetailPage = () => {
             </div>
             
             <main style={gridStyle as React.CSSProperties} className="transition-all duration-300">
-                <div style={{ gridArea: 'chart' }} className="relative flex flex-col">
-                    <Chart coin={coin} timeframe={timeframe} onTimeframeChange={setTimeframe} />
+                <div style={{ gridArea: 'chart' }} className="relative flex flex-col rounded-xl overflow-hidden border border-gray-800 bg-[#0a0a0a]">
+                    <div className="flex-grow relative" style={{ height: `${chartHeight}px`, minHeight: '450px' }}>
+                        <TradingViewWidget symbol={`${coin.symbol}USD`} />
+                    </div>
+                     <Resizer onMouseDown={handleMouseDown} />
                     <button
                         onClick={() => setIsChatVisible(!isChatVisible)}
                         className="absolute top-1/2 -right-3 transform -translate-y-1/2 z-10 p-2 bg-[#0a0a0a] border border-gray-800 rounded-full text-gray-400 hover:bg-green-500/20 hover:text-white"
