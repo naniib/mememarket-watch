@@ -1,3 +1,6 @@
+
+
+
 import React, { useState } from 'react';
 import { login, register } from '../api';
 import { X, User, Mail, Lock, LogIn, UserPlus } from 'lucide-react';
@@ -48,7 +51,7 @@ const AuthModal = ({ onClose, onLoginSuccess }: AuthModalProps) => {
             aria-labelledby="auth-modal-title"
         >
             <div 
-                className="relative w-full max-w-sm bg-gradient-to-br from-[#10141a] to-[#0D1117] border border-emerald-400/30 rounded-2xl shadow-2xl shadow-emerald-400/20"
+                className="relative w-full max-w-sm bg-gradient-to-br from-[#10141a] to-[#0D1117] border border-neon-green/30 rounded-2xl shadow-2xl shadow-neon-green/20"
                 onClick={e => e.stopPropagation()}
             >
                 <header className="p-4 flex justify-end">
@@ -56,7 +59,7 @@ const AuthModal = ({ onClose, onLoginSuccess }: AuthModalProps) => {
                 </header>
 
                 <div className="p-8 pt-0">
-                    <h1 id="auth-modal-title" className="text-3xl font-bold text-center mb-2 text-emerald-400" style={{ textShadow: '0 0 15px rgba(52, 211, 153, 0.7)' }}>
+                    <h1 id="auth-modal-title" className="text-3xl font-bold text-center mb-2 text-neon-green" style={{ textShadow: '0 0 15px rgba(0, 245, 179, 0.7)' }}>
                         {isLoginView ? 'Welcome Back' : 'Join the Revolution'}
                     </h1>
                     <p className="text-gray-400 text-center mb-6">
@@ -69,23 +72,22 @@ const AuthModal = ({ onClose, onLoginSuccess }: AuthModalProps) => {
                         {!isLoginView && (
                             <div className="relative">
                                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                <input type="text" placeholder="Username" required value={username} onChange={e => setUsername(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#0D1117] border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 text-white placeholder:text-gray-500 transition-colors" />
+                                <input type="text" placeholder="Username" required value={username} onChange={e => setUsername(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#0D1117] border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-neon-green text-white placeholder:text-gray-500 transition-colors" />
                             </div>
                         )}
                         <div className="relative">
                             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                            <input type="email" placeholder="Email" required value={email} onChange={e => setEmail(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#0D1117] border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 text-white placeholder:text-gray-500 transition-colors" />
+                            <input type="email" placeholder="Email" required value={email} onChange={e => setEmail(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#0D1117] border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-neon-green text-white placeholder:text-gray-500 transition-colors" />
                         </div>
                         <div className="relative">
                             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                            <input type="password" placeholder="Password" required value={password} onChange={e => setPassword(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#0D1117] border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 text-white placeholder:text-gray-500 transition-colors" />
+                            <input type="password" placeholder="Password" required value={password} onChange={e => setPassword(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-[#0D1117] border border-[#30363D] rounded-lg focus:outline-none focus:ring-2 focus:ring-neon-green text-white placeholder:text-gray-500 transition-colors" />
                         </div>
 
-                        {/* ### CAMBIO CLAVE 1: BOTÓN PRINCIPAL ### */}
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full flex items-center justify-center font-bold py-3 px-4 rounded-lg bg-emerald-400 text-black transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg hover:shadow-emerald-400/40 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full flex items-center justify-center bg-neon-green text-black font-bold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {loading ? 'Processing...' : (
                                 isLoginView ? <><LogIn className="mr-2" /> Sign In</> : <><UserPlus className="mr-2" /> Create Account</>
@@ -93,13 +95,9 @@ const AuthModal = ({ onClose, onLoginSuccess }: AuthModalProps) => {
                         </button>
                     </form>
 
-                    <p className="text-center text-gray-400 text-sm mt-6">
+                    <p className="text-center text-gray-300 text-sm mt-6">
                         {isLoginView ? "Don't have an account? " : "Already have an account? "}
-                         {/* ### CAMBIO CLAVE 2: ENLACE SECUNDARIO ### */}
-                        <button 
-                            onClick={() => { setIsLoginView(!isLoginView); setError(''); }} 
-                            className="font-semibold text-emerald-400 transition-colors duration-200 hover:text-white"
-                        >
+                        <button onClick={() => { setIsLoginView(!isLoginView); setError(''); }} className="font-bold text-neon-green">
                             {isLoginView ? "Register here" : "Sign in here"}
                         </button>
                     </p>

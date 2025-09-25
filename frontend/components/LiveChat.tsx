@@ -6,6 +6,7 @@ interface LiveChatProps {
   coinId: string;
   coinName: string;
   isAuthenticated: boolean;
+  onLoginClick: () => void;
 }
 
 interface Message {
@@ -32,7 +33,7 @@ const isImageUrl = (url: string) => {
     return /\.(jpeg|jpg|gif|png)$/i.test(url);
 };
 
-const LiveChat = ({ coinId, coinName, isAuthenticated }: LiveChatProps) => {
+const LiveChat = ({ coinId, coinName, isAuthenticated, onLoginClick }: LiveChatProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -44,6 +45,8 @@ const LiveChat = ({ coinId, coinName, isAuthenticated }: LiveChatProps) => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
         setCurrentUser(JSON.parse(storedUser));
+    } else {
+        setCurrentUser(null);
     }
   }, [isAuthenticated]);
 
@@ -186,9 +189,9 @@ const LiveChat = ({ coinId, coinName, isAuthenticated }: LiveChatProps) => {
             )}
           </div>
         ) : (
-          <a href="#/login" className="block w-full text-center bg-gray-800 hover:bg-gray-700 text-gray-300 py-2 rounded-lg text-sm">
+          <button onClick={onLoginClick} className="block w-full text-center bg-gray-800 hover:bg-gray-700 text-gray-300 py-2 rounded-lg text-sm">
               Login to join the conversation
-          </a>
+          </button>
         )}
       </div>
     </div>

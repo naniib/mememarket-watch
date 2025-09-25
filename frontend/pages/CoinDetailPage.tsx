@@ -112,7 +112,11 @@ const Resizer = ({ onMouseDown }: { onMouseDown: (e: React.MouseEvent) => void }
     </div>
 );
 
-const CoinDetailPage = () => {
+interface CoinDetailPageProps {
+    onLoginClick: () => void;
+}
+
+const CoinDetailPage = ({ onLoginClick }: CoinDetailPageProps) => {
     const [coin, setCoin] = useState<Coin | null>(null);
     const [isChatVisible, setIsChatVisible] = useState(true);
     const [isSentimentVisible, setIsSentimentVisible] = useState(true);
@@ -250,11 +254,11 @@ const CoinDetailPage = () => {
         return {
             display: 'grid',
             gridTemplateColumns: isAnySidebarVisible ? '1fr 400px' : '1fr 0px',
-            gridTemplateRows: `auto 1fr`,
+            gridTemplateRows: `${chartHeight}px 500px`,
             gridTemplateAreas: areas,
             gap: '1rem',
         };
-    }, [isChatVisible, isSentimentVisible]);
+    }, [isChatVisible, isSentimentVisible, chartHeight]);
 
 
     if (!coin) {
@@ -321,7 +325,7 @@ const CoinDetailPage = () => {
             
             <main style={gridStyle as React.CSSProperties} className="transition-all duration-300">
                 <div style={{ gridArea: 'chart' }} className="relative flex flex-col rounded-xl overflow-hidden border border-gray-800 bg-[#0a0a0a]">
-                    <div className="flex-grow relative" style={{ height: `${chartHeight}px`, minHeight: '450px' }}>
+                    <div className="flex-grow relative">
                         <TradingViewWidget symbol={`${coin.symbol}USD`} />
                     </div>
                      <Resizer onMouseDown={handleMouseDown} />
@@ -334,8 +338,8 @@ const CoinDetailPage = () => {
                     </button>
                 </div>
                 
-                <div style={{ gridArea: 'chat' }} className={`flex flex-col min-h-0 transition-all duration-300 ${!isChatVisible ? 'hidden' : ''}`}>
-                    <LiveChat coinId={coin.id} coinName={coin.name} isAuthenticated={isAuthenticated} />
+                <div style={{ gridArea: 'chat' }} className={`flex flex-col min-h-0 transition-all duration-300 overflow-hidden ${!isChatVisible ? 'hidden' : ''}`}>
+                    <LiveChat coinId={coin.id} coinName={coin.name} isAuthenticated={isAuthenticated} onLoginClick={onLoginClick} />
                 </div>
                 
                 <div style={{ gridArea: 'trades' }} className="relative flex flex-col">

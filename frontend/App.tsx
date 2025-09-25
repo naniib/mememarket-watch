@@ -1,6 +1,7 @@
 
 
 
+
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -138,13 +139,14 @@ const App = () => {
             '/profile/edit': { component: EditProfilePage },
             '/profile/': { component: ProfilePage },
             '/memepress/': { component: ArticleDetailPage, props: { showTrendingSidebar: false } },
-            '/coin/': { component: CoinDetailPage, useStandardHeader: true },
+            '/coin/': { component: CoinDetailPage, useStandardHeader: true, props: { onLoginClick: handleConnectClick } },
         };
 
         let found = false;
         for (const prefix in pathPrefixes) {
             if (path.startsWith(prefix)) {
                 PageComponent = pathPrefixes[prefix].component;
+                pageProps = { ...pageProps, ...(pathPrefixes[prefix].props || {}) };
                 if (pathPrefixes[prefix].useStandardHeader) {
                     showHeaderFooter = true;
                 } else {
