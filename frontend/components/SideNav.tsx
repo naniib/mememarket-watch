@@ -111,7 +111,7 @@ const SideNav = ({ user, onLogout, onConnectClick, onCreatePostClick }: SideNavP
                     </a>
                     {/* ### CAMBIO 4: Usamos clases estándar ### */}
                     <button 
-                        onClick={user ? () => { alert('Open create post modal/page'); } : onCreatePostClick}
+                        onClick={user ? () => { window.location.hash = '#/home'; } : onCreatePostClick}
                         className="w-full text-lg text-black font-bold py-3 rounded-lg bg-emerald-400 hover:opacity-90 transition-all flex items-center justify-center space-x-2 shadow-lg shadow-emerald-400/50 hover:shadow-xl hover:shadow-emerald-400/70"
                     >
                         <PenSquare className="w-6 h-6" />
