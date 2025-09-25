@@ -1,8 +1,7 @@
 
-
-
 import React, { useState } from 'react';
-import { login, register } from '../api';
+import { login as apiLogin, register as apiRegister } from '../api';
+import { useAuth } from '../App';
 import { X, User, Mail, Lock, LogIn, UserPlus } from 'lucide-react';
 
 interface AuthModalProps {
@@ -11,6 +10,7 @@ interface AuthModalProps {
 }
 
 const AuthModal = ({ onClose, onLoginSuccess }: AuthModalProps) => {
+    const { login } = useAuth();
     const [isLoginView, setIsLoginView] = useState(true);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -28,13 +28,16 @@ const AuthModal = ({ onClose, onLoginSuccess }: AuthModalProps) => {
         try {
             let data;
             if (isLoginView) {
-                data = await login({ email, password });
+                data = await apiLogin({ email, password });
             } else {
                 if (username.length < 3) throw new Error("Username must be at least 3 characters.");
                 if (password.length < 6) throw new Error("Password must be at least 6 characters.");
-                data = await register({ username, email, password });
+                data = await apiRegister({ username, email, password });
             }
-            onLoginSuccess(data.user, data.token);
+            // Use the login function from context which will update global state
+            login(data.user, data.token);
+            onLoginSuccess(data.user, data.token); // Also call original prop for modal-specific logic
+            onClose(); // Close modal on success
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An unknown error occurred');
         } finally {

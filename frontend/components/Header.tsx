@@ -1,5 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
+import { useAuth } from '../App';
 
 const Logo = () => (
     <img src="https://i.imgur.com/2jgOCyH.png" alt="MemeMarket Logo featuring Nelson the cat" className="w-12 h-12 rounded-full object-cover" />
@@ -19,20 +20,12 @@ const BnbChainIcon = () => <svg role="img" className="w-5 h-5 mr-3" viewBox="0 0
 const PolygonIcon = () => <svg role="img" className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="#8247E5" xmlns="http://www.w3.org/2000/svg"><path d="M16.48.62L7.52.62C6.16.62 5.04 1.75 5.04 3.1l0 8.96c0 1.35 1.12 2.47 2.48 2.47l8.96 0c1.35 0 2.47-1.12 2.47-2.48l0-8.96C18.96 1.75 17.83.62 16.48.62zM16.48 23.38l-8.96 0c-1.35 0-2.47-1.12-2.47-2.48l0-8.96c0-1.35 1.12-2.47 2.48-2.47l8.96 0c1.35 0 2.47 1.12 2.47 2.48l0 8.96C18.96 22.25 17.83 23.38 16.48 23.38z"/></svg>;
 const EthereumIcon = () => <svg role="img" className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="#627EEA" xmlns="http://www.w3.org/2000/svg"><path d="M12 0L3 12l9 12 9-12L12 0zM12 3.6l6.3 8.4-6.3 4.2-6.3-4.2L12 3.6z"/></svg>;
 
-interface User {
-    id: number;
-    username: string;
-    email: string;
-    avatarUrl?: string;
-}
-
 interface HeaderProps {
-    user: User | null;
-    onLogout: () => void;
     onLoginClick: () => void;
 }
 
-const Header = ({ user, onLogout, onLoginClick }: HeaderProps) => {
+const Header = ({ onLoginClick }: HeaderProps) => {
+    const { user, logout } = useAuth();
     const [isNetworkMenuOpen, setIsNetworkMenuOpen] = useState(false);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
@@ -121,7 +114,7 @@ const Header = ({ user, onLogout, onLoginClick }: HeaderProps) => {
                                             <p className="text-sm font-semibold text-white truncate">{user.username}</p>
                                             <p className="text-xs text-gray-400 truncate">{user.email}</p>
                                         </div>
-                                        <button onClick={onLogout} className="w-full text-left flex items-center px-4 py-2 text-sm text-red-400 hover:bg-gray-800">
+                                        <button onClick={logout} className="w-full text-left flex items-center px-4 py-2 text-sm text-red-400 hover:bg-gray-800">
                                             <LogoutIcon />
                                             Logout
                                         </button>

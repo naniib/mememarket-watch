@@ -1,8 +1,5 @@
 
-
-
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, createContext, useContext } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -18,12 +15,13 @@ import MemeBattlesPage from './pages/MemeBattlesPage';
 import MemePressPage from './pages/MemePressPage'; 
 import ArticleDetailPage from './pages/ArticleDetailPage'; 
 import FidelityPage from './pages/FidelityPage';
-import TrendingPage from './pages/TrendingPage'; // Importar la nueva página
+import TrendingPage from './pages/TrendingPage';
 import AuthModal from './components/AuthModal';
 import JoinCommunityModal from './components/JoinCommunityModal';
 import PumpUrShitNowModal from './components/PumpUrShitNowModal';
 import AccountRequiredModal from './components/AccountRequiredModal';
 
+// --- START: Auth Context Logic ---
 interface User {
     id: number;
     username: string;
@@ -31,7 +29,68 @@ interface User {
     avatarUrl?: string;
 }
 
-const App = () => {
+interface AuthContextType {
+    user: User | null;
+    login: (user: User, token: string) => void;
+    logout: () => void;
+    isAuthenticated: boolean;
+    loading: boolean;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (context === undefined) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
+};
+
+const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+    const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        try {
+            const storedUser = localStorage.getItem('user');
+            const token = localStorage.getItem('token');
+            if (storedUser && token) {
+                setUser(JSON.parse(storedUser));
+            }
+        } catch (error) {
+            console.error("Failed to parse user from localStorage", error);
+            localStorage.clear();
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    const login = useCallback((loggedInUser: User, token: string) => {
+        localStorage.setItem('user', JSON.stringify(loggedInUser));
+        localStorage.setItem('token', token);
+        setUser(loggedInUser);
+    }, []);
+
+    const logout = useCallback(() => {
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        setUser(null);
+    }, []);
+
+    const isAuthenticated = !!user;
+
+    const value = { user, login, logout, isAuthenticated, loading };
+
+    return (
+        <AuthContext.Provider value={value}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
+// --- END: Auth Context Logic ---
+
+const AppContent = () => {
     const getPathFromHash = () => {
         let path = window.location.hash.substring(1);
         if (!path) return '/';
@@ -40,40 +99,23 @@ const App = () => {
     };
     
     const [path, setPath] = useState(getPathFromHash());
-    const [user, setUser] = useState<User | null>(null);
     const [isAuthModalOpen, setAuthModalOpen] = useState(false);
     const [isJoinCommunityModalOpen, setJoinCommunityModalOpen] = useState(false);
     const [isPumpModalOpen, setPumpModalOpen] = useState(false);
     const [isAccountRequiredModalOpen, setAccountRequiredModalOpen] = useState(false);
     const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
+    
+    const { user, login } = useAuth();
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            try {
-                setUser(JSON.parse(storedUser));
-            } catch (e) {
-                console.error("Failed to parse user from localStorage", e);
-                localStorage.clear();
-            }
-        }
-
         const onLocationChange = () => setPath(getPathFromHash());
         window.addEventListener('hashchange', onLocationChange);
         onLocationChange();
         return () => window.removeEventListener('hashchange', onLocationChange);
     }, []);
 
-    const handleLogout = () => {
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-        setUser(null);
-    };
-
-    const handleLoginSuccess = (loggedInUser: User, token: string) => {
-        localStorage.setItem('user', JSON.stringify(loggedInUser));
-        localStorage.setItem('token', token);
-        setUser(loggedInUser);
+    const handleLoginSuccess = (loggedInUser: any, token: string) => {
+        login(loggedInUser, token);
         closeAllModals();
 
         if (pendingAction) {
@@ -83,7 +125,7 @@ const App = () => {
             window.location.hash = '#/home';
         }
     };
-
+    
     const handleConnectClick = () => {
         closeAllModals();
         setAuthModalOpen(true);
@@ -91,11 +133,15 @@ const App = () => {
 
     const handleCreatePostClick = () => {
         if (!user) {
-            setJoinCommunityModalOpen(true);
+            handleConnectClick();
         } else {
-            // Placeholder for create post modal or action
-            alert('Create post functionality will be implemented here.');
+            window.location.hash = '#/home';
         }
+    };
+
+    const handleOpenJoinCommunityModal = () => {
+        closeAllModals();
+        setJoinCommunityModalOpen(true);
     };
 
     const handleOpenPumpModal = () => {
@@ -124,17 +170,15 @@ const App = () => {
         let layoutProps: any = {};
         let pageProps: any = {};
 
-        // MainLayout Routes
         const mainLayoutRoutes: Record<string, { component: React.ElementType, props?: any }> = {
             '/home': { component: SocialHomePage, props: { showTrendingSidebar: true } },
             '/explore': { component: ExplorePage, props: { showTrendingSidebar: true } },
-            '/battles': { component: MemeBattlesPage, props: { user, onOpenJoinCommunityModal: () => setJoinCommunityModalOpen(true) } },
+            '/battles': { component: MemeBattlesPage, props: { user, onOpenJoinCommunityModal: handleOpenJoinCommunityModal } },
             '/memepress': { component: MemePressPage, props: { showTrendingSidebar: false } },
             '/fidelity': { component: FidelityPage },
-            '/trending': { component: TrendingPage, props: { showTrendingSidebar: true } }, // Añadir ruta de Trending
+            '/trending': { component: TrendingPage, props: { showTrendingSidebar: true } },
         };
 
-        // FIX: Add useStandardHeader to the type to resolve TypeScript errors.
         const pathPrefixes: Record<string, { component: React.ElementType, props?: any, useStandardHeader?: boolean }> = {
             '/profile/edit': { component: EditProfilePage },
             '/profile/': { component: ProfilePage },
@@ -151,7 +195,12 @@ const App = () => {
                     showHeaderFooter = true;
                 } else {
                     LayoutComponent = MainLayout;
-                    layoutProps = pathPrefixes[prefix].props || {};
+                    layoutProps = { 
+                        ...pathPrefixes[prefix].props, 
+                        onConnectClick: handleConnectClick,
+                        onCreatePostClick: handleCreatePostClick,
+                        onOpenJoinCommunityModal: handleOpenJoinCommunityModal,
+                    };
                 }
                 found = true;
                 break;
@@ -161,11 +210,15 @@ const App = () => {
         if (!found && mainLayoutRoutes[path]) {
             PageComponent = mainLayoutRoutes[path].component;
             LayoutComponent = MainLayout;
-            layoutProps = mainLayoutRoutes[path].props || {};
+            layoutProps = {
+                 ...mainLayoutRoutes[path].props,
+                 onConnectClick: handleConnectClick,
+                 onCreatePostClick: handleCreatePostClick,
+                 onOpenJoinCommunityModal: handleOpenJoinCommunityModal,
+            };
             found = true;
         }
 
-        // Standalone Routes
         if (!found) {
             switch (path) {
                 case '/login':
@@ -182,7 +235,6 @@ const App = () => {
                     showHeaderFooter = true;
                     break;
                 default:
-                    // Fallback for any unknown route
                     PageComponent = () => <div className="text-center p-10">404 - Page Not Found</div>;
                     showHeaderFooter = true;
             }
@@ -190,13 +242,7 @@ const App = () => {
         
         if (LayoutComponent) {
             return (
-                <LayoutComponent 
-                    user={user} 
-                    onLogout={handleLogout} 
-                    onConnectClick={handleConnectClick}
-                    onCreatePostClick={handleCreatePostClick}
-                    {...layoutProps}
-                >
+                <LayoutComponent {...layoutProps}>
                     <PageComponent {...pageProps} />
                 </LayoutComponent>
             );
@@ -205,7 +251,7 @@ const App = () => {
         if (showHeaderFooter) {
             return (
                 <>
-                    <Header user={user} onLogout={handleLogout} onLoginClick={() => setAuthModalOpen(true)} />
+                    <Header onLoginClick={() => setAuthModalOpen(true)} />
                     <PageComponent {...pageProps}/>
                     <Footer />
                 </>
@@ -241,5 +287,12 @@ const App = () => {
         </>
     );
 };
+
+
+const App = () => (
+    <AuthProvider>
+        <AppContent />
+    </AuthProvider>
+);
 
 export default App;
